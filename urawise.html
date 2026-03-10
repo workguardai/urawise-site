@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UraWise — Renovation Marketplace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root {
+    --ink: #0e0e0e;
+    --bone: #f5f2ec;
+    --warm-white: #faf8f4;
+    --accent: #e8521a;
+    --accent-soft: #fef0ea;
+    --accent-mid: #f47c4e;
+    --teal: #1a6b6b;
+    --teal-soft: #e6f2f2;
+    --gold: #c9a84c;
+    --muted: #8a8580;
+    --border: #e2ddd6;
+    --card: #ffffff;
+    --shadow: 0 2px 16px rgba(14,14,14,0.08);
+    --shadow-lg: 0 8px 40px rgba(14,14,14,0.14);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bone);
+    color: var(--ink);
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  h1, h2, h3, h4, h5 { font-family: 'Syne', sans-serif; }
+
+  /* ── TOP NAV ── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: 58px;
+    background: var(--ink);
+    display: flex; align-items: center; padding: 0 20px; gap: 16px;
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 22px;
+    color: var(--bone);
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-pill {
+    background: rgba(245,242,236,0.1);
+    border: 1px solid rgba(245,242,236,0.2);
+    border-radius: 30px;
+    padding: 6px 16px;
+    color: var(--bone); font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all .2s;
+    white-space: nowrap;
+  }
+  .nav-pill:hover, .nav-pill.active { background: var(--accent); border-color: var(--accent); }
+  .nav-search {
+    flex: 1; max-width: 380px;
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(245,242,236,0.1);
+    border: 1px solid rgba(245,242,236,0.2);
+    border-radius: 30px; padding: 7px 16px;
+  }
+  .nav-search input {
+    background: transparent; border: none; outline: none;
+    color: var(--bone); font-size: 13px; width: 100%;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .nav-search input::placeholder { color: rgba(245,242,236,0.45); }
+  .nav-search svg { color: rgba(245,242,236,0.5); flex-shrink: 0; }
+  .nav-spacer { flex: 1; }
+  .nav-btn {
+    padding: 8px 18px; border-radius: 30px; font-size: 13px;
+    font-weight: 600; cursor: pointer; border: none;
+    font-family: 'DM Sans', sans-serif; transition: all .2s;
+  }
+  .nav-btn-ghost {
+    background: transparent; color: var(--bone);
+    border: 1px solid rgba(245,242,236,0.3);
+  }
+  .nav-btn-ghost:hover { background: rgba(245,242,236,0.1); }
+  .nav-btn-primary { background: var(--accent); color: #fff; }
+  .nav-btn-primary:hover { background: #d44515; }
+
+  /* ── MAIN LAYOUT ── */
+  .app {
+    display: flex; height: 100vh;
+    padding-top: 58px;
+  }
+
+  /* ── LEFT FEED PANEL ── */
+  .feed-panel {
+    width: 380px; flex-shrink: 0;
+    background: var(--warm-white);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow: hidden; z-index: 100;
+  }
+  .feed-header {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--warm-white);
+  }
+  .feed-tabs {
+    display: flex; gap: 4px;
+    background: var(--bone); border-radius: 10px; padding: 3px;
+  }
+  .feed-tab {
+    flex: 1; padding: 7px 0; text-align: center;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
+    border-radius: 8px; cursor: pointer;
+    color: var(--muted); transition: all .2s;
+    font-family: 'Syne', sans-serif;
+  }
+  .feed-tab.active { background: var(--ink); color: var(--bone); }
+  .feed-filters {
+    display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .filter-chip {
+    padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--border);
+    background: var(--warm-white); color: var(--muted);
+    transition: all .2s; font-family: 'Syne', sans-serif; letter-spacing: 0.3px;
+  }
+  .filter-chip.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+  .feed-list {
+    flex: 1; overflow-y: auto; padding: 12px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .feed-list::-webkit-scrollbar { width: 4px; }
+  .feed-list::-webkit-scrollbar-track { background: transparent; }
+  .feed-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  /* ── FEED CARDS ── */
+  .feed-card {
+    background: var(--card);
+    border-radius: 14px;
+    border: 1.5px solid var(--border);
+    overflow: hidden; cursor: pointer;
+    transition: all .22s; position: relative;
+  }
+  .feed-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow); }
+  .feed-card.selected { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .card-img {
+    width: 100%; height: 130px; object-fit: cover;
+    background: var(--bone); display: block;
+  }
+  .card-img-placeholder {
+    width: 100%; height: 130px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+  }
+  .card-body { padding: 12px 14px; }
+  .card-type-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 20px; font-size: 10px;
+    font-weight: 700; letter-spacing: 0.5px; margin-bottom: 7px;
+    font-family: 'Syne', sans-serif; text-transform: uppercase;
+  }
+  .badge-project { background: var(--teal-soft); color: var(--teal); }
+  .badge-material { background: #fff8e6; color: #a07800; }
+  .badge-vehicle { background: #f0eeff; color: #5b4ab5; }
+  .badge-service { background: var(--accent-soft); color: var(--accent); }
+  .badge-store { background: #e8f5e9; color: #2e7d32; }
+  .card-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+    line-height: 1.3; margin-bottom: 5px; color: var(--ink);
+  }
+  .card-meta {
+    font-size: 12px; color: var(--muted); display: flex;
+    align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .card-meta-dot { width: 3px; height: 3px; background: var(--border); border-radius: 50%; }
+  .card-footer {
+    padding: 9px 14px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .card-price {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px;
+    color: var(--ink);
+  }
+  .card-price span { font-size: 11px; font-weight: 400; color: var(--muted); }
+  .card-action-btn {
+    padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    border: none; cursor: pointer; transition: all .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-bid { background: var(--teal); color: #fff; }
+  .btn-bid:hover { background: #145555; }
+  .btn-buy { background: var(--accent); color: #fff; }
+  .btn-buy:hover { background: #d44515; }
+  .btn-view { background: var(--bone); color: var(--ink); border: 1.5px solid var(--border); }
+  .btn-view:hover { border-color: var(--ink); }
+
+  /* ── MAP ── */
+  .map-container {
+    flex: 1; position: relative;
+  }
+  #map {
+    width: 100%; height: 100%;
+  }
+  .map-controls {
+    position: absolute; top: 14px; right: 14px; z-index: 500;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .map-ctrl-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 16px; box-shadow: var(--shadow);
+    transition: all .2s;
+  }
+  .map-ctrl-btn:hover { background: var(--bone); }
+  .post-fab {
+    position: absolute; bottom: 24px; right: 20px; z-index: 500;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 50px; padding: 14px 22px;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+    cursor: pointer; box-shadow: 0 4px 20px rgba(232,82,26,0.4);
+    transition: all .25s; display: flex; align-items: center; gap: 8px;
+  }
+  .post-fab:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,82,26,0.45); }
+
+  /* ── MAP MARKERS ── */
+  .map-marker {
+    background: var(--card);
+    border-radius: 12px;
+    border: 2px solid var(--accent);
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    cursor: pointer;
+    transition: all .2s;
+    width: 70px; height: 70px;
+  }
+  .map-marker img { width: 100%; height: 100%; object-fit: cover; }
+  .map-marker-emoji {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center; font-size: 28px;
+  }
+
+  /* ── MODAL OVERLAY ── */
+  .overlay {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(14,14,14,0.55); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity .25s;
+  }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--warm-white);
+    border-radius: 20px;
+    width: 100%; max-width: 580px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(20px); transition: transform .3s;
+  }
+  .overlay.open .modal { transform: translateY(0); }
+  .modal::-webkit-scrollbar { width: 4px; }
+  .modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  .modal-header {
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px; }
+  .modal-close {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--bone); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: all .2s;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-body { padding: 20px 24px; }
+  .modal-section { margin-bottom: 20px; }
+  .modal-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--muted);
+    font-family: 'Syne', sans-serif; margin-bottom: 8px; display: block;
+  }
+  .modal-input, .modal-select, .modal-textarea {
+    width: 100%; padding: 11px 14px; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--card);
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink);
+    outline: none; transition: border-color .2s;
+  }
+  .modal-input:focus, .modal-select:focus, .modal-textarea:focus {
+    border-color: var(--accent);
+  }
+  .modal-textarea { resize: vertical; min-height: 90px; }
+  .modal-row { display: flex; gap: 12px; }
+  .modal-row > * { flex: 1; }
+  .type-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+  }
+  .type-option {
+    border: 2px solid var(--border); border-radius: 12px;
+    padding: 12px 8px; text-align: center; cursor: pointer;
+    transition: all .2s; background: var(--card);
+  }
+  .type-option:hover { border-color: var(--accent-mid); }
+  .type-option.selected { border-color: var(--accent); background: var(--accent-soft); }
+  .type-option .icon { font-size: 24px; margin-bottom: 4px; }
+  .type-option .label { font-size: 11px; font-weight: 700; font-family: 'Syne', sans-serif; color: var(--ink); }
+  .ai-box {
+    background: linear-gradient(135deg, #fff8f5, #f5f2ec);
+    border: 1.5px solid #f0c4b0;
+    border-radius: 12px; padding: 14px;
+    position: relative; overflow: hidden;
+  }
+  .ai-box::before {
+    content: '✦'; position: absolute; top: 10px; right: 14px;
+    font-size: 20px; color: var(--accent-mid); opacity: 0.5;
+  }
+  .ai-box-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px;
+    color: var(--accent); margin-bottom: 6px; letter-spacing: 0.5px;
+  }
+  .ai-box p { font-size: 13px; color: var(--ink); line-height: 1.5; }
+  .ai-generate-btn {
+    margin-top: 10px; padding: 8px 16px; border-radius: 20px;
+    background: var(--accent); color: #fff; border: none;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 12px;
+    cursor: pointer; transition: all .2s;
+  }
+  .ai-generate-btn:hover { background: #d44515; }
+  .ai-generate-btn:disabled { opacity: 0.6; cursor: wait; }
+  .modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 10px; justify-content: flex-end;
+  }
+  .btn-cancel {
+    padding: 11px 22px; border-radius: 10px;
+    background: var(--bone); border: 1.5px solid var(--border);
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 14px;
+    cursor: pointer; transition: all .2s;
+  }
+  .btn-cancel:hover { border-color: var(--ink); }
+  .btn-submit {
+    padding: 11px 28px; border-radius: 10px;
+    background: var(--ink); color: var(--bone);
+    border: none; font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 14px; cursor: pointer; transition: all .2s;
+  }
+  .btn-submit:hover { background: var(--accent); }
+
+  /* ── POST DETAIL SLIDE-IN ── */
+  .detail-panel {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 400px; background: var(--warm-white);
+    z-index: 600; border-right: 1px solid var(--border);
+    transform: translateX(-100%); transition: transform .3s;
+    display: flex; flex-direction: column;
+    box-shadow: 4px 0 20px rgba(14,14,14,0.1);
+  }
+  .detail-panel.open { transform: translateX(0); }
+  .detail-img { width: 100%; height: 200px; object-fit: cover; background: var(--bone); }
+  .detail-img-ph {
+    width: 100%; height: 200px;
+    display: flex; align-items: center; justify-content: center; font-size: 72px;
+    background: var(--bone);
+  }
+  .detail-content { padding: 20px; flex: 1; overflow-y: auto; }
+  .detail-content::-webkit-scrollbar { width: 3px; }
+  .detail-content::-webkit-scrollbar-thumb { background: var(--border); }
+  .detail-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; z-index: 10; box-shadow: var(--shadow);
+  }
+  .detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .detail-tag {
+    padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    background: var(--bone); color: var(--muted); font-family: 'Syne', sans-serif;
+  }
+  .detail-desc { font-size: 13px; line-height: 1.65; color: #444; margin-bottom: 16px; }
+  .detail-info-row {
+    display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
+    font-size: 13px;
+  }
+  .detail-info-row svg { color: var(--muted); flex-shrink: 0; }
+  .detail-actions { padding: 16px 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+  .detail-primary-btn {
+    flex: 1; padding: 12px; border-radius: 12px;
+    background: var(--ink); color: var(--bone); border: none;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+    cursor: pointer; transition: all .2s;
+  }
+  .detail-primary-btn:hover { background: var(--accent); }
+  .detail-secondary-btn {
+    padding: 12px 20px; border-radius: 12px;
+    background: var(--bone); border: 1.5px solid var(--border);
+    font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 13px;
+    cursor: pointer; transition: all .2s;
+  }
+  .detail-secondary-btn:hover { border-color: var(--ink); }
+
+  /* ── AUTH MODAL ── */
+  .auth-modal { max-width: 420px; }
+  .auth-tabs { display: flex; gap: 0; margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); }
+  .auth-tab {
+    flex: 1; padding: 10px; text-align: center;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+    cursor: pointer; transition: all .2s;
+    background: var(--bone); color: var(--muted);
+  }
+  .auth-tab.active { background: var(--ink); color: var(--bone); }
+  .user-type-row { display: flex; gap: 10px; margin-bottom: 16px; }
+  .user-type-card {
+    flex: 1; border: 2px solid var(--border); border-radius: 12px;
+    padding: 14px; text-align: center; cursor: pointer; transition: all .2s;
+    background: var(--card);
+  }
+  .user-type-card:hover { border-color: var(--accent-mid); }
+  .user-type-card.selected { border-color: var(--accent); background: var(--accent-soft); }
+  .user-type-card .icon { font-size: 28px; margin-bottom: 6px; }
+  .user-type-card .label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px; }
+  .user-type-card .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* ── STORE CARD ── */
+  .store-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 20px;
+    background: #e8f5e9; color: #2e7d32;
+    font-size: 10px; font-weight: 700; font-family: 'Syne', sans-serif;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+    z-index: 9999; background: var(--ink); color: var(--bone);
+    padding: 12px 24px; border-radius: 40px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    transition: transform .3s, opacity .3s;
+    opacity: 0;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── LOADING DOTS ── */
+  .dots { display: inline-flex; gap: 4px; align-items: center; }
+  .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
+    animation: blink 1.2s infinite;
+  }
+  .dot:nth-child(2) { animation-delay: .2s; }
+  .dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes blink { 0%,80%,100% { opacity:0.2 } 40% { opacity:1 } }
+
+  /* ── RESPONSIVE SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .leaflet-container { font-family: 'DM Sans', sans-serif; }
+
+  .no-results {
+    text-align: center; padding: 40px 20px; color: var(--muted);
+  }
+  .no-results .nr-icon { font-size: 40px; margin-bottom: 10px; }
+  .no-results p { font-size: 14px; line-height: 1.6; }
+
+  .section-divider {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); padding: 4px 0 6px;
+  }
+
+  .highlight-ring {
+    animation: ring-pulse 2s ease-out forwards;
+  }
+  @keyframes ring-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(232,82,26,0.5); }
+    70% { box-shadow: 0 0 0 10px rgba(232,82,26,0); }
+    100% { box-shadow: 0 0 0 0 rgba(232,82,26,0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Ura<span>Wise</span></div>
+  <button class="nav-pill active" onclick="setTab('projects')">Projects</button>
+  <button class="nav-pill" onclick="setTab('materials')">Materials</button>
+  <button class="nav-pill" onclick="setTab('vehicles')">Vehicles</button>
+  <button class="nav-pill" onclick="setTab('stores')">Stores</button>
+  <div class="nav-search">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input id="nav-search-input" type="text" placeholder="Search projects, materials, stores…" oninput="handleSearch(this.value)">
+  </div>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Log in</button>
+  <button class="nav-btn nav-btn-primary" onclick="openAuth('signup')">Sign up free</button>
+</nav>
+
+<!-- MAIN APP -->
+<div class="app">
+  <!-- FEED PANEL -->
+  <div class="feed-panel">
+    <div class="feed-header">
+      <div class="feed-tabs">
+        <div class="feed-tab active" id="tab-nearby" onclick="setFeedTab('nearby')">Near me</div>
+        <div class="feed-tab" id="tab-recent" onclick="setFeedTab('recent')">Recent</div>
+        <div class="feed-tab" id="tab-saved" onclick="setFeedTab('saved')">Saved</div>
+      </div>
+      <div class="feed-filters" id="feed-filters"></div>
+    </div>
+    <div class="feed-list" id="feed-list">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="map-container" id="map-container">
+    <div id="map"></div>
+    <div class="map-controls">
+      <div class="map-ctrl-btn" title="My location" onclick="centerMap()">📍</div>
+      <div class="map-ctrl-btn" title="Filter" onclick="toggleFilter()">🔽</div>
+    </div>
+    <button class="post-fab" onclick="openPostModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Post
+    </button>
+  </div>
+</div>
+
+<!-- DETAIL PANEL (map overlay) -->
+<div class="detail-panel" id="detail-panel">
+  <button class="detail-close" onclick="closeDetail()">✕</button>
+  <div id="detail-image-area"></div>
+  <div class="detail-content" id="detail-content"></div>
+  <div class="detail-actions" id="detail-actions"></div>
+</div>
+
+<!-- POST MODAL -->
+<div class="overlay" id="post-overlay" onclick="closeOnBg(event,'post-overlay')">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Create a Post</div>
+      <button class="modal-close" onclick="closeModal('post-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Step 1: Post Type -->
+      <div class="modal-section">
+        <span class="modal-label">What are you posting?</span>
+        <div class="type-grid" id="post-type-grid">
+          <div class="type-option selected" onclick="selectPostType('project',this)"><div class="icon">🏠</div><div class="label">Project</div></div>
+          <div class="type-option" onclick="selectPostType('material',this)"><div class="icon">🧱</div><div class="label">Material</div></div>
+          <div class="type-option" onclick="selectPostType('vehicle',this)"><div class="icon">🚐</div><div class="label">Vehicle</div></div>
+          <div class="type-option" onclick="selectPostType('tool',this)"><div class="icon">🔧</div><div class="label">Tool</div></div>
+          <div class="type-option" onclick="selectPostType('service',this)"><div class="icon">⚙️</div><div class="label">Service</div></div>
+          <div class="type-option" onclick="selectPostType('transport',this)"><div class="icon">🚛</div><div class="label">Transport</div></div>
+        </div>
+      </div>
+
+      <!-- Dynamic fields -->
+      <div id="post-dynamic-fields"></div>
+
+      <!-- AI Generation -->
+      <div class="modal-section">
+        <span class="modal-label">✦ AI Assistant</span>
+        <div class="ai-box" id="ai-box">
+          <div class="ai-box-title">Generate with AI</div>
+          <p id="ai-preview-text" style="color:var(--muted);font-style:italic;">Fill in the details above and click Generate — AI will craft a compelling title and description for you.</p>
+          <button class="ai-generate-btn" id="ai-gen-btn" onclick="generateAI()">✦ Generate Title & Description</button>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="modal-section">
+        <span class="modal-label">Location</span>
+        <input class="modal-input" id="post-location" type="text" placeholder="Enter address or use current location…">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('post-overlay')">Cancel</button>
+      <button class="btn-submit" onclick="submitPost()">Publish Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="overlay" id="auth-overlay" onclick="closeOnBg(event,'auth-overlay')">
+  <div class="modal auth-modal">
+    <div class="modal-header">
+      <div class="modal-title" id="auth-title">Welcome to UraWise</div>
+      <button class="modal-close" onclick="closeModal('auth-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="auth-tab-signup" onclick="switchAuth('signup')">Sign Up</div>
+        <div class="auth-tab" id="auth-tab-login" onclick="switchAuth('login')">Log In</div>
+      </div>
+      <div id="auth-signup-section">
+        <span class="modal-label">I am a…</span>
+        <div class="user-type-row">
+          <div class="user-type-card selected" onclick="selectUserType('homeowner',this)">
+            <div class="icon">🏡</div>
+            <div class="label">Homeowner</div>
+            <div class="sub">Post projects & buy materials</div>
+          </div>
+          <div class="user-type-card" onclick="selectUserType('business',this)">
+            <div class="icon">🏗️</div>
+            <div class="label">Business</div>
+            <div class="sub">Bid on projects & sell goods</div>
+          </div>
+        </div>
+        <div class="modal-row" style="margin-bottom:12px">
+          <div>
+            <span class="modal-label">First Name</span>
+            <input class="modal-input" type="text" placeholder="John">
+          </div>
+          <div>
+            <span class="modal-label">Last Name</span>
+            <input class="modal-input" type="text" placeholder="Doe">
+          </div>
+        </div>
+      </div>
+      <div class="modal-section" style="margin-bottom:12px">
+        <span class="modal-label">Email</span>
+        <input class="modal-input" type="email" placeholder="you@example.com">
+      </div>
+      <div class="modal-section" style="margin-bottom:0">
+        <span class="modal-label">Password</span>
+        <input class="modal-input" type="password" placeholder="••••••••">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-submit" style="width:100%" onclick="handleAuth()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════════════
+const POSTS = [
+  {
+    id: 1, type: 'project', subtype: 'Kitchen Renovation',
+    title: 'Full Kitchen Renovation – Open Plan', emoji: '🍳',
+    img: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',
+    desc: 'Complete kitchen gut renovation. Looking for experienced contractors. Includes cabinetry, countertops (quartz preferred), plumbing relocation, and electrical. Materials can be separate.',
+    budget: '€18,000–€25,000', timeline: 'Starts April 2025',
+    tags: ['Kitchen', 'Plumbing', 'Electrical', 'Cabinetry'],
+    user: 'Anna K.', userType: 'homeowner',
+    lat: 60.169, lng: 24.935, bids: 4, saved: false
+  },
+  {
+    id: 2, type: 'project', subtype: 'Bathroom Renovation',
+    title: 'Master Bathroom Retile & Refit', emoji: '🛁',
+    img: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',
+    desc: 'Full retile of master bath. Replace old bathtub with walk-in shower. Flooring, waterproofing, and fixture replacement included.',
+    budget: '€6,000–€9,000', timeline: 'Starts May 2025',
+    tags: ['Bathroom', 'Tiling', 'Plumbing'],
+    user: 'Mikael J.', userType: 'homeowner',
+    lat: 60.175, lng: 24.945, bids: 7, saved: true
+  },
+  {
+    id: 3, type: 'material', subtype: 'Leftover Paint',
+    title: '14× Tikkurila Interior Paint (5L cans)', emoji: '🪣',
+    img: 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=70',
+    desc: 'Unopened and barely used cans of Tikkurila Harmony interior paint, white and off-white shades. From a completed project. Pick-up only in Kallio.',
+    budget: '€8/can or €90 all', timeline: 'Available now',
+    tags: ['Paint', 'Tikkurila', 'White', 'Interior'],
+    user: 'NordBuilders Oy', userType: 'business',
+    lat: 60.183, lng: 24.950, bids: 0, saved: false
+  },
+  {
+    id: 4, type: 'material', subtype: 'Timber & Planks',
+    title: 'Spruce Structural Timber — 50+ pcs', emoji: '🪵',
+    img: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',
+    desc: 'Surplus spruce timber from a framing project. Various lengths 2.4m–4.8m, 45×120mm profile. Dry-stored, excellent condition. Delivery possible within 20km.',
+    budget: '€3.50/m', timeline: 'Available now',
+    tags: ['Timber', 'Spruce', 'Framing'],
+    user: 'BuildStock Oy', userType: 'business',
+    lat: 60.160, lng: 24.920, bids: 0, saved: false
+  },
+  {
+    id: 5, type: 'vehicle', subtype: 'Work Van',
+    title: '2019 Mercedes Sprinter 316 CDI – Fitted Out', emoji: '🚐',
+    img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&q=70',
+    desc: 'Full builder van with racking, shelving, and lockable storage. 148,000 km, full service history, new tyres. Ideal for trade or construction company.',
+    budget: '€22,500', timeline: 'Available immediately',
+    tags: ['Mercedes', 'Sprinter', 'Van', '2019'],
+    user: 'Heikkinen Rakennus', userType: 'business',
+    lat: 60.155, lng: 24.955, bids: 0, saved: false
+  },
+  {
+    id: 6, type: 'project', subtype: 'Painting',
+    title: 'Interior Painting — 3-Bedroom Apartment', emoji: '🖌️',
+    img: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=70',
+    desc: 'Full repaint of 3-bed apartment, 85m². Ceilings, walls, trims. Painter to supply materials. Looking for neat finish with minimal disruption.',
+    budget: '€1,800–€2,800', timeline: 'Flexible, June–July',
+    tags: ['Painting', 'Interior', 'Apartment'],
+    user: 'Laura M.', userType: 'homeowner',
+    lat: 60.178, lng: 24.928, bids: 2, saved: false
+  },
+  {
+    id: 7, type: 'service', subtype: 'Plumbing',
+    title: 'Certified Plumber — Available for Projects', emoji: '🔧',
+    img: null,
+    desc: 'Licensed plumber with 12 years experience. Specialising in bathroom renovations, pipe replacement, and kitchen reconfigurations. Fast quotes, clean work.',
+    budget: 'From €65/hr', timeline: 'Available from April',
+    tags: ['Plumbing', 'Bathroom', 'Kitchen'],
+    user: 'Virtanen Plumbing', userType: 'business',
+    lat: 60.165, lng: 24.940, bids: 0, saved: false
+  },
+  {
+    id: 8, type: 'stores', subtype: 'Hardware Store',
+    title: 'K-Rauta Helsinki Centrum', emoji: '🏪',
+    img: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',
+    desc: 'Finland\'s leading DIY and building materials store. Wide range of tools, timber, tiles, paints, plumbing, and electrical supplies.',
+    budget: 'Visit store', timeline: 'Open Mon–Sat 8–20',
+    tags: ['Hardware', 'Tools', 'Paint', 'Timber'],
+    user: 'K-Rauta', userType: 'store',
+    lat: 60.172, lng: 24.962, bids: 0, saved: false,
+    storeUrl: 'https://www.k-rauta.fi'
+  },
+  {
+    id: 9, type: 'stores', subtype: 'Hardware Store',
+    title: 'Bauhaus Helsinki — Building & Garden', emoji: '🔨',
+    img: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',
+    desc: 'Large-format hardware and home improvement superstore. Tools, materials, flooring, lighting, garden, and bathroom fixtures.',
+    budget: 'Visit store', timeline: 'Open Mon–Sun 8–21',
+    tags: ['Hardware', 'Flooring', 'Bathroom', 'Lighting'],
+    user: 'Bauhaus', userType: 'store',
+    lat: 60.210, lng: 25.000, bids: 0, saved: false,
+    storeUrl: 'https://www.bauhaus.fi'
+  }
+];
+
+// ═══════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════
+let currentTab = 'projects';
+let feedTab = 'nearby';
+let searchQuery = '';
+let selectedPostType = 'project';
+let selectedPost = null;
+let map = null;
+let markers = {};
+let authMode = 'signup';
+
+const TAB_TYPE_MAP = {
+  projects: 'project',
+  materials: 'material',
+  vehicles: 'vehicle',
+  stores: 'stores'
+};
+
+const FILTERS = {
+  projects: ['All', 'Kitchen', 'Bathroom', 'Painting', 'Tiling', 'Repair'],
+  materials: ['All', 'Paint', 'Timber', 'Bricks', 'Tools', 'Tiles'],
+  vehicles: ['All', 'Van', 'Truck', 'Car', 'Trailer'],
+  stores: ['All', 'Hardware', 'Tiles', 'Paint', 'Electrical']
+};
+
+let activeFilter = 'All';
+
+// ═══════════════════════════════════════════════
+//  MAP INIT
+// ═══════════════════════════════════════════════
+function initMap() {
+  map = L.map('map', {
+    center: [60.1695, 24.9354],
+    zoom: 13,
+    zoomControl: false
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '©OpenStreetMap ©CartoDB',
+    maxZoom: 19
+  }).addTo(map);
+
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
+  renderMarkers();
+}
+
+function renderMarkers() {
+  Object.values(markers).forEach(m => m.remove());
+  markers = {};
+
+  const visible = getFilteredPosts();
+
+  visible.forEach(post => {
+    const el = document.createElement('div');
+    el.className = 'map-marker';
+    if (post === selectedPost) el.classList.add('highlight-ring');
+
+    if (post.img) {
+      el.innerHTML = `<img src="${post.img}" alt="${post.title}" loading="lazy">`;
+    } else {
+      el.innerHTML = `<div class="map-marker-emoji">${post.emoji}</div>`;
+    }
+
+    const icon = L.divIcon({ html: el, className: '', iconSize: [70, 70], iconAnchor: [35, 35] });
+    const marker = L.marker([post.lat, post.lng], { icon }).addTo(map);
+    marker.on('click', () => openDetail(post));
+    markers[post.id] = marker;
+  });
+}
+
+function centerMap() {
+  map.setView([60.1695, 24.9354], 13);
+}
+
+// ═══════════════════════════════════════════════
+//  FEED
+// ═══════════════════════════════════════════════
+function getFilteredPosts() {
+  const typeKey = TAB_TYPE_MAP[currentTab] || currentTab;
+  let posts = POSTS.filter(p => {
+    if (currentTab === 'projects') return p.type === 'project' || p.type === 'service';
+    return p.type === typeKey;
+  });
+
+  if (activeFilter !== 'All') {
+    posts = posts.filter(p => p.tags.includes(activeFilter) || p.subtype.includes(activeFilter));
+  }
+
+  if (searchQuery.trim()) {
+    const q = searchQuery.toLowerCase();
+    posts = posts.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.desc.toLowerCase().includes(q) ||
+      p.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }
+  return posts;
+}
+
+function renderFeed() {
+  const list = document.getElementById('feed-list');
+  const posts = getFilteredPosts();
+  activeFilter = 'All'; // reset unless we update
+
+  if (!posts.length) {
+    list.innerHTML = `<div class="no-results"><div class="nr-icon">🔍</div><p>No results found.<br>Try a different filter or search.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = posts.map(p => cardHTML(p)).join('');
+}
+
+function cardHTML(p) {
+  const isSelected = selectedPost && selectedPost.id === p.id;
+  const imgArea = p.img
+    ? `<img class="card-img" src="${p.img}" alt="${p.title}" loading="lazy">`
+    : `<div class="card-img-placeholder">${p.emoji}</div>`;
+
+  let badgeClass = 'badge-project';
+  if (p.type === 'material') badgeClass = 'badge-material';
+  if (p.type === 'vehicle') badgeClass = 'badge-vehicle';
+  if (p.type === 'service') badgeClass = 'badge-service';
+  if (p.type === 'stores') badgeClass = 'badge-store';
+
+  let actionBtn = `<button class="card-action-btn btn-bid" onclick="triggerBid(event,${p.id})">Bid →</button>`;
+  if (p.type === 'material' || p.type === 'vehicle') {
+    actionBtn = `<button class="card-action-btn btn-buy" onclick="triggerBuy(event,${p.id})">Enquire</button>`;
+  }
+  if (p.type === 'service') {
+    actionBtn = `<button class="card-action-btn btn-view" onclick="triggerContact(event,${p.id})">Contact</button>`;
+  }
+  if (p.type === 'stores') {
+    actionBtn = `<button class="card-action-btn btn-buy" onclick="goToStore(event,'${p.storeUrl}')">Visit ↗</button>`;
+  }
+
+  const bidsBadge = p.bids > 0
+    ? `<span>${p.bids} bid${p.bids > 1 ? 's' : ''}</span><span class="card-meta-dot"></span>`
+    : '';
+
+  return `
+    <div class="feed-card ${isSelected ? 'selected' : ''}" onclick="openDetail(POSTS.find(x=>x.id==${p.id}))" data-id="${p.id}">
+      ${imgArea}
+      <div class="card-body">
+        <div class="card-type-badge ${badgeClass}">${p.emoji} ${p.subtype}</div>
+        <div class="card-title">${p.title}</div>
+        <div class="card-meta">
+          ${bidsBadge}
+          <span>📍 ${p.lat.toFixed(2)}, ${p.lng.toFixed(2)}</span>
+          <span class="card-meta-dot"></span>
+          <span>${p.timeline}</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-price">${p.budget}</div>
+        ${actionBtn}
+      </div>
+    </div>
+  `;
+}
+
+function renderFilters() {
+  const container = document.getElementById('feed-filters');
+  const chips = FILTERS[currentTab] || [];
+  container.innerHTML = chips.map(f =>
+    `<div class="filter-chip ${f === activeFilter ? 'active' : ''}" onclick="setFilter('${f}')">${f}</div>`
+  ).join('');
+}
+
+function setFilter(f) {
+  activeFilter = f;
+  renderFilters();
+  renderFeed();
+  renderMarkers();
+}
+
+function setTab(tab) {
+  currentTab = tab;
+  activeFilter = 'All';
+  selectedPost = null;
+  closeDetail();
+  document.querySelectorAll('.nav-pill').forEach((el, i) => {
+    el.classList.toggle('active', ['projects','materials','vehicles','stores'][i] === tab);
+  });
+  renderFilters();
+  renderFeed();
+  renderMarkers();
+}
+
+function setFeedTab(tab) {
+  feedTab = tab;
+  ['nearby','recent','saved'].forEach(t => {
+    document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
+  });
+  if (tab === 'saved') {
+    // show saved
+    const list = document.getElementById('feed-list');
+    const saved = POSTS.filter(p => p.saved);
+    if (!saved.length) {
+      list.innerHTML = `<div class="no-results"><div class="nr-icon">💾</div><p>No saved posts yet.<br>Tap the ★ on any listing to save it.</p></div>`;
+    } else {
+      list.innerHTML = saved.map(p => cardHTML(p)).join('');
+    }
+  } else {
+    renderFeed();
+  }
+}
+
+function handleSearch(val) {
+  searchQuery = val;
+  renderFeed();
+  renderMarkers();
+}
+
+// ═══════════════════════════════════════════════
+//  DETAIL PANEL
+// ═══════════════════════════════════════════════
+function openDetail(post) {
+  selectedPost = post;
+  renderFeed(); // update selected state
+
+  const panel = document.getElementById('detail-panel');
+  const imgArea = document.getElementById('detail-image-area');
+  const content = document.getElementById('detail-content');
+  const actions = document.getElementById('detail-actions');
+
+  imgArea.innerHTML = post.img
+    ? `<img class="detail-img" src="${post.img}" alt="${post.title}">`
+    : `<div class="detail-img-ph">${post.emoji}</div>`;
+
+  const tagsHTML = post.tags.map(t => `<span class="detail-tag">${t}</span>`).join('');
+
+  let badgeClass = 'badge-project';
+  if (post.type === 'material') badgeClass = 'badge-material';
+  if (post.type === 'vehicle') badgeClass = 'badge-vehicle';
+  if (post.type === 'service') badgeClass = 'badge-service';
+  if (post.type === 'stores') badgeClass = 'badge-store';
+
+  content.innerHTML = `
+    <div class="card-type-badge ${badgeClass}" style="margin-bottom:8px">${post.emoji} ${post.subtype}</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;line-height:1.25;margin-bottom:8px">${post.title}</h2>
+    <div class="detail-tags">${tagsHTML}</div>
+    <p class="detail-desc">${post.desc}</p>
+    <div class="detail-info-row">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+      <span>${post.lat.toFixed(3)}, ${post.lng.toFixed(3)}</span>
+    </div>
+    <div class="detail-info-row">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>${post.timeline}</span>
+    </div>
+    <div class="detail-info-row">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <strong>${post.budget}</strong>
+    </div>
+    <div class="detail-info-row">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span>${post.user} · ${post.userType}</span>
+    </div>
+    ${post.bids > 0 ? `<div style="margin-top:12px;background:var(--teal-soft);border-radius:10px;padding:10px 14px;font-size:13px;color:var(--teal)"><strong>${post.bids} contractors</strong> have already bid on this project</div>` : ''}
+  `;
+
+  let primaryLabel = 'Place a Bid';
+  let primaryFn = `triggerBid(event,${post.id})`;
+  if (post.type === 'material' || post.type === 'vehicle') { primaryLabel = 'Send Enquiry'; primaryFn = `triggerBuy(event,${post.id})`; }
+  if (post.type === 'service') { primaryLabel = 'Contact Business'; primaryFn = `triggerContact(event,${post.id})`; }
+  if (post.type === 'stores') { primaryLabel = 'Visit Store ↗'; primaryFn = `goToStore(event,'${post.storeUrl}')`; }
+
+  actions.innerHTML = `
+    <button class="detail-primary-btn" onclick="${primaryFn}">${primaryLabel}</button>
+    <button class="detail-secondary-btn" onclick="savePost(${post.id})">♡ Save</button>
+  `;
+
+  panel.classList.add('open');
+
+  // Fly map
+  map.flyTo([post.lat, post.lng], 15, { duration: 1.2 });
+  renderMarkers();
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+  selectedPost = null;
+  renderFeed();
+}
+
+// ═══════════════════════════════════════════════
+//  ACTIONS
+// ═══════════════════════════════════════════════
+function triggerBid(e, id) {
+  if (e) e.stopPropagation();
+  openAuth('signup');
+}
+function triggerBuy(e, id) {
+  if (e) e.stopPropagation();
+  openAuth('signup');
+}
+function triggerContact(e, id) {
+  if (e) e.stopPropagation();
+  openAuth('signup');
+}
+function goToStore(e, url) {
+  if (e) e.stopPropagation();
+  window.open(url, '_blank');
+}
+function savePost(id) {
+  const p = POSTS.find(x => x.id === id);
+  if (p) { p.saved = !p.saved; showToast(p.saved ? '★ Saved!' : 'Removed from saved'); }
+}
+
+// ═══════════════════════════════════════════════
+//  POST MODAL
+// ═══════════════════════════════════════════════
+const POST_FIELDS = {
+  project: `
+    <div class="modal-section">
+      <span class="modal-label">Project Category</span>
+      <select class="modal-select" id="pf-category">
+        <option>Kitchen Renovation</option><option>Bathroom Renovation</option>
+        <option>Painting</option><option>Tiling</option><option>Wall Repair</option>
+        <option>Flooring</option><option>Roof Repair</option><option>Other</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <div><span class="modal-label">Budget Range</span>
+        <input class="modal-input" id="pf-budget" type="text" placeholder="e.g. €5,000–€8,000"></div>
+      <div><span class="modal-label">Start Date</span>
+        <input class="modal-input" id="pf-start" type="date"></div>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Materials</span>
+      <select class="modal-select" id="pf-materials">
+        <option>Contractor supplies materials</option>
+        <option>I supply materials</option>
+        <option>Quote materials separately</option>
+      </select>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Add Photos (3–5) & Video</span>
+      <input class="modal-input" type="file" accept="image/*,video/*" multiple>
+    </div>`,
+  material: `
+    <div class="modal-section">
+      <span class="modal-label">Material Type</span>
+      <select class="modal-select" id="pf-category">
+        <option>Paint</option><option>Timber / Planks</option><option>Bricks / Blocks</option>
+        <option>Tiles</option><option>Insulation</option><option>Steel</option><option>Other</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <div><span class="modal-label">Quantity / Amount</span>
+        <input class="modal-input" id="pf-qty" type="text" placeholder="e.g. 20 cans / 50m²"></div>
+      <div><span class="modal-label">Asking Price</span>
+        <input class="modal-input" id="pf-budget" type="text" placeholder="e.g. €120 or €8/can"></div>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Condition</span>
+      <select class="modal-select" id="pf-condition">
+        <option>Unused / unopened</option><option>Barely used</option><option>Good condition</option><option>Fair condition</option>
+      </select>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Add Photos</span>
+      <input class="modal-input" type="file" accept="image/*" multiple>
+    </div>`,
+  vehicle: `
+    <div class="modal-row">
+      <div><span class="modal-label">Make</span><input class="modal-input" id="pf-make" type="text" placeholder="e.g. Mercedes"></div>
+      <div><span class="modal-label">Model</span><input class="modal-input" id="pf-model" type="text" placeholder="e.g. Sprinter 316"></div>
+    </div>
+    <div class="modal-row">
+      <div><span class="modal-label">Year</span><input class="modal-input" id="pf-year" type="number" placeholder="2019"></div>
+      <div><span class="modal-label">Mileage (km)</span><input class="modal-input" id="pf-mileage" type="text" placeholder="e.g. 148,000"></div>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Asking Price</span>
+      <input class="modal-input" id="pf-budget" type="text" placeholder="e.g. €22,500">
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Add Photos</span>
+      <input class="modal-input" type="file" accept="image/*" multiple>
+    </div>`,
+  tool: `
+    <div class="modal-section">
+      <span class="modal-label">Tool Type</span>
+      <select class="modal-select" id="pf-category">
+        <option>Power Tool</option><option>Hand Tool</option><option>Scaffolding</option>
+        <option>Measuring Equipment</option><option>Safety Equipment</option><option>Other</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <div><span class="modal-label">Brand / Model</span><input class="modal-input" id="pf-make" type="text" placeholder="e.g. Makita DHP484"></div>
+      <div><span class="modal-label">Price</span><input class="modal-input" id="pf-budget" type="text" placeholder="€ or For hire/day"></div>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Add Photos</span>
+      <input class="modal-input" type="file" accept="image/*" multiple>
+    </div>`,
+  service: `
+    <div class="modal-section">
+      <span class="modal-label">Service Type</span>
+      <select class="modal-select" id="pf-category">
+        <option>Plumbing</option><option>Electrical</option><option>Carpentry</option>
+        <option>Painting</option><option>Tiling</option><option>Roofing</option><option>General Construction</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <div><span class="modal-label">Rate</span><input class="modal-input" id="pf-budget" type="text" placeholder="e.g. From €65/hr"></div>
+      <div><span class="modal-label">Availability</span><input class="modal-input" id="pf-start" type="text" placeholder="e.g. From April 2025"></div>
+    </div>
+    <div class="modal-section">
+      <span class="modal-label">Experience / Certifications</span>
+      <textarea class="modal-textarea" id="pf-desc" placeholder="Briefly describe your experience, specialisms, and any certifications…"></textarea>
+    </div>`,
+  transport: `
+    <div class="modal-section">
+      <span class="modal-label">Transport Type</span>
+      <select class="modal-select" id="pf-category">
+        <option>Material Delivery</option><option>Equipment Rental with Driver</option>
+        <option>Waste Removal</option><option>Heavy Haulage</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <div><span class="modal-label">Rate</span><input class="modal-input" id="pf-budget" type="text" placeholder="e.g. From €2.50/km"></div>
+      <div><span class="modal-label">Availability</span><input class="modal-input" id="pf-start" type="text" placeholder="e.g. Mon–Sat"></div>
+    </div>`
+};
+
+function openPostModal() {
+  document.getElementById('post-overlay').classList.add('open');
+  renderPostFields('project');
+}
+
+function selectPostType(type, el) {
+  selectedPostType = type;
+  document.querySelectorAll('#post-type-grid .type-option').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  renderPostFields(type);
+}
+
+function renderPostFields(type) {
+  document.getElementById('post-dynamic-fields').innerHTML = POST_FIELDS[type] || '';
+  document.getElementById('ai-preview-text').textContent = 'Fill in the details above and click Generate — AI will craft a compelling title and description for you.';
+}
+
+// ═══════════════════════════════════════════════
+//  AI GENERATION
+// ═══════════════════════════════════════════════
+async function generateAI() {
+  const btn = document.getElementById('ai-gen-btn');
+  const preview = document.getElementById('ai-preview-text');
+
+  // Gather form data
+  const cat = document.getElementById('pf-category')?.value || selectedPostType;
+  const budget = document.getElementById('pf-budget')?.value || '';
+  const location = document.getElementById('post-location')?.value || 'Helsinki';
+  const desc = document.getElementById('pf-desc')?.value || '';
+  const make = document.getElementById('pf-make')?.value || '';
+  const model = document.getElementById('pf-model')?.value || '';
+
+  const prompt = `You are helping a user create a post on UraWise, a renovation and construction marketplace platform.
+
+Post type: ${selectedPostType}
+Category: ${cat}
+Budget/Price: ${budget || 'not specified'}
+Location: ${location || 'Helsinki'}
+Extra details: ${desc || make + ' ' + model || 'none'}
+
+Generate a compelling post title (max 10 words) and a clear, professional description (2–3 sentences). 
+Format as JSON: {"title": "...", "description": "..."}
+Be specific, professional, and persuasive. Respond ONLY with the JSON object.`;
+
+  btn.disabled = true;
+  btn.textContent = 'Generating…';
+  preview.innerHTML = `<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await res.json();
+    const text = data.content?.map(c => c.text || '').join('') || '';
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    preview.innerHTML = `<strong style="display:block;font-family:'Syne',sans-serif;font-size:14px;margin-bottom:6px">${parsed.title}</strong>${parsed.description}`;
+    btn.textContent = '✦ Regenerate';
+
+    // Optionally pre-fill title input if it exists
+    const titleInput = document.getElementById('pf-title');
+    if (titleInput) titleInput.value = parsed.title;
+
+  } catch(err) {
+    preview.textContent = 'Could not generate right now. Please try again.';
+    btn.textContent = '✦ Generate Title & Description';
+  }
+
+  btn.disabled = false;
+}
+
+// ═══════════════════════════════════════════════
+//  AUTH
+// ═══════════════════════════════════════════════
+function openAuth(mode) {
+  authMode = mode;
+  switchAuth(mode);
+  document.getElementById('auth-overlay').classList.add('open');
+}
+
+function switchAuth(mode) {
+  authMode = mode;
+  document.getElementById('auth-tab-signup').classList.toggle('active', mode === 'signup');
+  document.getElementById('auth-tab-login').classList.toggle('active', mode === 'login');
+  document.getElementById('auth-title').textContent = mode === 'signup' ? 'Join UraWise' : 'Welcome back';
+  document.getElementById('auth-signup-section').style.display = mode === 'signup' ? 'block' : 'none';
+}
+
+function selectUserType(type, el) {
+  document.querySelectorAll('.user-type-card').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function handleAuth() {
+  closeModal('auth-overlay');
+  showToast(authMode === 'signup' ? '🎉 Account created! Welcome to UraWise.' : '👋 Welcome back!');
+}
+
+function submitPost() {
+  closeModal('post-overlay');
+  showToast('✦ Post published! It\'s now live on the map.');
+}
+
+// ═══════════════════════════════════════════════
+//  MODAL UTILS
+// ═══════════════════════════════════════════════
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function closeOnBg(e, id) {
+  if (e.target.id === id) closeModal(id);
+}
+
+function toggleFilter() {
+  showToast('Advanced filters coming soon ✦');
+}
+
+// ═══════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ═══════════════════════════════════════════════
+//  BOOT
+// ═══════════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  renderFilters();
+  renderFeed();
+  initMap();
+});
+</script>
+</body>
+</html>
