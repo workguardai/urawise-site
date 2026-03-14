@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UraWise — Renovation Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -516,6 +516,8 @@
     <div id="user-menu" style="display:none;position:absolute;top:54px;right:16px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:8px;min-width:180px;box-shadow:0 8px 30px rgba(14,14,14,0.14);z-index:2000;">
       <div onclick="setTab('dashboard')" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">📊 My Projects</div>
       <div onclick="openPostModal()" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">✦ Post a Project</div>
+      <div onclick="openProfileModal()" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">👤 Edit Profile</div>
+      <div onclick="openMessages()" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">💬 Messages</div>
       <div style="height:1px;background:var(--border);margin:4px 0;"></div>
       <div onclick="signOut()" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;color:#c0392b;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">Sign out</div>
     </div>
@@ -665,6 +667,131 @@
   </div>
 </div>
 
+<!-- ═══ PROFILE MODAL ═══ -->
+<div class="overlay" id="profile-overlay" onclick="closeOnBg(event,'profile-overlay')">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header">
+      <div class="modal-title">My Profile</div>
+      <button class="modal-close" onclick="closeModal('profile-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <!-- Avatar upload -->
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px;">
+        <div id="profile-avatar-display" onclick="document.getElementById('profile-avatar-input').click()" style="width:72px;height:72px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:26px;cursor:pointer;border:3px solid var(--border);overflow:hidden;flex-shrink:0;"></div>
+        <div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:4px;">Profile Photo</div>
+          <div style="font-size:12px;color:var(--muted);">Click the circle to upload a photo</div>
+          <input type="file" id="profile-avatar-input" accept="image/*" style="display:none" onchange="handleAvatarUpload(this)">
+        </div>
+      </div>
+      <div class="modal-row" style="margin-bottom:14px;">
+        <div><span class="modal-label">First Name</span><input class="modal-input" id="profile-firstname" type="text" placeholder="First name"></div>
+        <div><span class="modal-label">Last Name</span><input class="modal-input" id="profile-lastname" type="text" placeholder="Last name"></div>
+      </div>
+      <div class="modal-section" style="margin-bottom:14px;">
+        <span class="modal-label">Phone</span>
+        <input class="modal-input" id="profile-phone" type="tel" placeholder="+351 …">
+      </div>
+      <div class="modal-section" style="margin-bottom:14px;">
+        <span class="modal-label">City</span>
+        <input class="modal-input" id="profile-city" type="text" placeholder="Lisbon">
+      </div>
+      <div class="modal-section" style="margin-bottom:14px;" id="profile-company-section">
+        <span class="modal-label">Company Name</span>
+        <input class="modal-input" id="profile-company" type="text" placeholder="Your business name">
+      </div>
+      <div class="modal-section" style="margin-bottom:0;">
+        <span class="modal-label">Bio</span>
+        <textarea class="modal-textarea" id="profile-bio" placeholder="Tell homeowners or contractors a bit about yourself…"></textarea>
+      </div>
+      <div id="profile-message" style="display:none;margin-top:12px;padding:10px 14px;border-radius:10px;font-size:13px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('profile-overlay')">Cancel</button>
+      <button class="btn-submit" onclick="saveProfile()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CREATE / EDIT PROJECT MODAL ═══ -->
+<div class="overlay" id="project-overlay" onclick="closeOnBg(event,'project-overlay')">
+  <div class="modal" style="max-width:600px;">
+    <div class="modal-header">
+      <div class="modal-title" id="project-modal-title">New Project</div>
+      <button class="modal-close" onclick="closeModal('project-overlay')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section" style="margin-bottom:14px;">
+        <span class="modal-label">Project Title</span>
+        <input class="modal-input" id="proj-title" type="text" placeholder="e.g. Full apartment renovation – Bairro Alto">
+      </div>
+      <div class="modal-row" style="margin-bottom:14px;">
+        <div>
+          <span class="modal-label">Category</span>
+          <select class="modal-select" id="proj-category">
+            <option>Full Renovation</option><option>Kitchen</option><option>Bathroom</option>
+            <option>Painting</option><option>Flooring</option><option>Tiling</option>
+            <option>Electrical</option><option>Plumbing</option><option>Roof</option>
+            <option>Facade</option><option>Other</option>
+          </select>
+        </div>
+        <div>
+          <span class="modal-label">Status</span>
+          <select class="modal-select" id="proj-status">
+            <option value="pending">Planning</option>
+            <option value="active">Active / In Progress</option>
+            <option value="paused">Paused</option>
+            <option value="complete">Complete</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-section" style="margin-bottom:14px;">
+        <span class="modal-label">Description</span>
+        <textarea class="modal-textarea" id="proj-desc" placeholder="Describe the scope of works, materials needed, special requirements…"></textarea>
+      </div>
+      <div class="modal-row" style="margin-bottom:14px;">
+        <div><span class="modal-label">Budget (€)</span><input class="modal-input" id="proj-budget" type="text" placeholder="e.g. 15,000"></div>
+        <div><span class="modal-label">Address / Area</span><input class="modal-input" id="proj-address" type="text" placeholder="e.g. Alfama, Lisboa"></div>
+      </div>
+      <div class="modal-row" style="margin-bottom:14px;">
+        <div><span class="modal-label">Start Date</span><input class="modal-input" id="proj-start" type="date"></div>
+        <div><span class="modal-label">Est. End Date</span><input class="modal-input" id="proj-end" type="date"></div>
+      </div>
+      <!-- Milestones -->
+      <div class="modal-section" style="margin-bottom:0;">
+        <span class="modal-label">Payment Milestones</span>
+        <div id="milestone-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+        <button onclick="addMilestone()" style="background:var(--bone);border:1.5px dashed var(--border);border-radius:10px;padding:9px 16px;font-size:13px;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;color:var(--muted);">+ Add milestone</button>
+      </div>
+      <div id="project-message" style="display:none;margin-top:12px;padding:10px 14px;border-radius:10px;font-size:13px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('project-overlay')">Cancel</button>
+      <button class="btn-submit" id="proj-save-btn" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MESSAGING PANEL ═══ -->
+<div id="msg-panel" style="position:fixed;bottom:0;right:24px;width:340px;background:var(--card);border-radius:16px 16px 0 0;border:1.5px solid var(--border);box-shadow:0 -4px 30px rgba(14,14,14,0.12);z-index:1500;display:none;flex-direction:column;" >
+  <div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;cursor:pointer;" onclick="toggleMsgPanel()">
+    <div id="msg-peer-avatar" style="width:34px;height:34px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;flex-shrink:0;"></div>
+    <div style="flex:1;">
+      <div id="msg-peer-name" style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;"></div>
+      <div id="msg-peer-sub" style="font-size:11px;color:var(--muted);"></div>
+    </div>
+    <div id="msg-unread-dot" style="display:none;width:8px;height:8px;border-radius:50%;background:var(--accent);"></div>
+    <div style="font-size:16px;color:var(--muted);" id="msg-toggle-icon">▾</div>
+  </div>
+  <div id="msg-body" style="flex:1;display:flex;flex-direction:column;height:320px;">
+    <div id="msg-feed" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+    <div style="padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;">
+      <input id="msg-input" type="text" placeholder="Type a message…" style="flex:1;padding:9px 12px;border-radius:10px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')sendMessage()">
+      <button onclick="sendMessage()" style="padding:9px 14px;background:var(--accent);color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;">Send</button>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -681,7 +808,7 @@ const POSTS = [
     budget: '€18,000–€25,000', timeline: 'Starts April 2025',
     tags: ['Kitchen', 'Plumbing', 'Electrical', 'Cabinetry'],
     user: 'Anna K.', userType: 'homeowner',
-    lat: 60.169, lng: 24.935, bids: 4, saved: false
+    lat: 38.717, lng: -9.142, bids: 4, saved: false
   },
   {
     id: 2, type: 'project', subtype: 'Bathroom Renovation',
@@ -691,7 +818,7 @@ const POSTS = [
     budget: '€6,000–€9,000', timeline: 'Starts May 2025',
     tags: ['Bathroom', 'Tiling', 'Plumbing'],
     user: 'Mikael J.', userType: 'homeowner',
-    lat: 60.175, lng: 24.945, bids: 7, saved: true
+    lat: 38.722, lng: -9.137, bids: 7, saved: true
   },
   {
     id: 3, type: 'material', subtype: 'Leftover Paint',
@@ -701,7 +828,7 @@ const POSTS = [
     budget: '€8/can or €90 all', timeline: 'Available now',
     tags: ['Paint', 'Tikkurila', 'White', 'Interior'],
     user: 'NordBuilders Oy', userType: 'business',
-    lat: 60.183, lng: 24.950, bids: 0, saved: false
+    lat: 38.714, lng: -9.148, bids: 0, saved: false
   },
   {
     id: 4, type: 'material', subtype: 'Timber & Planks',
@@ -711,7 +838,7 @@ const POSTS = [
     budget: '€3.50/m', timeline: 'Available now',
     tags: ['Timber', 'Spruce', 'Framing'],
     user: 'BuildStock Oy', userType: 'business',
-    lat: 60.160, lng: 24.920, bids: 0, saved: false
+    lat: 38.709, lng: -9.155, bids: 0, saved: false
   },
   {
     id: 5, type: 'vehicle', subtype: 'Work Van',
@@ -721,7 +848,7 @@ const POSTS = [
     budget: '€22,500', timeline: 'Available immediately',
     tags: ['Mercedes', 'Sprinter', 'Van', '2019'],
     user: 'Heikkinen Rakennus', userType: 'business',
-    lat: 60.155, lng: 24.955, bids: 0, saved: false
+    lat: 38.726, lng: -9.130, bids: 0, saved: false
   },
   {
     id: 6, type: 'project', subtype: 'Painting',
@@ -731,7 +858,7 @@ const POSTS = [
     budget: '€1,800–€2,800', timeline: 'Flexible, June–July',
     tags: ['Painting', 'Interior', 'Apartment'],
     user: 'Laura M.', userType: 'homeowner',
-    lat: 60.178, lng: 24.928, bids: 2, saved: false
+    lat: 38.719, lng: -9.144, bids: 2, saved: false
   },
   {
     id: 7, type: 'service', subtype: 'Plumbing',
@@ -741,29 +868,29 @@ const POSTS = [
     budget: 'From €65/hr', timeline: 'Available from April',
     tags: ['Plumbing', 'Bathroom', 'Kitchen'],
     user: 'Virtanen Plumbing', userType: 'business',
-    lat: 60.165, lng: 24.940, bids: 0, saved: false
+    lat: 38.711, lng: -9.139, bids: 0, saved: false
   },
   {
     id: 8, type: 'stores', subtype: 'Hardware Store',
-    title: 'K-Rauta Helsinki Centrum', emoji: '🏪',
+    title: 'Leroy Merlin Lisboa', emoji: '🏪',
     img: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',
     desc: 'Finland\'s leading DIY and building materials store. Wide range of tools, timber, tiles, paints, plumbing, and electrical supplies.',
-    budget: 'Visit store', timeline: 'Open Mon–Sat 8–20',
+    budget: 'Visit store', timeline: 'Open Mon–Sat 9–20',
     tags: ['Hardware', 'Tools', 'Paint', 'Timber'],
-    user: 'K-Rauta', userType: 'store',
-    lat: 60.172, lng: 24.962, bids: 0, saved: false,
-    storeUrl: 'https://www.k-rauta.fi'
+    user: 'Leroy Merlin', userType: 'store',
+    lat: 38.724, lng: -9.135, bids: 0, saved: false,
+    storeUrl: 'https://www.leroymerlin.pt'
   },
   {
     id: 9, type: 'stores', subtype: 'Hardware Store',
-    title: 'Bauhaus Helsinki — Building & Garden', emoji: '🔨',
+    title: 'AKI Bricolage Lisboa', emoji: '🔨',
     img: 'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',
     desc: 'Large-format hardware and home improvement superstore. Tools, materials, flooring, lighting, garden, and bathroom fixtures.',
-    budget: 'Visit store', timeline: 'Open Mon–Sun 8–21',
+    budget: 'Visit store', timeline: 'Open Mon–Sun 9–21',
     tags: ['Hardware', 'Flooring', 'Bathroom', 'Lighting'],
-    user: 'Bauhaus', userType: 'store',
-    lat: 60.210, lng: 25.000, bids: 0, saved: false,
-    storeUrl: 'https://www.bauhaus.fi'
+    user: 'AKI Bricolage', userType: 'store',
+    lat: 38.730, lng: -9.160, bids: 0, saved: false,
+    storeUrl: 'https://www.aki.pt'
   }
 ];
 
@@ -800,7 +927,7 @@ let activeFilter = 'All';
 // ═══════════════════════════════════════════════
 function initMap() {
   map = L.map('map', {
-    center: [60.1695, 24.9354],
+    center: [38.7169, -9.1395],
     zoom: 13,
     zoomControl: false
   });
@@ -811,6 +938,15 @@ function initMap() {
   }).addTo(map);
 
   L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+  // Try to get real user location
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => map.setView([pos.coords.latitude, pos.coords.longitude], 13),
+      ()  => map.setView([38.7169, -9.1395], 13) // fallback: Lisbon
+    );
+  }
+
   renderMarkers();
 }
 
@@ -839,7 +975,14 @@ function renderMarkers() {
 }
 
 function centerMap() {
-  map.setView([60.1695, 24.9354], 13);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => map.setView([pos.coords.latitude, pos.coords.longitude], 14),
+      ()  => map.setView([38.7169, -9.1395], 13)
+    );
+  } else {
+    map.setView([38.7169, -9.1395], 13);
+  }
 }
 
 // ═══════════════════════════════════════════════
@@ -1212,7 +1355,7 @@ async function generateAI() {
   // Gather form data
   const cat = document.getElementById('pf-category')?.value || selectedPostType;
   const budget = document.getElementById('pf-budget')?.value || '';
-  const location = document.getElementById('post-location')?.value || 'Helsinki';
+  const location = document.getElementById('post-location')?.value || 'Lisboa';
   const desc = document.getElementById('pf-desc')?.value || '';
   const make = document.getElementById('pf-make')?.value || '';
   const model = document.getElementById('pf-model')?.value || '';
@@ -1222,7 +1365,7 @@ async function generateAI() {
 Post type: ${selectedPostType}
 Category: ${cat}
 Budget/Price: ${budget || 'not specified'}
-Location: ${location || 'Helsinki'}
+Location: ${location || 'Lisboa'}
 Extra details: ${desc || make + ' ' + model || 'none'}
 
 Generate a compelling post title (max 10 words) and a clear, professional description (2–3 sentences). 
@@ -1710,6 +1853,533 @@ function showToast(msg) {
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
 }
+
+
+// ═══════════════════════════════════════════════
+//  PROFILE EDIT
+// ═══════════════════════════════════════════════
+async function openProfileModal() {
+  document.getElementById('user-menu').style.display = 'none';
+  // Pre-fill from current profile
+  if (userProfile) {
+    document.getElementById('profile-firstname').value = userProfile.first_name || '';
+    document.getElementById('profile-lastname').value  = userProfile.last_name  || '';
+    document.getElementById('profile-phone').value     = userProfile.phone      || '';
+    document.getElementById('profile-city').value      = userProfile.city       || '';
+    document.getElementById('profile-company').value   = userProfile.company_name || '';
+    document.getElementById('profile-bio').value       = userProfile.bio        || '';
+    // Show company field only for business accounts
+    document.getElementById('profile-company-section').style.display =
+      userProfile.user_type === 'business' ? 'block' : 'none';
+    // Avatar
+    const av = document.getElementById('profile-avatar-display');
+    if (userProfile.avatar_url) {
+      av.innerHTML = `<img src="${userProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;">`;
+    } else {
+      av.textContent = (userProfile.first_name||'U').charAt(0).toUpperCase();
+    }
+  }
+  document.getElementById('profile-message').style.display = 'none';
+  document.getElementById('profile-overlay').classList.add('open');
+}
+
+async function handleAvatarUpload(input) {
+  if (!input.files || !input.files[0] || !currentUser) return;
+  const file = input.files[0];
+  const ext  = file.name.split('.').pop();
+  const path = `avatars/${currentUser.id}.${ext}`;
+  const { error } = await sb.storage.from('avatars').upload(path, file, { upsert: true });
+  if (error) { showToast('Photo upload failed. Try again.'); return; }
+  const { data } = sb.storage.from('avatars').getPublicUrl(path);
+  const av = document.getElementById('profile-avatar-display');
+  av.innerHTML = `<img src="${data.publicUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+  // Save URL to profile immediately
+  await sb.from('profiles').update({ avatar_url: data.publicUrl }).eq('id', currentUser.id);
+  if (userProfile) userProfile.avatar_url = data.publicUrl;
+  // Update nav avatar
+  document.getElementById('nav-avatar').innerHTML =
+    `<img src="${data.publicUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  showToast('Photo updated!');
+}
+
+async function saveProfile() {
+  if (!currentUser) return;
+  const updates = {
+    first_name:   document.getElementById('profile-firstname').value.trim(),
+    last_name:    document.getElementById('profile-lastname').value.trim(),
+    phone:        document.getElementById('profile-phone').value.trim(),
+    city:         document.getElementById('profile-city').value.trim(),
+    company_name: document.getElementById('profile-company').value.trim(),
+    bio:          document.getElementById('profile-bio').value.trim(),
+  };
+  const { error } = await sb.from('profiles').update(updates).eq('id', currentUser.id);
+  const msgEl = document.getElementById('profile-message');
+  if (error) {
+    msgEl.style.display = 'block';
+    msgEl.style.background = '#fff0f0'; msgEl.style.color = '#c0392b';
+    msgEl.style.border = '1.5px solid #f5c6c6';
+    msgEl.textContent = 'Could not save. Please try again.';
+  } else {
+    Object.assign(userProfile, updates);
+    document.getElementById('nav-user-name').textContent = updates.first_name || currentUser.email.split('@')[0];
+    document.getElementById('nav-avatar').textContent    = (updates.first_name||'U').charAt(0).toUpperCase();
+    closeModal('profile-overlay');
+    showToast('Profile saved ✓');
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  PROJECT CRUD  (real Supabase)
+// ═══════════════════════════════════════════════
+let editingProjectId = null;
+let milestoneCount   = 0;
+
+function openCreateProject() {
+  if (!currentUser) { openAuth('login'); return; }
+  editingProjectId = null;
+  milestoneCount   = 0;
+  document.getElementById('project-modal-title').textContent = 'New Project';
+  document.getElementById('proj-title').value    = '';
+  document.getElementById('proj-desc').value     = '';
+  document.getElementById('proj-budget').value   = '';
+  document.getElementById('proj-address').value  = '';
+  document.getElementById('proj-start').value    = '';
+  document.getElementById('proj-end').value      = '';
+  document.getElementById('proj-status').value   = 'pending';
+  document.getElementById('milestone-list').innerHTML = '';
+  document.getElementById('project-message').style.display = 'none';
+  // Add default 4 milestones
+  ['M1 – Contract & Materials (30%)','M2 – Mid-works complete (30%)','M3 – Finishes applied (30%)','M4 – Final handover (10%)'].forEach(name => addMilestone(name));
+  document.getElementById('project-overlay').classList.add('open');
+}
+
+function openEditProject(proj, milestones) {
+  editingProjectId = proj.id;
+  milestoneCount   = 0;
+  document.getElementById('project-modal-title').textContent = 'Edit Project';
+  document.getElementById('proj-title').value    = proj.title    || '';
+  document.getElementById('proj-desc').value     = proj.description || '';
+  document.getElementById('proj-budget').value   = proj.total_value  || '';
+  document.getElementById('proj-address').value  = proj.address   || '';
+  document.getElementById('proj-start').value    = proj.start_date ? proj.start_date.split('T')[0] : '';
+  document.getElementById('proj-end').value      = proj.est_end_date ? proj.est_end_date.split('T')[0] : '';
+  document.getElementById('proj-status').value   = proj.status   || 'pending';
+  document.getElementById('milestone-list').innerHTML = '';
+  (milestones||[]).forEach(m => addMilestone(m.name, m.amount, m.status));
+  document.getElementById('project-message').style.display = 'none';
+  document.getElementById('project-overlay').classList.add('open');
+}
+
+function addMilestone(name='', amount='', status='pending') {
+  const id = milestoneCount++;
+  const row = document.createElement('div');
+  row.id = `ms-row-${id}`;
+  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.innerHTML = `
+    <input class="modal-input" style="flex:2;" type="text" id="ms-name-${id}" placeholder="Milestone name" value="${name}">
+    <input class="modal-input" style="flex:1;" type="number" id="ms-amt-${id}"  placeholder="€ amount" value="${amount}">
+    <select class="modal-select" style="flex:1;" id="ms-status-${id}">
+      <option value="pending"  ${status==='pending' ?'selected':''}>Pending</option>
+      <option value="invoiced" ${status==='invoiced'?'selected':''}>Invoiced</option>
+      <option value="paid"     ${status==='paid'    ?'selected':''}>Paid</option>
+    </select>
+    <button onclick="document.getElementById('ms-row-${id}').remove()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:0 4px;">×</button>`;
+  document.getElementById('milestone-list').appendChild(row);
+}
+
+async function saveProject() {
+  if (!currentUser) return;
+  const title  = document.getElementById('proj-title').value.trim();
+  if (!title) { showProjMsg('Please enter a project title.', true); return; }
+
+  const btn = document.getElementById('proj-save-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  const projData = {
+    owner_id:      currentUser.id,
+    title,
+    description:   document.getElementById('proj-desc').value.trim(),
+    total_value:   parseFloat(document.getElementById('proj-budget').value.replace(/[^0-9.]/g,'')) || null,
+    address:       document.getElementById('proj-address').value.trim(),
+    start_date:    document.getElementById('proj-start').value    || null,
+    est_end_date:  document.getElementById('proj-end').value      || null,
+    status:        document.getElementById('proj-status').value,
+    city:          'Lisboa',
+  };
+
+  let projId = editingProjectId;
+  let error;
+
+  if (editingProjectId) {
+    ({ error } = await sb.from('projects').update(projData).eq('id', editingProjectId));
+  } else {
+    const { data, error: e } = await sb.from('projects').insert(projData).select().single();
+    error = e; if (data) projId = data.id;
+  }
+
+  if (error) { showProjMsg('Could not save project: ' + error.message, true); btn.disabled=false; btn.textContent='Save Project'; return; }
+
+  // Save milestones — delete old ones, re-insert
+  if (projId) {
+    await sb.from('milestones').delete().eq('project_id', projId);
+    const msRows = [];
+    for (let i = 0; i < milestoneCount; i++) {
+      const nameEl = document.getElementById(`ms-name-${i}`);
+      const amtEl  = document.getElementById(`ms-amt-${i}`);
+      const stEl   = document.getElementById(`ms-status-${i}`);
+      if (!nameEl) continue;
+      msRows.push({ project_id: projId, name: nameEl.value.trim(), amount: parseFloat(amtEl.value)||null, status: stEl.value, sort_order: i });
+    }
+    if (msRows.length) await sb.from('milestones').insert(msRows);
+  }
+
+  btn.disabled=false; btn.textContent='Save Project';
+  closeModal('project-overlay');
+  showToast(editingProjectId ? 'Project updated ✓' : 'Project created! ✓');
+  if (currentTab === 'dashboard') { dashSelected=0; renderDashboard(); }
+  else loadRealDashboard();
+}
+
+function showProjMsg(msg, isErr) {
+  const el = document.getElementById('project-message');
+  el.style.display='block'; el.textContent=msg;
+  el.style.background = isErr ? '#fff0f0' : '#e6f2f2';
+  el.style.color       = isErr ? '#c0392b' : '#1a6b6b';
+  el.style.border      = isErr ? '1.5px solid #f5c6c6' : '1.5px solid #a8d8d8';
+}
+
+// ═══════════════════════════════════════════════
+//  REAL SUPABASE DASHBOARD
+// ═══════════════════════════════════════════════
+let realProjects   = [];
+let realMilestones = {};
+let realMessages   = {};
+let dashRealSel    = 0;
+let dashRealTab    = 'overview';
+
+async function loadRealDashboard() {
+  if (!currentUser) return;
+  // Load projects where user is owner or contractor
+  const { data: projs } = await sb.from('projects')
+    .select('*')
+    .or(`owner_id.eq.${currentUser.id},contractor_id.eq.${currentUser.id}`)
+    .order('created_at', { ascending: false });
+  realProjects = projs || [];
+
+  // Load milestones for all projects
+  if (realProjects.length) {
+    const ids = realProjects.map(p => p.id);
+    const { data: ms } = await sb.from('milestones').select('*').in('project_id', ids).order('sort_order');
+    realMilestones = {};
+    (ms||[]).forEach(m => { if (!realMilestones[m.project_id]) realMilestones[m.project_id]=[];  realMilestones[m.project_id].push(m); });
+  }
+}
+
+async function renderDashboard() {
+  await loadRealDashboard();
+  const panel = document.getElementById('dashboard-panel');
+  if (!panel) return;
+
+  const isOwner = userProfile?.user_type !== 'business';
+  const hasProjects = realProjects.length > 0;
+
+  panel.style.fontFamily = "'Poppins', sans-serif";
+  panel.innerHTML = `
+  <style>
+    #dashboard-panel * { font-family: 'Poppins', sans-serif !important; }
+    .dp-sidebar { width:260px;flex-shrink:0;background:#faf8f4;border-right:1px solid #e2ddd6;overflow-y:auto;padding:16px 12px; }
+    .dp-unit { padding:10px;border-radius:10px;cursor:pointer;margin-bottom:4px;border:1.5px solid transparent;transition:all .18s; }
+    .dp-unit:hover { background:#f5f2ec; }
+    .dp-unit.sel { background:#fef0ea;border-color:#e8521a; }
+    .dp-stat { background:#fff;border-radius:12px;border:1.5px solid #e2ddd6;padding:14px 16px; }
+    .dp-card { background:#fff;border-radius:14px;border:1.5px solid #e2ddd6;padding:16px;margin-bottom:16px; }
+    .dp-tab-row { display:flex;gap:4px;background:#f5f2ec;border-radius:10px;padding:3px;margin-bottom:16px; }
+    .dp-tab { flex:1;padding:6px 0;text-align:center;font-size:12px;font-weight:600;border-radius:7px;cursor:pointer;border:none;background:transparent;color:#8a8580;transition:all .18s; }
+    .dp-tab.act { background:#0e0e0e;color:#f5f2ec; }
+    .dp-ms-row { display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #e2ddd6; }
+    .dp-ms-row:last-child { border-bottom:none; }
+    .dp-badge { display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px; }
+    .dp-empty { text-align:center;padding:60px 20px; }
+    .dp-create-btn { display:inline-flex;align-items:center;gap:8px;padding:14px 28px;background:#e8521a;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;margin-top:16px;transition:all .2s; }
+    .dp-create-btn:hover { background:#d44515;transform:translateY(-1px); }
+    .dp-edit-btn { padding:6px 12px;background:var(--bone);border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif; }
+  </style>
+  <div style="display:flex;height:calc(100vh - 58px);">
+    <div class="dp-sidebar">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#8a8580;margin:0 4px 10px;">
+        ${isOwner ? 'My Projects' : 'Active Projects'}
+      </div>
+      ${hasProjects ? realProjects.map((p,i) => {
+        const ms = realMilestones[p.id]||[];
+        const paid   = ms.filter(m=>m.status==='paid').reduce((s,m)=>s+(m.amount||0),0);
+        const total  = p.total_value||0;
+        const pct    = total>0 ? Math.round(paid/total*100) : 0;
+        const stColor = p.status==='active'?'background:#fff8e6;color:#a07800':p.status==='complete'?'background:#e8f5e9;color:#2e7d32':'background:#fef0ea;color:#e8521a';
+        return `<div class="dp-unit ${i===dashRealSel?'sel':''}" onclick="dashRealSelect(${i})">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;">${p.title}</div>
+            <span class="dp-badge" style="${stColor}">${p.status}</span>
+          </div>
+          <div style="font-size:11px;color:#8a8580;margin-top:2px;">${p.address||p.city||'Lisboa'}</div>
+          <div style="height:3px;background:#e2ddd6;border-radius:3px;margin-top:6px;overflow:hidden;"><div style="height:100%;border-radius:3px;background:#e8521a;width:${pct}%;"></div></div>
+        </div>`;
+      }).join('') : `<div style="font-size:13px;color:#8a8580;text-align:center;margin-top:20px;line-height:1.6;">No projects yet.<br>Create your first one!</div>`}
+      <button class="dp-create-btn" style="width:100%;justify-content:center;margin-top:16px;" onclick="openCreateProject()">+ New Project</button>
+      ${!isOwner ? `<div style="margin-top:16px;padding:12px;background:#fef0ea;border-radius:10px;border:1.5px solid #e8521a;">
+        <div style="font-weight:700;font-size:12px;color:#e8521a;margin-bottom:4px;">Bundle Active</div>
+        <div style="font-size:11px;color:#8a8580;">7-unit Lisbon programme</div>
+      </div>` : ''}
+    </div>
+    <div style="flex:1;padding:20px 24px;overflow-y:auto;" id="dp-main">
+      ${hasProjects ? '' : `<div class="dp-empty">
+        <div style="font-size:48px;margin-bottom:16px;">🏗️</div>
+        <div style="font-weight:700;font-size:20px;margin-bottom:8px;">No projects yet</div>
+        <div style="font-size:14px;color:#8a8580;max-width:320px;margin:0 auto 24px;line-height:1.6;">
+          ${isOwner ? 'Post your renovation project and get bids from contractors across Lisbon.' : 'Create a project to track works, milestones and communicate with your client.'}
+        </div>
+        <button class="dp-create-btn" onclick="openCreateProject()">+ Create your first project</button>
+      </div>`}
+    </div>
+  </div>`;
+
+  if (hasProjects) renderDashRealMain();
+
+  // Subscribe to real-time message updates
+  sb.channel('messages').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+    const p = payload.new;
+    if (realProjects.find(pr => pr.id === p.project_id)) appendMessageBubble(p);
+  }).subscribe();
+}
+
+function dashRealSelect(i) { dashRealSel=i; dashRealTab='overview'; renderDashRealMain(); }
+function dashRealSetTab(t) { dashRealTab=t; renderDashRealMain(); }
+
+function renderDashRealMain() {
+  const el = document.getElementById('dp-main');
+  if (!el || !realProjects.length) return;
+  const proj = realProjects[dashRealSel];
+  if (!proj) return;
+  const ms    = realMilestones[proj.id]||[];
+  const paid  = ms.filter(m=>m.status==='paid').reduce((s,m)=>s+(m.amount||0),0);
+  const total = proj.total_value||0;
+  const pct   = total>0 ? Math.round(paid/total*100) : 0;
+  const remaining = total - paid;
+  const pendingMs = ms.filter(m=>m.status!=='paid').length;
+  const isOwner   = userProfile?.user_type !== 'business';
+
+  let content = '';
+
+  if (dashRealTab === 'overview') {
+    const msHTML = ms.length ? ms.map(m => {
+      const stColor = m.status==='paid'?'background:#e8f5e9;color:#2e7d32':m.status==='invoiced'?'background:#fff8e6;color:#a07800':'background:#fef0ea;color:#e8521a';
+      return `<div class="dp-ms-row">
+        <div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;${m.status==='paid'?'background:#e8f5e9;color:#2e7d32':'background:#f5f2ec;border:1.5px solid #e2ddd6;color:#8a8580'};">${m.status==='paid'?'✓':'○'}</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">${m.name}</div>
+          ${m.due_date?`<div style="font-size:11px;color:#8a8580;">Due: ${m.due_date}</div>`:''}
+        </div>
+        <div style="text-align:right;">
+          <div style="font-weight:700;font-size:14px;">${m.amount?'€'+Number(m.amount).toLocaleString('en-IE'):'-'}</div>
+          <span class="dp-badge" style="${stColor}">${m.status}</span>
+          ${!isOwner && m.status==='pending'?`<br><button class="dp-edit-btn" style="margin-top:4px;" onclick="markMilestonePaid('${m.id}')">Mark invoiced</button>`:''}
+        </div>
+      </div>`;
+    }).join('') : `<div style="font-size:13px;color:#8a8580;padding:16px 0;">No milestones yet. Edit the project to add them.</div>`;
+
+    content = `
+      <div class="dp-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-weight:600;font-size:14px;">Payment progress</div>
+          <div style="font-weight:700;font-size:14px;">€${Number(paid).toLocaleString('en-IE')} / €${Number(total).toLocaleString('en-IE')}</div>
+        </div>
+        <div style="height:8px;background:#f5f2ec;border-radius:8px;overflow:hidden;margin:8px 0;"><div style="height:100%;background:#e8521a;border-radius:8px;width:${pct}%;transition:width .4s;"></div></div>
+        <div style="font-size:11px;color:#8a8580;">${pct}% received · ${pendingMs} milestone${pendingMs!==1?'s':''} remaining</div>
+      </div>
+      <div class="dp-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <div style="font-weight:600;font-size:14px;">Milestones</div>
+          <button class="dp-edit-btn" onclick="openEditProject(realProjects[${dashRealSel}], realMilestones['${proj.id}'])">Edit</button>
+        </div>
+        ${msHTML}
+      </div>`;
+
+  } else if (dashRealTab === 'activity') {
+    content = `<div class="dp-card" id="activity-dp-card">
+      <div style="font-weight:600;font-size:14px;margin-bottom:12px;">Activity & Messages</div>
+      <div id="dp-activity-feed" style="display:flex;flex-direction:column;gap:8px;min-height:80px;margin-bottom:12px;"></div>
+      <div style="display:flex;gap:8px;">
+        <input id="dp-msg-input" type="text" placeholder="Send a message to the ${isOwner?'contractor':'client'}…" style="flex:1;padding:10px 14px;border-radius:10px;border:1.5px solid #e2ddd6;font-family:'Poppins',sans-serif;font-size:13px;outline:none;" onkeydown="if(event.key==='Enter')sendDpMessage('${proj.id}')">
+        <button onclick="sendDpMessage('${proj.id}')" style="padding:10px 16px;background:#e8521a;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Send</button>
+      </div>
+    </div>`;
+  } else {
+    // Documents tab
+    content = `<div class="dp-card">
+      <div style="font-weight:600;font-size:14px;margin-bottom:12px;">Documents & Files</div>
+      <div style="font-size:13px;color:#8a8580;margin-bottom:16px;">Upload contracts, receipts, photos and plans for this project.</div>
+      <input type="file" multiple accept="image/*,.pdf,.doc,.docx" onchange="uploadProjectFiles(this,'${proj.id}')" style="display:none;" id="doc-upload-input">
+      <button onclick="document.getElementById('doc-upload-input').click()" style="padding:10px 18px;border:1.5px dashed #e2ddd6;border-radius:10px;background:var(--bone);font-size:13px;cursor:pointer;font-family:'Poppins',sans-serif;">+ Upload files</button>
+    </div>`;
+  }
+
+  el.innerHTML = `
+    <div style="margin-bottom:20px;display:flex;align-items:flex-start;justify-content:space-between;">
+      <div>
+        <div style="font-weight:700;font-size:22px;margin-bottom:4px;">${proj.title}</div>
+        <div style="font-size:13px;color:#8a8580;display:flex;gap:12px;flex-wrap:wrap;">
+          ${proj.address?`<span>📍 ${proj.address}</span>`:''}
+          <span>Status: <strong style="color:#e8521a;">${proj.status}</strong></span>
+          ${proj.start_date?`<span>Started: ${proj.start_date}</span>`:''}
+        </div>
+        ${proj.description?`<div style="margin-top:10px;font-size:13px;color:#444;line-height:1.6;max-width:600px;">${proj.description}</div>`:''}
+      </div>
+      <button class="dp-edit-btn" onclick="openEditProject(realProjects[${dashRealSel}], realMilestones['${proj.id}'])">✏ Edit</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:20px;">
+      ${[
+        ['Contract Value','€'+Number(total).toLocaleString('en-IE'),'#e8521a','incl. all works'],
+        ['Received',      '€'+Number(paid).toLocaleString('en-IE'), '#1a6b6b', pct+'% of total'],
+        ['Remaining',     '€'+Number(remaining).toLocaleString('en-IE'),'#0e0e0e', pendingMs+' milestones left'],
+        ['Progress',      pct+'%','#c9a84c', proj.status],
+      ].map(([l,v,c,s])=>`<div class="dp-stat"><div style="font-size:11px;color:#8a8580;margin-bottom:6px;font-weight:500;">${l}</div><div style="font-weight:700;font-size:22px;color:${c};">${v}</div><div style="font-size:11px;color:#8a8580;margin-top:2px;">${s}</div></div>`).join('')}
+    </div>
+    <div class="dp-tab-row">
+      ${['overview','activity','documents'].map(t=>`<button class="dp-tab ${dashRealTab===t?'act':''}" onclick="dashRealSetTab('${t}')">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('')}
+    </div>
+    ${content}`;
+
+  // Load messages if activity tab
+  if (dashRealTab === 'activity') loadProjectMessages(proj.id);
+}
+
+async function loadProjectMessages(projectId) {
+  const { data } = await sb.from('messages').select('*, profiles(first_name,last_name,avatar_url)').eq('project_id', projectId).order('created_at', { ascending: true }).limit(50);
+  const feed = document.getElementById('dp-activity-feed');
+  if (!feed) return;
+  feed.innerHTML = (data||[]).map(m => messageBubbleHTML(m)).join('');
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function messageBubbleHTML(m) {
+  const isMine = m.sender_id === currentUser?.id;
+  const name   = m.profiles ? (m.profiles.first_name||'') + ' ' + (m.profiles.last_name||'') : 'User';
+  const time   = new Date(m.created_at).toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit'});
+  return `<div style="display:flex;flex-direction:${isMine?'row-reverse':'row'};gap:8px;align-items:flex-end;">
+    <div style="width:28px;height:28px;border-radius:50%;background:${isMine?'#e8521a':'#1a6b6b'};display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;flex-shrink:0;">${name.charAt(0).toUpperCase()}</div>
+    <div style="max-width:70%;">
+      <div style="background:${isMine?'#e8521a':'#f5f2ec'};color:${isMine?'#fff':'#0e0e0e'};padding:10px 14px;border-radius:${isMine?'14px 14px 4px 14px':'14px 14px 14px 4px'};font-size:13px;line-height:1.5;">${m.body}</div>
+      <div style="font-size:10px;color:#8a8580;margin-top:3px;text-align:${isMine?'right':'left'};">${time}</div>
+    </div>
+  </div>`;
+}
+
+function appendMessageBubble(m) {
+  const feed = document.getElementById('dp-activity-feed');
+  if (!feed) return;
+  feed.insertAdjacentHTML('beforeend', messageBubbleHTML(m));
+  feed.scrollTop = feed.scrollHeight;
+}
+
+async function sendDpMessage(projectId) {
+  const input = document.getElementById('dp-msg-input');
+  const body  = input?.value?.trim();
+  if (!body || !currentUser) return;
+  input.value = '';
+  await sb.from('messages').insert({ project_id: projectId, sender_id: currentUser.id, body });
+}
+
+async function markMilestonePaid(msId) {
+  await sb.from('milestones').update({ status: 'invoiced' }).eq('id', msId);
+  await loadRealDashboard();
+  renderDashRealMain();
+  showToast('Milestone marked as invoiced ✓');
+}
+
+async function uploadProjectFiles(input, projectId) {
+  if (!input.files || !currentUser) return;
+  for (const file of input.files) {
+    const path = `projects/${projectId}/${Date.now()}_${file.name}`;
+    const { error } = await sb.storage.from('project-files').upload(path, file);
+    if (!error) {
+      await sb.from('activity_log').insert({ project_id: projectId, user_id: currentUser.id, event_type: 'file_upload', message: `File uploaded: ${file.name}` });
+    }
+  }
+  showToast('Files uploaded ✓');
+}
+
+// ═══════════════════════════════════════════════
+//  MESSAGING PANEL  (floating, for bids/enquiries)
+// ═══════════════════════════════════════════════
+let msgProjectId  = null;
+let msgPanelOpen  = true;
+let msgSubscription = null;
+
+function openMessages(projectId, peerName, peerSub) {
+  document.getElementById('user-menu').style.display = 'none';
+  if (!currentUser) { openAuth('login'); return; }
+  // If called from a project context, use that project; otherwise use first project
+  msgProjectId = projectId || (realProjects[0]?.id) || null;
+  if (!msgProjectId) { showToast('No projects found. Create one first.'); return; }
+
+  const panel = document.getElementById('msg-panel');
+  document.getElementById('msg-peer-avatar').textContent = (peerName||'M').charAt(0).toUpperCase();
+  document.getElementById('msg-peer-name').textContent   = peerName || 'Project Messages';
+  document.getElementById('msg-peer-sub').textContent    = peerSub  || 'Tap to expand';
+  panel.style.display = 'flex';
+  msgPanelOpen = true;
+  document.getElementById('msg-body').style.display = 'flex';
+  document.getElementById('msg-toggle-icon').textContent = '▾';
+  loadMsgFeed();
+
+  // Subscribe for real-time
+  if (msgSubscription) sb.removeChannel(msgSubscription);
+  msgSubscription = sb.channel('msg-float').on('postgres_changes',
+    { event:'INSERT', schema:'public', table:'messages', filter:`project_id=eq.${msgProjectId}` },
+    p => appendFloatBubble(p.new)
+  ).subscribe();
+}
+
+function toggleMsgPanel() {
+  msgPanelOpen = !msgPanelOpen;
+  document.getElementById('msg-body').style.display        = msgPanelOpen ? 'flex' : 'none';
+  document.getElementById('msg-toggle-icon').textContent   = msgPanelOpen ? '▾' : '▴';
+}
+
+async function loadMsgFeed() {
+  if (!msgProjectId) return;
+  const { data } = await sb.from('messages').select('*, profiles(first_name)').eq('project_id', msgProjectId).order('created_at').limit(40);
+  const feed = document.getElementById('msg-feed');
+  feed.innerHTML = (data||[]).map(m => floatBubbleHTML(m)).join('');
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function floatBubbleHTML(m) {
+  const isMine = m.sender_id === currentUser?.id;
+  const time   = new Date(m.created_at).toLocaleTimeString('en-IE',{hour:'2-digit',minute:'2-digit'});
+  return `<div style="display:flex;justify-content:${isMine?'flex-end':'flex-start'};">
+    <div style="max-width:80%;background:${isMine?'#e8521a':'#f5f2ec'};color:${isMine?'#fff':'#0e0e0e'};padding:8px 12px;border-radius:${isMine?'12px 12px 3px 12px':'12px 12px 12px 3px'};font-size:12px;line-height:1.5;">
+      ${m.body}
+      <div style="font-size:10px;opacity:0.7;margin-top:2px;text-align:right;">${time}</div>
+    </div>
+  </div>`;
+}
+
+function appendFloatBubble(m) {
+  const feed = document.getElementById('msg-feed');
+  if (!feed) return;
+  feed.insertAdjacentHTML('beforeend', floatBubbleHTML(m));
+  feed.scrollTop = feed.scrollHeight;
+  document.getElementById('msg-unread-dot').style.display = msgPanelOpen ? 'none' : 'block';
+}
+
+async function sendMessage() {
+  const input = document.getElementById('msg-input');
+  const body  = input?.value?.trim();
+  if (!body || !msgProjectId || !currentUser) return;
+  input.value = '';
+  await sb.from('messages').insert({ project_id: msgProjectId, sender_id: currentUser.id, body });
+}
+
 
 // ═══════════════════════════════════════════════
 //  BOOT
