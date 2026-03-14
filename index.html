@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
   :root {
     --ink: #0e0e0e;
@@ -493,23 +494,38 @@
 <!-- NAV -->
 <nav class="nav">
   <div class="nav-logo">Ura<span>Wise</span></div>
-  <button class="nav-pill active" onclick="setTab('projects')">Projects</button>
-  <button class="nav-pill" onclick="setTab('materials')">Materials</button>
-  <button class="nav-pill" onclick="setTab('vehicles')">Vehicles</button>
-  <button class="nav-pill" onclick="setTab('stores')">Stores</button>
+  <button class="nav-pill active" id="pill-projects"   onclick="setTab('projects')">Projects</button>
+  <button class="nav-pill"        id="pill-materials"  onclick="setTab('materials')">Materials</button>
+  <button class="nav-pill"        id="pill-vehicles"   onclick="setTab('vehicles')">Vehicles</button>
+  <button class="nav-pill"        id="pill-stores"     onclick="setTab('stores')">Stores</button>
+  <button class="nav-pill"        id="pill-dashboard"  onclick="setTab('dashboard')" style="display:none">My Projects</button>
   <div class="nav-search">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
     <input id="nav-search-input" type="text" placeholder="Search projects, materials, stores…" oninput="handleSearch(this.value)">
   </div>
   <div class="nav-spacer"></div>
-  <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Log in</button>
-  <button class="nav-btn nav-btn-primary" onclick="openAuth('signup')">Sign up free</button>
+  <!-- Logged-out state -->
+  <div id="nav-loggedout">
+    <button class="nav-btn nav-btn-ghost" onclick="openAuth('login')">Log in</button>
+    <button class="nav-btn nav-btn-primary" onclick="openAuth('signup')">Sign up free</button>
+  </div>
+  <!-- Logged-in state -->
+  <div id="nav-loggedin" style="display:none;align-items:center;gap:10px;">
+    <span id="nav-user-name" style="font-size:13px;color:rgba(245,242,236,0.7);"></span>
+    <div id="nav-avatar" onclick="toggleUserMenu()" style="width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;cursor:pointer;"></div>
+    <div id="user-menu" style="display:none;position:absolute;top:54px;right:16px;background:var(--card);border:1.5px solid var(--border);border-radius:14px;padding:8px;min-width:180px;box-shadow:0 8px 30px rgba(14,14,14,0.14);z-index:2000;">
+      <div onclick="setTab('dashboard')" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">📊 My Projects</div>
+      <div onclick="openPostModal()" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">✦ Post a Project</div>
+      <div style="height:1px;background:var(--border);margin:4px 0;"></div>
+      <div onclick="signOut()" style="padding:10px 14px;border-radius:9px;font-size:13px;cursor:pointer;color:#c0392b;font-family:'Syne',sans-serif;font-weight:600;" onmouseover="this.style.background='var(--bone)'" onmouseout="this.style.background='transparent'">Sign out</div>
+    </div>
+  </div>
 </nav>
 
 <!-- MAIN APP -->
 <div class="app">
   <!-- FEED PANEL -->
-  <div class="feed-panel">
+  <div class="feed-panel" id="feed-panel">
     <div class="feed-header">
       <div class="feed-tabs">
         <div class="feed-tab active" id="tab-nearby" onclick="setFeedTab('nearby')">Near me</div>
@@ -535,6 +551,9 @@
       Post
     </button>
   </div>
+
+  <!-- DASHBOARD PANEL (hidden until logged in) -->
+  <div id="dashboard-panel" style="display:none;flex:1;background:var(--bone);overflow-y:auto;"></div>
 </div>
 
 <!-- DETAIL PANEL (map overlay) -->
@@ -621,25 +640,27 @@
         <div class="modal-row" style="margin-bottom:12px">
           <div>
             <span class="modal-label">First Name</span>
-            <input class="modal-input" type="text" placeholder="John">
+            <input class="modal-input" id="auth-firstname" type="text" placeholder="John">
           </div>
           <div>
             <span class="modal-label">Last Name</span>
-            <input class="modal-input" type="text" placeholder="Doe">
+            <input class="modal-input" id="auth-lastname" type="text" placeholder="Doe">
           </div>
         </div>
       </div>
       <div class="modal-section" style="margin-bottom:12px">
         <span class="modal-label">Email</span>
-        <input class="modal-input" type="email" placeholder="you@example.com">
+        <input class="modal-input" id="auth-email" type="email" placeholder="you@example.com">
       </div>
       <div class="modal-section" style="margin-bottom:0">
         <span class="modal-label">Password</span>
-        <input class="modal-input" type="password" placeholder="••••••••">
+        <input class="modal-input" id="auth-password" type="password" placeholder="••••••••">
       </div>
+      <!-- Error / info message -->
+      <div id="auth-message" style="display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:13px;line-height:1.5;"></div>
     </div>
     <div class="modal-footer">
-      <button class="btn-submit" style="width:100%" onclick="handleAuth()">Continue →</button>
+      <button class="btn-submit" style="width:100%" id="auth-submit-btn" onclick="handleAuth()">Continue →</button>
     </div>
   </div>
 </div>
@@ -922,18 +943,8 @@ function setFilter(f) {
   renderMarkers();
 }
 
-function setTab(tab) {
-  currentTab = tab;
-  activeFilter = 'All';
-  selectedPost = null;
-  closeDetail();
-  document.querySelectorAll('.nav-pill').forEach((el, i) => {
-    el.classList.toggle('active', ['projects','materials','vehicles','stores'][i] === tab);
-  });
-  renderFilters();
-  renderFeed();
-  renderMarkers();
-}
+// setTab is defined below with dashboard support
+
 
 function setFeedTab(tab) {
   feedTab = tab;
@@ -1256,9 +1267,147 @@ Be specific, professional, and persuasive. Respond ONLY with the JSON object.`;
 // ═══════════════════════════════════════════════
 //  AUTH
 // ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+//  SUPABASE SETUP
+//  ⚠️  Replace these two values with your own from:
+//  Supabase Dashboard → Settings → API
+// ═══════════════════════════════════════════════
+const SUPABASE_URL  = 'https://upvmllosoyddosjopymv.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwdm1sbG9zb3lkZG9zam9weW12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0ODExMzQsImV4cCI6MjA4OTA1NzEzNH0.GdGm8vQu_SmUJpPYW07JDR7XMH3uOYTuiFPmPJMwH1Y';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+let currentUser  = null;
+let userProfile  = null;
+let selectedUserType = 'homeowner';
+
+// ── Auth state listener — fires on every page load + login/logout
+sb.auth.onAuthStateChange(async (event, session) => {
+  currentUser = session?.user ?? null;
+  if (currentUser) {
+    await loadProfile();
+    renderNavLoggedIn();
+  } else {
+    userProfile = null;
+    renderNavLoggedOut();
+  }
+});
+
+async function loadProfile() {
+  const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  userProfile = data;
+}
+
+function renderNavLoggedIn() {
+  document.getElementById('nav-loggedout').style.display = 'none';
+  const li = document.getElementById('nav-loggedin');
+  li.style.display = 'flex';
+  const name = userProfile?.first_name || currentUser.email.split('@')[0];
+  document.getElementById('nav-user-name').textContent = name;
+  document.getElementById('nav-avatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('pill-dashboard').style.display = '';
+}
+
+function renderNavLoggedOut() {
+  document.getElementById('nav-loggedout').style.display = 'flex';
+  document.getElementById('nav-loggedin').style.display = 'none';
+  document.getElementById('pill-dashboard').style.display = 'none';
+}
+
+function toggleUserMenu() {
+  const m = document.getElementById('user-menu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', e => {
+  const menu = document.getElementById('user-menu');
+  if (menu && !document.getElementById('nav-avatar')?.contains(e.target)) {
+    menu.style.display = 'none';
+  }
+});
+
+// ── Auth modal helpers
+function showAuthMessage(msg, isError = true) {
+  const el = document.getElementById('auth-message');
+  el.style.display = 'block';
+  el.style.background = isError ? '#fff0f0' : '#e6f2f2';
+  el.style.color       = isError ? '#c0392b' : '#1a6b6b';
+  el.style.border      = isError ? '1.5px solid #f5c6c6' : '1.5px solid #a8d8d8';
+  el.textContent = msg;
+}
+function hideAuthMessage() {
+  const el = document.getElementById('auth-message');
+  if (el) el.style.display = 'none';
+}
+
+// ── Sign up
+async function handleAuth() {
+  const btn   = document.getElementById('auth-submit-btn');
+  const email = document.getElementById('auth-email')?.value?.trim();
+  const pass  = document.getElementById('auth-password')?.value;
+  hideAuthMessage();
+
+  if (!email || !pass) { showAuthMessage('Please enter your email and password.'); return; }
+  if (pass.length < 8) { showAuthMessage('Password must be at least 8 characters.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = authMode === 'signup' ? 'Creating account…' : 'Signing in…';
+
+  if (authMode === 'signup') {
+    const first = document.getElementById('auth-firstname')?.value?.trim() || '';
+    const last  = document.getElementById('auth-lastname')?.value?.trim() || '';
+
+    const { error } = await sb.auth.signUp({
+      email, password: pass,
+      options: {
+        data: { first_name: first, last_name: last, user_type: selectedUserType }
+      }
+    });
+
+    if (error) {
+      showAuthMessage(error.message);
+    } else {
+      showAuthMessage(
+        '✅ Account created! Check your inbox for a confirmation email. Click the link to activate your account — then come back to log in.',
+        false
+      );
+      btn.textContent = 'Check your email ✓';
+      btn.disabled = true;
+      return;
+    }
+
+  } else {
+    // Login
+    const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      if (error.message.includes('Email not confirmed')) {
+        showAuthMessage('Please confirm your email first. Check your inbox for the confirmation link.');
+      } else if (error.message.includes('Invalid login')) {
+        showAuthMessage('Email or password is incorrect. Please try again.');
+      } else {
+        showAuthMessage(error.message);
+      }
+    } else {
+      closeModal('auth-overlay');
+      showToast('👋 Welcome back to UraWise!');
+    }
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Continue →';
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  document.getElementById('user-menu').style.display = 'none';
+  if (currentTab === 'dashboard') setTab('projects');
+  showToast('Signed out. See you soon!');
+}
+
 function openAuth(mode) {
   authMode = mode;
   switchAuth(mode);
+  hideAuthMessage();
+  document.getElementById('auth-submit-btn').disabled = false;
+  document.getElementById('auth-submit-btn').textContent = 'Continue →';
   document.getElementById('auth-overlay').classList.add('open');
 }
 
@@ -1268,16 +1417,268 @@ function switchAuth(mode) {
   document.getElementById('auth-tab-login').classList.toggle('active', mode === 'login');
   document.getElementById('auth-title').textContent = mode === 'signup' ? 'Join UraWise' : 'Welcome back';
   document.getElementById('auth-signup-section').style.display = mode === 'signup' ? 'block' : 'none';
+  hideAuthMessage();
 }
 
 function selectUserType(type, el) {
+  selectedUserType = type;
   document.querySelectorAll('.user-type-card').forEach(e => e.classList.remove('selected'));
   el.classList.add('selected');
 }
 
-function handleAuth() {
-  closeModal('auth-overlay');
-  showToast(authMode === 'signup' ? '🎉 Account created! Welcome to UraWise.' : '👋 Welcome back!');
+// ═══════════════════════════════════════════════
+//  DASHBOARD  (My Projects view)
+// ═══════════════════════════════════════════════
+const DASHBOARD_UNITS = [
+  { id:0, name:"APT 1",     sub:"Full Renovation · 75m²",  progress:22, status:"In Progress",       price:47200, paid:14160, phase:"Phase 2 – Demolition",      badge:"badge-prog",
+    address:"Rua do Século, Lisboa",
+    milestones:[
+      { name:"M1 – Contract & Materials", pct:30, amt:14160, done:true,  date:"10 Mar 2025",     desc:"Materials purchased · receipts on platform" },
+      { name:"M2 – Mid-works complete",   pct:30, amt:14160, done:false, date:"Est. 12 May 2025",desc:"Plastering, plumbing rough-in, tiling substrate" },
+      { name:"M3 – Finishes applied",     pct:30, amt:14160, done:false, date:"Est. 14 Jul 2025",desc:"Tiling, painting, windows, floors, doors" },
+      { name:"M4 – Final handover",       pct:10, amt:4720,  done:false, date:"Est. 28 Jul 2025",desc:"Snagging resolved · keys + docs handed over" },
+    ],
+    gantt:[
+      { label:"Demolition", start:0,  w:15, s:"done" },
+      { label:"Wet works",  start:13, w:22, s:"act"  },
+      { label:"Finishes",   start:32, w:20, s:"pend" },
+      { label:"Handover",   start:50, w:8,  s:"pend" },
+    ],
+    activity:[
+      { icon:"📦", text:"Materials receipt uploaded – Leroy Merlin Lisboa", time:"Today, 09:14" },
+      { icon:"📸", text:"3 progress photos added – demolition complete, Apt 1 bathroom", time:"Yesterday, 16:40" },
+      { icon:"✅", text:"M1 payment confirmed by client – €14,160", time:"10 Mar, 11:02" },
+    ]
+  },
+  { id:1, name:"APT 2", sub:"Floor + Moisture · ~55m²", progress:0, status:"Awaiting Start", price:5130, paid:0, phase:"Scheduled – Wk 1", badge:"badge-pend",
+    address:"Rua do Século, Lisboa",
+    milestones:[
+      { name:"M1 – Contract & Materials", pct:30, amt:1539, done:false, date:"Est. 17 Mar 2025", desc:"Floor compound + moisture injection materials" },
+      { name:"M2 – Works complete",       pct:60, amt:3078, done:false, date:"Est. 4 Apr 2025",  desc:"All floor and moisture works finished" },
+      { name:"M3 – Final handover",       pct:10, amt:513,  done:false, date:"Est. 7 Apr 2025",  desc:"Final clean and snagging" },
+    ],
+    gantt:[
+      { label:"Floor filing",   start:0,  w:30, s:"pend" },
+      { label:"Moisture treat.",start:12, w:35, s:"pend" },
+      { label:"Plaster repair", start:40, w:25, s:"pend" },
+      { label:"Handover",       start:82, w:12, s:"pend" },
+    ],
+    activity:[{ icon:"📋", text:"Project scoped and added to programme", time:"8 Mar, 14:30" }]
+  },
+  { id:2, name:"APT 3", sub:"Floor + Moisture · ~55m²", progress:0, status:"Awaiting Start", price:5130, paid:0, phase:"Scheduled – Wk 2", badge:"badge-pend",
+    address:"Rua do Século, Lisboa",
+    milestones:[
+      { name:"M1 – Contract & Materials", pct:30, amt:1539, done:false, date:"Est. 24 Mar 2025", desc:"" },
+      { name:"M2 – Works complete",       pct:60, amt:3078, done:false, date:"Est. 11 Apr 2025", desc:"" },
+      { name:"M3 – Final handover",       pct:10, amt:513,  done:false, date:"Est. 14 Apr 2025", desc:"" },
+    ],
+    gantt:[
+      { label:"Floor filing",   start:0,  w:30, s:"pend" },
+      { label:"Moisture treat.",start:12, w:35, s:"pend" },
+      { label:"Plaster repair", start:40, w:25, s:"pend" },
+      { label:"Handover",       start:82, w:12, s:"pend" },
+    ],
+    activity:[{ icon:"📋", text:"Project scoped and added to programme", time:"8 Mar, 14:30" }]
+  },
+  { id:3, name:"BLDG A", sub:"Full Reno · ~45m²", progress:0, status:"Awaiting Architect", price:27250, paid:0, phase:"Framework – Architect TBC", badge:"badge-pend",
+    address:"Rua da Boavista, Lisboa",
+    milestones:[
+      { name:"M1 – Contract & Materials", pct:30, amt:8175, done:false, date:"TBC post-architect", desc:"" },
+      { name:"M2 – Mid-works",            pct:30, amt:8175, done:false, date:"TBC", desc:"" },
+      { name:"M3 – Finishes",             pct:30, amt:8175, done:false, date:"TBC", desc:"" },
+      { name:"M4 – Handover",             pct:10, amt:2725, done:false, date:"TBC", desc:"" },
+    ],
+    gantt:[
+      { label:"Demolition",start:0, w:15,s:"pend" },{ label:"Wet works",start:14,w:22,s:"pend" },
+      { label:"Finishes",  start:34,w:20,s:"pend" },{ label:"Handover", start:54,w:8, s:"pend" },
+    ],
+    activity:[{ icon:"🏛️", text:"Awaiting architect plans to finalise scope", time:"8 Mar, 14:30" }]
+  },
+  { id:4, name:"BLDG B", sub:"Full Reno · ~45m²", progress:0, status:"Awaiting Architect", price:27250, paid:0, phase:"Framework – Architect TBC", badge:"badge-pend", address:"Rua da Boavista, Lisboa",
+    milestones:[{ name:"M1",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M2",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M3",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M4",pct:10,amt:2725,done:false,date:"TBC",desc:"" }],
+    gantt:[{ label:"Demolition",start:0,w:15,s:"pend" },{ label:"Wet works",start:14,w:22,s:"pend" },{ label:"Finishes",start:34,w:20,s:"pend" },{ label:"Handover",start:54,w:8,s:"pend" }],
+    activity:[{ icon:"🏛️", text:"Awaiting architect plans", time:"8 Mar" }]
+  },
+  { id:5, name:"BLDG C", sub:"Full Reno · ~45m²", progress:0, status:"Awaiting Architect", price:27250, paid:0, phase:"Framework – Architect TBC", badge:"badge-pend", address:"Rua da Boavista, Lisboa",
+    milestones:[{ name:"M1",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M2",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M3",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M4",pct:10,amt:2725,done:false,date:"TBC",desc:"" }],
+    gantt:[{ label:"Demolition",start:0,w:15,s:"pend" },{ label:"Wet works",start:14,w:22,s:"pend" },{ label:"Finishes",start:34,w:20,s:"pend" },{ label:"Handover",start:54,w:8,s:"pend" }],
+    activity:[{ icon:"🏛️", text:"Awaiting architect plans", time:"8 Mar" }]
+  },
+  { id:6, name:"BLDG D", sub:"Full Reno · ~45m²", progress:0, status:"Awaiting Architect", price:27250, paid:0, phase:"Framework – Architect TBC", badge:"badge-pend", address:"Rua da Boavista, Lisboa",
+    milestones:[{ name:"M1",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M2",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M3",pct:30,amt:8175,done:false,date:"TBC",desc:"" },{ name:"M4",pct:10,amt:2725,done:false,date:"TBC",desc:"" }],
+    gantt:[{ label:"Demolition",start:0,w:15,s:"pend" },{ label:"Wet works",start:14,w:22,s:"pend" },{ label:"Finishes",start:34,w:20,s:"pend" },{ label:"Handover",start:54,w:8,s:"pend" }],
+    activity:[{ icon:"🏛️", text:"Awaiting architect plans", time:"8 Mar" }]
+  },
+];
+let dashSelected = 0;
+let dashTab = 'overview';
+
+function fmt(n){ return '€'+Number(n).toLocaleString('en-IE'); }
+
+function renderDashboard() {
+  const panel = document.getElementById('dashboard-panel');
+  if (!panel) return;
+  panel.innerHTML = `
+    <div style="display:flex;height:calc(100vh - 58px);">
+      <!-- Sidebar -->
+      <div style="width:260px;flex-shrink:0;background:#faf8f4;border-right:1px solid #e2ddd6;display:flex;flex-direction:column;overflow-y:auto;padding:16px 12px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8a8580;margin:0 4px 10px;">Programme Units</div>
+        ${DASHBOARD_UNITS.map((u,i)=>`
+          <div onclick="dashSelect(${i})" style="padding:10px;border-radius:10px;cursor:pointer;margin-bottom:4px;border:1.5px solid ${i===dashSelected?'#e8521a':'transparent'};background:${i===dashSelected?'#fef0ea':'transparent'};">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">${u.name}</div>
+              <span style="padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;text-transform:uppercase;${u.progress>0?'background:#fff8e6;color:#a07800':'background:#fef0ea;color:#e8521a'}">${u.status}</span>
+            </div>
+            <div style="font-size:11px;color:#8a8580;margin-top:2px;">${u.sub}</div>
+            <div style="height:3px;background:#e2ddd6;border-radius:3px;margin-top:6px;overflow:hidden;"><div style="height:100%;border-radius:3px;background:#e8521a;width:${u.progress}%;transition:width .4s;"></div></div>
+          </div>
+        `).join('')}
+        <div style="margin-top:16px;padding:12px;background:#fef0ea;border-radius:10px;border:1.5px solid #e8521a;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#e8521a;margin-bottom:4px;">Bundle Discount</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;">6% OFF</div>
+          <div style="font-size:11px;color:#8a8580;margin-top:2px;">All 7 units contracted</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-top:6px;">Saving ~€10,000</div>
+        </div>
+      </div>
+      <!-- Main -->
+      <div style="flex:1;padding:20px 24px;overflow-y:auto;" id="dash-main"></div>
+    </div>
+  `;
+  renderDashMain();
+}
+
+function dashSelect(i) { dashSelected=i; dashTab='overview'; renderDashboard(); }
+function dashSetTab(t) { dashTab=t; renderDashMain(); }
+
+function renderDashMain() {
+  const u = DASHBOARD_UNITS[dashSelected];
+  const paidPct = u.price>0 ? Math.round(u.paid/u.price*100) : 0;
+  const el = document.getElementById('dash-main');
+  if (!el) return;
+
+  let content = '';
+  if (dashTab==='overview') {
+    const msRows = u.milestones.map(m=>`
+      <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid #e2ddd6;">
+        <div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;${m.done?'background:#e8f5e9;color:#2e7d32':'background:#f5f2ec;border:1.5px solid #e2ddd6;color:#8a8580'};">${m.done?'✓':'○'}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;">${m.name}</div>
+          <div style="font-size:12px;color:#8a8580;">${m.desc}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">${fmt(m.amt)}</div>
+          <div style="font-size:11px;color:#8a8580;">${m.date}</div>
+          <span style="display:inline-block;margin-top:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;text-transform:uppercase;${m.done?'background:#e8f5e9;color:#2e7d32':'background:#fef0ea;color:#e8521a'}">${m.done?'Paid':'Pending'}</span>
+        </div>
+      </div>
+    `).join('');
+    content = `
+      <div style="background:#fff;border-radius:14px;border:1.5px solid #e2ddd6;padding:16px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Payment progress</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">${fmt(u.paid)} / ${fmt(u.price)}</div>
+        </div>
+        <div style="height:8px;background:#f5f2ec;border-radius:8px;overflow:hidden;margin:8px 0;">
+          <div style="height:100%;background:#e8521a;border-radius:8px;width:${paidPct}%;"></div>
+        </div>
+        <div style="font-size:11px;color:#8a8580;">${paidPct}% received</div>
+      </div>
+      <div style="background:#fff;border-radius:14px;border:1.5px solid #e2ddd6;padding:16px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;">Milestone schedule</div>
+        ${msRows}
+      </div>`;
+  } else if (dashTab==='schedule') {
+    const bars = u.gantt.map(g=>`
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:8px;">
+        <div style="width:110px;flex-shrink:0;font-size:11px;color:#8a8580;text-align:right;padding-right:10px;">${g.label}</div>
+        <div style="flex:1;height:22px;background:#f5f2ec;border-radius:6px;position:relative;overflow:hidden;">
+          <div style="position:absolute;height:100%;border-radius:6px;left:${g.start}%;width:${g.w}%;display:flex;align-items:center;padding:0 6px;font-size:10px;font-weight:600;font-family:'Syne',sans-serif;white-space:nowrap;overflow:hidden;${g.s==='done'?'background:#1a6b6b;color:#fff':g.s==='act'?'background:#e8521a;color:#fff':'background:#e2ddd6;color:#8a8580'}">${g.label}</div>
+        </div>
+      </div>`).join('');
+    content = `<div style="background:#fff;border-radius:14px;border:1.5px solid #e2ddd6;padding:16px;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:14px;">Work schedule</div>
+      ${bars}
+      <div style="display:flex;gap:16px;margin-top:14px;font-size:11px;color:#8a8580;">
+        <span><span style="display:inline-block;width:10px;height:10px;background:#1a6b6b;border-radius:3px;margin-right:5px;"></span>Complete</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#e8521a;border-radius:3px;margin-right:5px;"></span>In progress</span>
+        <span><span style="display:inline-block;width:10px;height:10px;background:#e2ddd6;border-radius:3px;margin-right:5px;"></span>Pending</span>
+      </div>
+    </div>`;
+  } else {
+    const acts = u.activity.map(a=>`
+      <div style="display:flex;gap:10px;padding:10px 12px;background:#fff;border-radius:10px;border:1px solid #e2ddd6;margin-bottom:8px;">
+        <div style="font-size:16px;flex-shrink:0;">${a.icon}</div>
+        <div>
+          <div style="font-size:12px;line-height:1.5;">${a.text}</div>
+          <div style="font-size:11px;color:#8a8580;">${a.time}</div>
+        </div>
+      </div>`).join('');
+    content = `<div style="background:#fff;border-radius:14px;border:1.5px solid #e2ddd6;padding:16px;">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:12px;">Activity log</div>
+      ${acts}
+      <input type="text" placeholder="Send a message…" style="width:100%;margin-top:10px;padding:10px 14px;border-radius:10px;border:1.5px solid #e2ddd6;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+    </div>`;
+  }
+
+  el.innerHTML = `
+    <div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;">${u.name} – ${u.sub}</div>
+        <span style="padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;text-transform:uppercase;${u.progress>0?'background:#fff8e6;color:#a07800':'background:#fef0ea;color:#e8521a'}">${u.status}</span>
+      </div>
+      <div style="font-size:13px;color:#8a8580;display:flex;gap:16px;">
+        <span>📍 ${u.address}</span><span>·</span><span>${u.phase}</span><span>·</span><span>${u.progress}% complete</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">
+      ${[
+        ['Contract Value', fmt(u.price), '#e8521a', 'incl. bundle discount'],
+        ['Received',       fmt(u.paid),  '#1a6b6b', paidPct+'% of total'],
+        ['Remaining',      fmt(u.price-u.paid), '#0e0e0e', u.milestones.filter(m=>!m.done).length+' milestones left'],
+        ['Completion',     u.progress+'%', '#c9a84c', u.phase],
+      ].map(([lbl,val,col,sub])=>`
+        <div style="background:#fff;border-radius:12px;border:1.5px solid #e2ddd6;padding:14px 16px;">
+          <div style="font-size:11px;color:#8a8580;margin-bottom:6px;font-weight:500;">${lbl}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:${col};">${val}</div>
+          <div style="font-size:11px;color:#8a8580;margin-top:2px;">${sub}</div>
+        </div>`).join('')}
+    </div>
+    <div style="display:flex;gap:4px;background:#f5f2ec;border-radius:10px;padding:3px;margin-bottom:16px;">
+      ${['overview','schedule','activity'].map(t=>`
+        <button onclick="dashSetTab('${t}')" style="flex:1;padding:6px 0;text-align:center;font-size:12px;font-weight:600;border-radius:7px;cursor:pointer;font-family:'Syne',sans-serif;border:none;${dashTab===t?'background:#0e0e0e;color:#f5f2ec':'background:transparent;color:#8a8580'};transition:all .18s;">${t.charAt(0).toUpperCase()+t.slice(1)}</button>`).join('')}
+    </div>
+    ${content}
+  `;
+}
+
+// ── Override setTab to handle dashboard
+function setTab(tab) {
+  currentTab = tab;
+  activeFilter = 'All';
+  selectedPost = null;
+
+  const feedPanel = document.getElementById('feed-panel');
+  const mapContainer = document.getElementById('map-container');
+  const dashPanel = document.getElementById('dashboard-panel');
+
+  if (tab === 'dashboard') {
+    if (!currentUser) { openAuth('login'); return; }
+    feedPanel.style.display = 'none';
+    mapContainer.style.display = 'none';
+    dashPanel.style.display = 'block';
+    renderDashboard();
+  } else {
+    feedPanel.style.display = '';
+    mapContainer.style.display = '';
+    dashPanel.style.display = 'none';
+    closeDetail();
+    document.querySelectorAll('.nav-pill').forEach(el => el.classList.remove('active'));
+    const pillMap = { projects:'pill-projects', materials:'pill-materials', vehicles:'pill-vehicles', stores:'pill-stores' };
+    if (pillMap[tab]) document.getElementById(pillMap[tab])?.classList.add('active');
+    renderFilters();
+    renderFeed();
+    renderMarkers();
+  }
 }
 
 function submitPost() {
