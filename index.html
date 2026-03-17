@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
 <style>
   :root {
     --ink: #0e0e0e;
@@ -1502,7 +1502,14 @@ async function generateAI() {
 // ═══════════════════════════════════════════════
 const SUPABASE_URL  = 'https://upvmllosoyddosjopymv.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVwdm1sbG9zb3lkZG9zam9weW12Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0ODExMzQsImV4cCI6MjA4OTA1NzEzNH0.GdGm8vQu_SmUJpPYW07JDR7XMH3uOYTuiFPmPJMwH1Y';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: {
+    persistSession: true,
+    detectSessionInUrl: true,
+    flowType: 'implicit',
+    lock: undefined,   // disables the Web Locks API that's causing the conflict
+  }
+});
 
 let currentUser  = null;
 let userProfile  = null;
@@ -1953,96 +1960,97 @@ function setTab(tab) {
 async function submitPost() {
   if (!currentUser) { closeModal('post-overlay'); openAuth('login'); return; }
 
-  const type     = selectedPostType;
-  const category = document.getElementById('pf-category')?.value || type;
-  const budget   = document.getElementById('pf-budget')?.value   || '';
-  const location = document.getElementById('post-location')?.value || '';
-  const desc     = document.getElementById('pf-desc')?.value     || '';
-  const make     = document.getElementById('pf-make')?.value     || '';
-  const model    = document.getElementById('pf-model')?.value    || '';
-  const year     = document.getElementById('pf-year')?.value     || '';
-  const mileage  = document.getElementById('pf-mileage')?.value  || '';
+  // Show loading state on button
+  const submitBtn = document.querySelector('#post-overlay .btn-submit');
+  if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Publishing…'; }
 
-  // Use AI-generated title if available, else build one
-  const aiPreview = document.getElementById('ai-preview-text');
-  const aiStrong  = aiPreview?.querySelector('strong');
-  const title     = window._aiGeneratedTitle
-    || aiStrong?.textContent?.trim()
-    || (make && model ? `${year} ${make} ${model}` : null)
-    || `${category} – ${location || 'Lisboa'}`;
+  try {
+    const type     = selectedPostType;
+    const category = document.getElementById('pf-category')?.value || type;
+    const budget   = document.getElementById('pf-budget')?.value   || '';
+    const location = document.getElementById('post-location')?.value || '';
+    const desc     = document.getElementById('pf-desc')?.value     || '';
+    const make     = document.getElementById('pf-make')?.value     || '';
+    const model    = document.getElementById('pf-model')?.value    || '';
+    const year     = document.getElementById('pf-year')?.value     || '';
+    const mileage  = document.getElementById('pf-mileage')?.value  || '';
 
-  const fullDesc  = window._aiGeneratedDesc
-    || desc
-    || `${make} ${model} ${year} ${mileage ? mileage+'km' : ''}`.trim()
-    || title;
+    const title    = window._aiGeneratedTitle
+      || document.getElementById('ai-preview-text')?.querySelector('strong')?.textContent?.trim()
+      || (make && model ? `${year} ${make} ${model}`.trim() : null)
+      || `${category} – ${location || 'Lisboa'}`;
 
-  // Clear stored AI values
-  window._aiGeneratedTitle = null;
-  window._aiGeneratedDesc  = null;
+    const fullDesc = window._aiGeneratedDesc
+      || desc
+      || [make, model, year, mileage ? mileage+'km' : ''].filter(Boolean).join(' ')
+      || title;
 
-  // Geocode location to lat/lng using Nominatim (free, no key needed)
-  let lat = 38.7169 + (Math.random()-0.5)*0.04;
-  let lng = -9.1395 + (Math.random()-0.5)*0.04;
-  if (location) {
-    try {
-      const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location+', Lisboa, Portugal')}&format=json&limit=1`);
-      const geoData = await geo.json();
-      if (geoData[0]) { lat = parseFloat(geoData[0].lat); lng = parseFloat(geoData[0].lon); }
-    } catch(e) {}
+    window._aiGeneratedTitle = null;
+    window._aiGeneratedDesc  = null;
+
+    // Geocode via Nominatim — fallback to random Lisbon coords
+    let lat = 38.7169 + (Math.random() - 0.5) * 0.04;
+    let lng = -9.1395 + (Math.random() - 0.5) * 0.04;
+    if (location) {
+      try {
+        const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location + ', Lisboa, Portugal')}&format=json&limit=1`);
+        const gj  = await geo.json();
+        if (gj[0]) { lat = parseFloat(gj[0].lat); lng = parseFloat(gj[0].lon); }
+      } catch (_) {}
+    }
+
+    const EMOJI_MAP = { project:'🏠', material:'🧱', vehicle:'🚐', tool:'🔧', service:'⚙️', transport:'🚛' };
+
+    const postData = {
+      user_id:      currentUser.id,
+      type,
+      subtype:      category,
+      title,
+      description:  fullDesc,
+      budget_label: budget,
+      timeline:     document.getElementById('pf-start')?.value
+                      ? `From ${document.getElementById('pf-start').value}` : 'Flexible',
+      tags:         [category, make, model, type].filter(Boolean),
+      lat, lng,
+      address:      location || 'Lisboa',
+      city:         'Lisboa',
+      emoji:        EMOJI_MAP[type] || '📌',
+      status:       'active',
+    };
+
+    const { data: saved, error } = await sb.from('posts').insert(postData).select().single();
+
+    if (error) {
+      showToast('Could not publish: ' + (error.message || 'Unknown error'));
+      console.warn('Post insert error:', error);
+      return;
+    }
+
+    // Inject into local feed immediately
+    const localPost = {
+      id: saved.id, type: saved.type, subtype: saved.subtype,
+      title: saved.title, emoji: saved.emoji, img: null,
+      desc: saved.description, budget: saved.budget_label || 'See listing',
+      timeline: saved.timeline, tags: saved.tags || [],
+      user: userProfile?.first_name || 'You',
+      userType: userProfile?.user_type || 'homeowner',
+      lat: saved.lat, lng: saved.lng,
+      bids: 0, saved: false, ownedByMe: true,
+    };
+    POSTS.unshift(localPost);
+
+    closeModal('post-overlay');
+    showToast('✦ Post published! Now live on the map.');
+    renderFeed();
+    renderMarkers();
+    if (map) map.flyTo([saved.lat, saved.lng], 15, { duration: 1.2 });
+
+  } catch (err) {
+    showToast('Something went wrong. Please try again.');
+    console.warn('submitPost error:', err);
+  } finally {
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Publish Post'; }
   }
-
-  const EMOJI_MAP = { project:'🏠', material:'🧱', vehicle:'🚐', tool:'🔧', service:'⚙️', transport:'🚛' };
-
-  const postData = {
-    user_id:      currentUser.id,
-    type,
-    subtype:      category,
-    title,
-    description:  fullDesc || `${make} ${model} ${year} ${mileage ? mileage+'km' : ''}`.trim() || title,
-    budget_label: budget,
-    timeline:     document.getElementById('pf-start')?.value ? `From ${document.getElementById('pf-start').value}` : 'Flexible',
-    tags:         [category, make, model, type].filter(Boolean),
-    lat, lng,
-    address:      location || 'Lisboa',
-    city:         'Lisboa',
-    emoji:        EMOJI_MAP[type] || '📌',
-    status:       'active',
-  };
-
-  const { data: saved, error } = await sb.from('posts').insert(postData).select().single();
-  if (error) { showToast('Could not publish post. Try again.'); console.error(error); return; }
-
-  // Add to local POSTS array so it appears immediately on map + feed
-  const localPost = {
-    id:       saved.id,
-    type:     saved.type,
-    subtype:  saved.subtype,
-    title:    saved.title,
-    emoji:    saved.emoji,
-    img:      null,
-    desc:     saved.description,
-    budget:   saved.budget_label || 'See listing',
-    timeline: saved.timeline,
-    tags:     saved.tags || [],
-    user:     (userProfile?.first_name || 'You'),
-    userType: userProfile?.user_type || 'homeowner',
-    lat:      saved.lat,
-    lng:      saved.lng,
-    bids:     0,
-    saved:    false,
-    ownedByMe: true,
-  };
-  POSTS.unshift(localPost);
-
-  closeModal('post-overlay');
-  showToast('✦ Post published! Now live on the map.');
-
-  // Refresh feed + map
-  renderFeed();
-  renderMarkers();
-
-  // Fly to the new post
-  if (map) map.flyTo([saved.lat, saved.lng], 15, { duration: 1.2 });
 }
 
 
