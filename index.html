@@ -1624,48 +1624,65 @@ async function handleAuth() {
   btn.disabled = true;
   btn.textContent = authMode === 'signup' ? 'Creating account…' : 'Signing in…';
 
-  if (authMode === 'signup') {
-    const first = document.getElementById('auth-firstname')?.value?.trim() || '';
-    const last  = document.getElementById('auth-lastname')?.value?.trim() || '';
+  // Safety net — always re-enable after 10s no matter what
+  const safetyTimer = setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = 'Continue →';
+    showAuthMessage('Connection timed out. Please try again.');
+  }, 10000);
 
-    const { error } = await sb.auth.signUp({
-      email, password: pass,
-      options: {
-        data: { first_name: first, last_name: last, user_type: selectedUserType }
+  try {
+    if (authMode === 'signup') {
+      const first = document.getElementById('auth-firstname')?.value?.trim() || '';
+      const last  = document.getElementById('auth-lastname')?.value?.trim() || '';
+
+      const { error } = await sb.auth.signUp({
+        email, password: pass,
+        options: { data: { first_name: first, last_name: last, user_type: selectedUserType } }
+      });
+
+      clearTimeout(safetyTimer);
+      if (error) {
+        showAuthMessage(error.message);
+        btn.disabled = false; btn.textContent = 'Continue →';
+      } else {
+        showAuthMessage('✅ Account created! Check your inbox for a confirmation email. Click the link to activate your account — then come back to log in.', false);
+        btn.textContent = 'Check your email ✓';
+        btn.disabled = true;
       }
-    });
 
-    if (error) {
-      showAuthMessage(error.message);
     } else {
-      showAuthMessage(
-        '✅ Account created! Check your inbox for a confirmation email. Click the link to activate your account — then come back to log in.',
-        false
-      );
-      btn.textContent = 'Check your email ✓';
-      btn.disabled = true;
-      return;
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+      clearTimeout(safetyTimer);
+
+      if (error) {
+        btn.disabled = false; btn.textContent = 'Continue →';
+        if (error.message.includes('Email not confirmed')) {
+          showAuthMessage('Please confirm your email first. Check your inbox for the confirmation link.');
+        } else if (error.message.toLowerCase().includes('invalid')) {
+          showAuthMessage('Email or password is incorrect. Please try again.');
+        } else {
+          showAuthMessage(error.message);
+        }
+      } else {
+        clearTimeout(safetyTimer);
+        closeModal('auth-overlay');
+        showToast('👋 Welcome back to UraWise!');
+        btn.disabled = false; btn.textContent = 'Continue →';
+      }
     }
 
-  } else {
-    // Login
-    const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-    if (error) {
-      if (error.message.includes('Email not confirmed')) {
-        showAuthMessage('Please confirm your email first. Check your inbox for the confirmation link.');
-      } else if (error.message.includes('Invalid login')) {
-        showAuthMessage('Email or password is incorrect. Please try again.');
-      } else {
-        showAuthMessage(error.message);
-      }
+  } catch (err) {
+    clearTimeout(safetyTimer);
+    btn.disabled = false; btn.textContent = 'Continue →';
+    // If it's the lock AbortError, just retry the login silently once
+    if (err.name === 'AbortError') {
+      showAuthMessage('Connection interrupted. Please try again — this usually resolves on the second attempt.');
     } else {
-      closeModal('auth-overlay');
-      showToast('👋 Welcome back to UraWise!');
+      showAuthMessage('Something went wrong. Please try again.');
+      console.warn('Auth error:', err);
     }
   }
-
-  btn.disabled = false;
-  btn.textContent = 'Continue →';
 }
 
 async function signOut() {
