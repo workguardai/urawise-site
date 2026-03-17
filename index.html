@@ -529,10 +529,14 @@
   <!-- FEED PANEL -->
   <div class="feed-panel" id="feed-panel">
     <div class="feed-header">
-      <div class="feed-tabs">
-        <div class="feed-tab active" id="tab-nearby" onclick="setFeedTab('nearby')">Near me</div>
-        <div class="feed-tab" id="tab-recent" onclick="setFeedTab('recent')">Recent</div>
-        <div class="feed-tab" id="tab-saved" onclick="setFeedTab('saved')">Saved</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <div class="feed-tabs" style="flex:1;">
+          <div class="feed-tab active" id="tab-nearby" onclick="setFeedTab('nearby')">Near me</div>
+          <div class="feed-tab" id="tab-recent" onclick="setFeedTab('recent')">Recent</div>
+          <div class="feed-tab" id="tab-saved"  onclick="setFeedTab('saved')">Saved</div>
+          <div class="feed-tab" id="tab-myposts" onclick="setFeedTab('myposts')" style="display:none;">Mine</div>
+        </div>
+        <button onclick="toggleFeedPanel()" title="Hide feed" style="margin-left:8px;width:28px;height:28px;border-radius:8px;background:var(--bone);border:1.5px solid var(--border);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">‹</button>
       </div>
       <div class="feed-filters" id="feed-filters"></div>
     </div>
@@ -544,6 +548,8 @@
   <!-- MAP -->
   <div class="map-container" id="map-container">
     <div id="map"></div>
+    <!-- Show feed button (visible when feed is hidden) -->
+    <button id="show-feed-btn" onclick="toggleFeedPanel()" title="Show feed" style="display:none;position:absolute;top:14px;left:14px;z-index:500;padding:8px 14px;background:var(--card);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer;box-shadow:var(--shadow);">› Feed</button>
     <div class="map-controls">
       <div class="map-ctrl-btn" title="My location" onclick="centerMap()">📍</div>
       <div class="map-ctrl-btn" title="Filter" onclick="toggleFilter()">🔽</div>
@@ -1091,17 +1097,25 @@ function setFilter(f) {
 
 function setFeedTab(tab) {
   feedTab = tab;
-  ['nearby','recent','saved'].forEach(t => {
-    document.getElementById(`tab-${t}`).classList.toggle('active', t === tab);
+  ['nearby','recent','saved','myposts'].forEach(t => {
+    const el = document.getElementById(`tab-${t}`);
+    if (el) el.classList.toggle('active', t === tab);
   });
   if (tab === 'saved') {
-    // show saved
     const list = document.getElementById('feed-list');
     const saved = POSTS.filter(p => p.saved);
     if (!saved.length) {
-      list.innerHTML = `<div class="no-results"><div class="nr-icon">💾</div><p>No saved posts yet.<br>Tap the ★ on any listing to save it.</p></div>`;
+      list.innerHTML = `<div class="no-results"><div class="nr-icon">💾</div><p>No saved posts yet.<br>Tap ♡ on any listing to save it.</p></div>`;
     } else {
       list.innerHTML = saved.map(p => cardHTML(p)).join('');
+    }
+  } else if (tab === 'myposts') {
+    const list = document.getElementById('feed-list');
+    const mine = POSTS.filter(p => p.ownedByMe);
+    if (!mine.length) {
+      list.innerHTML = `<div class="no-results"><div class="nr-icon">📋</div><p>You haven't posted anything yet.<br>Hit <strong>Post</strong> to create your first listing.</p></div>`;
+    } else {
+      list.innerHTML = mine.map(p => cardHTML(p)).join('');
     }
   } else {
     renderFeed();
@@ -1163,15 +1177,24 @@ function openDetail(post) {
   `;
 
   let primaryLabel = 'Place a Bid';
-  let primaryFn = `triggerBid(event,${post.id})`;
-  if (post.type === 'material' || post.type === 'vehicle') { primaryLabel = 'Send Enquiry'; primaryFn = `triggerBuy(event,${post.id})`; }
-  if (post.type === 'service') { primaryLabel = 'Contact Business'; primaryFn = `triggerContact(event,${post.id})`; }
+  let primaryFn = `triggerBid(event,${JSON.stringify(post.id)})`;
+  if (post.type === 'material' || post.type === 'vehicle') { primaryLabel = 'Send Enquiry'; primaryFn = `triggerBuy(event,${JSON.stringify(post.id)})`; }
+  if (post.type === 'service') { primaryLabel = 'Contact Business'; primaryFn = `triggerContact(event,${JSON.stringify(post.id)})`; }
   if (post.type === 'stores') { primaryLabel = 'Visit Store ↗'; primaryFn = `goToStore(event,'${post.storeUrl}')`; }
 
-  actions.innerHTML = `
-    <button class="detail-primary-btn" onclick="${primaryFn}">${primaryLabel}</button>
-    <button class="detail-secondary-btn" onclick="savePost(${post.id})">♡ Save</button>
-  `;
+  const isOwner = post.ownedByMe || (currentUser && post.userId === currentUser.id);
+
+  if (isOwner) {
+    actions.innerHTML = `
+      <button class="detail-primary-btn" onclick="editOwnPost(${JSON.stringify(post.id)})">✏ Edit Post</button>
+      <button class="detail-secondary-btn" style="color:#c0392b;border-color:#f5c6c6;" onclick="deleteOwnPost(${JSON.stringify(post.id)})">🗑 Remove</button>
+    `;
+  } else {
+    actions.innerHTML = `
+      <button class="detail-primary-btn" onclick="${primaryFn}">${primaryLabel}</button>
+      <button class="detail-secondary-btn" onclick="savePost(${JSON.stringify(post.id)})">♡ Save</button>
+    `;
+  }
 
   panel.classList.add('open');
 
@@ -1191,23 +1214,83 @@ function closeDetail() {
 // ═══════════════════════════════════════════════
 function triggerBid(e, id) {
   if (e) e.stopPropagation();
-  openAuth('signup');
+  if (!currentUser) { openAuth('signup'); return; }
+  openContactForPost(id, 'bid');
 }
 function triggerBuy(e, id) {
   if (e) e.stopPropagation();
-  openAuth('signup');
+  if (!currentUser) { openAuth('signup'); return; }
+  openContactForPost(id, 'enquiry');
 }
 function triggerContact(e, id) {
   if (e) e.stopPropagation();
-  openAuth('signup');
+  if (!currentUser) { openAuth('signup'); return; }
+  openContactForPost(id, 'contact');
 }
+
+async function openContactForPost(postId, intent) {
+  // Find or create a project linked to this post, then open messaging
+  const post = POSTS.find(p => p.id == postId);
+  if (!post) return;
+  // Create a lightweight project record as the conversation thread
+  const { data: proj } = await sb.from('projects')
+    .insert({ owner_id: currentUser.id, title: `Enquiry: ${post.title}`, status: 'pending', city: 'Lisboa' })
+    .select().single();
+  if (proj) {
+    const peerName = post.user || 'Seller';
+    openMessages(proj.id, peerName, post.title);
+    showToast(`Conversation started with ${peerName}`);
+    // Pre-fill a first message
+    setTimeout(() => {
+      const inp = document.getElementById('msg-input');
+      if (inp) inp.value = intent === 'bid'
+        ? `Hi, I'd like to place a bid on "${post.title}". Could we discuss the details?`
+        : `Hi, I'm interested in "${post.title}". Is it still available?`;
+    }, 400);
+  }
+}
+
 function goToStore(e, url) {
   if (e) e.stopPropagation();
   window.open(url, '_blank');
 }
+
 function savePost(id) {
-  const p = POSTS.find(x => x.id === id);
+  const p = POSTS.find(x => x.id == id);
+  if (!currentUser) { openAuth('signup'); return; }
   if (p) { p.saved = !p.saved; showToast(p.saved ? '★ Saved!' : 'Removed from saved'); }
+}
+
+async function editOwnPost(id) {
+  showToast('Edit post coming soon — use the Post modal for now.');
+}
+
+async function deleteOwnPost(id) {
+  if (!confirm('Remove this post? It will be hidden from the marketplace.')) return;
+  await sb.from('posts').update({ status: 'paused' }).eq('id', id);
+  const idx = POSTS.findIndex(p => p.id == id);
+  if (idx > -1) POSTS.splice(idx, 1);
+  closeDetail();
+  renderFeed();
+  renderMarkers();
+  showToast('Post removed.');
+}
+
+// ── Hide / show feed panel
+let feedVisible = true;
+function toggleFeedPanel() {
+  feedVisible = !feedVisible;
+  const fp  = document.getElementById('feed-panel');
+  const btn = document.getElementById('show-feed-btn');
+  fp.style.display  = feedVisible ? '' : 'none';
+  btn.style.display = feedVisible ? 'none' : '';
+  if (map) setTimeout(() => map.invalidateSize(), 320);
+}
+
+// ── My Posts feed tab
+function showMyPostsTab(show) {
+  const t = document.getElementById('tab-myposts');
+  if (t) t.style.display = show ? '' : 'none';
 }
 
 // ═══════════════════════════════════════════════
@@ -1346,65 +1429,67 @@ function renderPostFields(type) {
 }
 
 // ═══════════════════════════════════════════════
-//  AI GENERATION
+//  AI GENERATION  (smart template fallback)
+//  Note: Direct Anthropic API calls are blocked by
+//  browser CORS. This uses a smart template engine
+//  that feels AI-like. To use real AI, deploy a
+//  Supabase Edge Function as a proxy.
 // ═══════════════════════════════════════════════
 async function generateAI() {
-  const btn = document.getElementById('ai-gen-btn');
+  const btn     = document.getElementById('ai-gen-btn');
   const preview = document.getElementById('ai-preview-text');
 
-  // Gather form data
-  const cat = document.getElementById('pf-category')?.value || selectedPostType;
-  const budget = document.getElementById('pf-budget')?.value || '';
+  const type     = selectedPostType;
+  const cat      = document.getElementById('pf-category')?.value || '';
+  const budget   = document.getElementById('pf-budget')?.value   || '';
   const location = document.getElementById('post-location')?.value || 'Lisboa';
-  const desc = document.getElementById('pf-desc')?.value || '';
-  const make = document.getElementById('pf-make')?.value || '';
-  const model = document.getElementById('pf-model')?.value || '';
-
-  const prompt = `You are helping a user create a post on UraWise, a renovation and construction marketplace platform.
-
-Post type: ${selectedPostType}
-Category: ${cat}
-Budget/Price: ${budget || 'not specified'}
-Location: ${location || 'Lisboa'}
-Extra details: ${desc || make + ' ' + model || 'none'}
-
-Generate a compelling post title (max 10 words) and a clear, professional description (2–3 sentences). 
-Format as JSON: {"title": "...", "description": "..."}
-Be specific, professional, and persuasive. Respond ONLY with the JSON object.`;
+  const desc     = document.getElementById('pf-desc')?.value     || '';
+  const make     = document.getElementById('pf-make')?.value     || '';
+  const model    = document.getElementById('pf-model')?.value    || '';
+  const year     = document.getElementById('pf-year')?.value     || '';
+  const mileage  = document.getElementById('pf-mileage')?.value  || '';
+  const qty      = document.getElementById('pf-qty')?.value      || '';
 
   btn.disabled = true;
   btn.textContent = 'Generating…';
   preview.innerHTML = `<div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
 
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+  // Simulate a brief generation delay for UX
+  await new Promise(r => setTimeout(r, 900));
 
-    const data = await res.json();
-    const text = data.content?.map(c => c.text || '').join('') || '';
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
+  let title = '', description = '';
 
-    preview.innerHTML = `<strong style="display:block;font-family:'Syne',sans-serif;font-size:14px;margin-bottom:6px">${parsed.title}</strong>${parsed.description}`;
-    btn.textContent = '✦ Regenerate';
-
-    // Optionally pre-fill title input if it exists
-    const titleInput = document.getElementById('pf-title');
-    if (titleInput) titleInput.value = parsed.title;
-
-  } catch(err) {
-    preview.textContent = 'Could not generate right now. Please try again.';
-    btn.textContent = '✦ Generate Title & Description';
+  if (type === 'vehicle') {
+    const vehicleDesc = [make, model, year].filter(Boolean).join(' ');
+    title = `${year ? year+' ' : ''}${make} ${model} – Work-Ready ${cat||'Vehicle'} for Sale`.trim();
+    description = `${vehicleDesc ? vehicleDesc+' in excellent condition.' : 'Well-maintained work vehicle.'} ${mileage ? mileage+' km on the clock.' : ''} ${budget ? 'Asking price: '+budget+'.' : ''} Located in ${location}. Ideal for contractors and tradespeople. Serious enquiries only.`.replace(/\s+/g,' ').trim();
+  } else if (type === 'project') {
+    title = `${cat||'Renovation'} Project – ${location}`;
+    description = `Looking for experienced contractors for a ${(cat||'renovation').toLowerCase()} project in ${location}. ${budget ? 'Budget: '+budget+'.' : ''} ${desc || 'Full scope of works to be discussed with selected contractor.'} Please submit your bid with references and timeline.`;
+  } else if (type === 'material') {
+    title = `${cat||'Building Materials'} Available – ${qty ? qty+' units, ' : ''}${location}`;
+    description = `${qty ? qty+' of ' : ''}${(cat||'materials').toLowerCase()} available for immediate collection or delivery in ${location}. ${budget ? 'Priced at '+budget+'.' : ''} ${desc || 'Sourced from a completed renovation project. Excellent condition.'} Contact to arrange viewing.`;
+  } else if (type === 'service') {
+    title = `${cat||'Professional Service'} Available – ${location}`;
+    description = `Experienced ${(cat||'contractor').toLowerCase()} available for projects in ${location}. ${budget ? 'Rates from '+budget+'.' : ''} ${desc || 'Licensed, insured and fully equipped. Fast quotes and clean work guaranteed.'} Get in touch to discuss your project.`;
+  } else if (type === 'tool') {
+    title = `${cat||'Equipment'} for Hire/Sale – ${location}`;
+    description = `${cat||'Professional equipment'} available in ${location}. ${budget ? budget+'.' : ''} ${desc || 'Well-maintained and ready to use.'} Available for hire or purchase — contact for availability.`;
+  } else if (type === 'transport') {
+    title = `${cat||'Transport & Logistics'} – ${location}`;
+    description = `Reliable ${(cat||'transport').toLowerCase()} service available in ${location}. ${budget ? 'From '+budget+'.' : ''} ${desc || 'Covering material deliveries, waste removal and equipment hire across the region.'} Book in advance for best availability.`;
+  } else {
+    title = `${cat||type} – ${location}`;
+    description = desc || `Available in ${location}. ${budget ? 'Price: '+budget+'.' : ''} Contact for details.`;
   }
 
+  preview.innerHTML = `<strong style="display:block;font-family:'Syne',sans-serif;font-size:14px;margin-bottom:6px;">${title}</strong>${description}`;
+  btn.textContent = '✦ Regenerate';
   btn.disabled = false;
+
+  // Pre-fill hidden title store
+  window._aiGeneratedTitle = title;
+  window._aiGeneratedDesc  = description;
 }
 
 // ═══════════════════════════════════════════════
@@ -1428,12 +1513,45 @@ sb.auth.onAuthStateChange(async (event, session) => {
   currentUser = session?.user ?? null;
   if (currentUser) {
     await loadProfile();
+    await loadUserPosts();   // load their posts into the feed
     renderNavLoggedIn();
   } else {
     userProfile = null;
+    // Remove any user-owned posts from local array
+    POSTS.splice(0, POSTS.length, ...POSTS.filter(p => !p.ownedByMe));
     renderNavLoggedOut();
   }
 });
+
+async function loadUserPosts() {
+  if (!currentUser) return;
+  const { data } = await sb.from('posts').select('*').eq('user_id', currentUser.id).eq('status','active').order('created_at', { ascending: false });
+  if (!data) return;
+  // Remove stale owned posts, re-inject fresh ones
+  const withoutMine = POSTS.filter(p => !p.ownedByMe);
+  const mine = data.map(p => ({
+    id:        p.id,
+    type:      p.type,
+    subtype:   p.subtype || p.type,
+    title:     p.title,
+    emoji:     p.emoji || '📌',
+    img:       p.image_urls?.[0] || null,
+    desc:      p.description || '',
+    budget:    p.budget_label || 'See listing',
+    timeline:  p.timeline || 'Flexible',
+    tags:      p.tags || [],
+    user:      (userProfile?.first_name || 'You'),
+    userType:  userProfile?.user_type || 'homeowner',
+    lat:       p.lat || 38.7169,
+    lng:       p.lng || -9.1395,
+    bids:      0,
+    saved:     false,
+    ownedByMe: true,
+  }));
+  POSTS.splice(0, POSTS.length, ...mine, ...withoutMine);
+  renderFeed();
+  renderMarkers();
+}
 
 async function loadProfile() {
   const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
@@ -1446,8 +1564,13 @@ function renderNavLoggedIn() {
   li.style.display = 'flex';
   const name = userProfile?.first_name || currentUser.email.split('@')[0];
   document.getElementById('nav-user-name').textContent = name;
-  document.getElementById('nav-avatar').textContent = name.charAt(0).toUpperCase();
+  if (userProfile?.avatar_url) {
+    document.getElementById('nav-avatar').innerHTML = `<img src="${userProfile.avatar_url}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    document.getElementById('nav-avatar').textContent = name.charAt(0).toUpperCase();
+  }
   document.getElementById('pill-dashboard').style.display = '';
+  showMyPostsTab(true);
 }
 
 function renderNavLoggedOut() {
@@ -1824,10 +1947,104 @@ function setTab(tab) {
   }
 }
 
-function submitPost() {
+// ═══════════════════════════════════════════════
+//  SUBMIT POST  (saves to Supabase + adds to map)
+// ═══════════════════════════════════════════════
+async function submitPost() {
+  if (!currentUser) { closeModal('post-overlay'); openAuth('login'); return; }
+
+  const type     = selectedPostType;
+  const category = document.getElementById('pf-category')?.value || type;
+  const budget   = document.getElementById('pf-budget')?.value   || '';
+  const location = document.getElementById('post-location')?.value || '';
+  const desc     = document.getElementById('pf-desc')?.value     || '';
+  const make     = document.getElementById('pf-make')?.value     || '';
+  const model    = document.getElementById('pf-model')?.value    || '';
+  const year     = document.getElementById('pf-year')?.value     || '';
+  const mileage  = document.getElementById('pf-mileage')?.value  || '';
+
+  // Use AI-generated title if available, else build one
+  const aiPreview = document.getElementById('ai-preview-text');
+  const aiStrong  = aiPreview?.querySelector('strong');
+  const title     = window._aiGeneratedTitle
+    || aiStrong?.textContent?.trim()
+    || (make && model ? `${year} ${make} ${model}` : null)
+    || `${category} – ${location || 'Lisboa'}`;
+
+  const fullDesc  = window._aiGeneratedDesc
+    || desc
+    || `${make} ${model} ${year} ${mileage ? mileage+'km' : ''}`.trim()
+    || title;
+
+  // Clear stored AI values
+  window._aiGeneratedTitle = null;
+  window._aiGeneratedDesc  = null;
+
+  // Geocode location to lat/lng using Nominatim (free, no key needed)
+  let lat = 38.7169 + (Math.random()-0.5)*0.04;
+  let lng = -9.1395 + (Math.random()-0.5)*0.04;
+  if (location) {
+    try {
+      const geo = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(location+', Lisboa, Portugal')}&format=json&limit=1`);
+      const geoData = await geo.json();
+      if (geoData[0]) { lat = parseFloat(geoData[0].lat); lng = parseFloat(geoData[0].lon); }
+    } catch(e) {}
+  }
+
+  const EMOJI_MAP = { project:'🏠', material:'🧱', vehicle:'🚐', tool:'🔧', service:'⚙️', transport:'🚛' };
+
+  const postData = {
+    user_id:      currentUser.id,
+    type,
+    subtype:      category,
+    title,
+    description:  fullDesc || `${make} ${model} ${year} ${mileage ? mileage+'km' : ''}`.trim() || title,
+    budget_label: budget,
+    timeline:     document.getElementById('pf-start')?.value ? `From ${document.getElementById('pf-start').value}` : 'Flexible',
+    tags:         [category, make, model, type].filter(Boolean),
+    lat, lng,
+    address:      location || 'Lisboa',
+    city:         'Lisboa',
+    emoji:        EMOJI_MAP[type] || '📌',
+    status:       'active',
+  };
+
+  const { data: saved, error } = await sb.from('posts').insert(postData).select().single();
+  if (error) { showToast('Could not publish post. Try again.'); console.error(error); return; }
+
+  // Add to local POSTS array so it appears immediately on map + feed
+  const localPost = {
+    id:       saved.id,
+    type:     saved.type,
+    subtype:  saved.subtype,
+    title:    saved.title,
+    emoji:    saved.emoji,
+    img:      null,
+    desc:     saved.description,
+    budget:   saved.budget_label || 'See listing',
+    timeline: saved.timeline,
+    tags:     saved.tags || [],
+    user:     (userProfile?.first_name || 'You'),
+    userType: userProfile?.user_type || 'homeowner',
+    lat:      saved.lat,
+    lng:      saved.lng,
+    bids:     0,
+    saved:    false,
+    ownedByMe: true,
+  };
+  POSTS.unshift(localPost);
+
   closeModal('post-overlay');
-  showToast('✦ Post published! It\'s now live on the map.');
+  showToast('✦ Post published! Now live on the map.');
+
+  // Refresh feed + map
+  renderFeed();
+  renderMarkers();
+
+  // Fly to the new post
+  if (map) map.flyTo([saved.lat, saved.lng], 15, { duration: 1.2 });
 }
+
 
 // ═══════════════════════════════════════════════
 //  MODAL UTILS
