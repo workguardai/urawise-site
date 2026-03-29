@@ -6,8 +6,8 @@
 <title>UraWise — Renovation Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <style>
 :root{
   --ink:#0e0e0e;--bone:#f5f2ec;--warm:#faf8f4;
@@ -46,13 +46,15 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 .nbtn-p:hover{background:#d44515}
 
 /* ── LAYOUT ── */
-.app{display:flex;height:100vh;padding-top:56px}
+.app{display:flex;position:fixed;top:56px;left:0;right:0;bottom:0;overflow:hidden}
 
 /* ── FEED PANEL ── */
-.feed-panel{width:var(--feed-w);flex-shrink:0;background:var(--warm);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100;position:relative;transition:width .3s,min-width .3s}
+.feed-panel{width:var(--feed-w);flex-shrink:0;background:var(--warm);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100;position:relative;transition:width .3s;height:100%}
 .feed-panel.collapsed{width:0;min-width:0}
-.feed-toggle{position:absolute;right:-14px;top:50%;transform:translateY(-50%);z-index:200;width:28px;height:28px;border-radius:50%;background:var(--card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;box-shadow:var(--sh);cursor:pointer;transition:all .2s}
+/* Toggle button is fixed so it always shows even when feed is collapsed */
+.feed-toggle{position:fixed;top:50%;z-index:400;width:28px;height:28px;border-radius:50%;background:var(--card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;transition:left .3s,all .2s;left:calc(var(--feed-w) - 14px);transform:translateY(-50%)}
 .feed-toggle:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.feed-toggle.collapsed{left:-14px}
 .feed-header{padding:11px 13px 9px;border-bottom:1px solid var(--border);flex-shrink:0}
 .feed-tabs{display:flex;gap:3px;background:var(--bone);border-radius:9px;padding:3px}
 .ftab{flex:1;padding:6px 0;text-align:center;font-size:10px;font-weight:700;border-radius:7px;cursor:pointer;color:var(--muted);transition:all .2s;font-family:'Syne',sans-serif}
@@ -95,8 +97,8 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 .status-completed{background:#e3e8ff;color:#3730a3}
 
 /* ── MAP ── */
-.map-wrap{flex:1;position:relative}
-#map{width:100%;height:100%}
+.map-wrap{flex:1;position:relative;height:100%;min-width:0;min-height:400px}
+#map{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#e8e4dd}
 .map-marker{background:var(--card);border-radius:11px;border:2px solid var(--accent);overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.18);cursor:pointer;width:60px;height:60px}
 .map-marker img{width:100%;height:100%;object-fit:cover}
 .map-marker-e{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px}
@@ -105,15 +107,17 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 .fab:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(232,82,26,.45)}
 
 /* ── DETAIL SLIDE PANEL ── */
-.detail-panel{position:absolute;left:0;top:0;bottom:0;width:390px;background:var(--warm);z-index:600;border-right:1px solid var(--border);transform:translateX(-100%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:4px 0 20px rgba(14,14,14,.1)}
+.detail-panel{position:fixed;left:0;top:56px;bottom:0;width:390px;background:var(--warm);z-index:600;border-right:1px solid var(--border);transform:translateX(-100%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:4px 0 20px rgba(14,14,14,.1)}
 .detail-panel.open{transform:translateX(0)}
 .dimg{width:100%;height:180px;object-fit:cover}
 .dph{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:64px;background:var(--bone)}
 .dcontent{padding:16px;flex:1;overflow-y:auto}
 .dcontent::-webkit-scrollbar{width:3px}
 .dcontent::-webkit-scrollbar-thumb{background:var(--border)}
-.dclose{position:absolute;top:9px;right:9px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;font-size:12px;z-index:10;box-shadow:var(--sh)}
-.dback{position:absolute;top:9px;left:9px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);border:none;display:flex;align-items:center;justify-content:center;font-size:12px;z-index:10;box-shadow:var(--sh)}
+.dclose{position:absolute;top:9px;right:9px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.95);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;z-index:10;box-shadow:var(--sh);cursor:pointer}
+.dclose:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.dback{position:absolute;top:9px;left:9px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.95);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;z-index:10;box-shadow:var(--sh);cursor:pointer}
+.dback:hover{background:var(--bone);border-color:var(--ink)}
 .dtags{display:flex;flex-wrap:wrap;gap:4px;margin:9px 0}
 .dtag{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;background:var(--bone);color:var(--muted);font-family:'Syne',sans-serif}
 .ddesc{font-size:12px;line-height:1.65;color:#444;margin-bottom:13px}
@@ -396,9 +400,8 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 
 <!-- MAIN APP -->
 <div class="app">
-  <!-- FEED PANEL -->
+  <!-- FEED PANEL (toggle button is outside so it stays visible when collapsed) -->
   <div class="feed-panel" id="feed-panel">
-    <button class="feed-toggle" id="feed-toggle" onclick="toggleFeed()" title="Hide/Show feed">◀</button>
     <!-- content injected by JS depending on mode -->
     <div id="feed-inner" style="display:flex;flex-direction:column;height:100%;overflow:hidden">
       <div class="feed-header">
@@ -450,10 +453,16 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
   </div>
 </div>
 
-<!-- DETAIL PANEL (overlays feed) -->
+<!-- FEED TOGGLE — fixed so it always shows even when feed is collapsed -->
+<button class="feed-toggle" id="feed-toggle" onclick="toggleFeed()" title="Toggle feed">◀</button>
+
+<!-- DETAIL PANEL (overlays feed area via fixed positioning) -->
 <div class="detail-panel" id="detail-panel">
-  <button class="dback" onclick="closeDetail()" title="Back to list">◀</button>
-  <button class="dclose" onclick="closeDetail()">✕</button>
+  <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--warm);flex-shrink:0">
+    <button class="dback" onclick="closeDetail()" title="Back to list" style="position:static;box-shadow:none;background:var(--bone)">◀</button>
+    <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;flex:1" id="d-panel-title">Details</span>
+    <button class="dclose" onclick="closeDetail()" style="position:static;box-shadow:none;background:var(--bone)">✕</button>
+  </div>
   <div id="d-img-area"></div>
   <div class="dcontent" id="d-content"></div>
   <div class="dacts" id="d-acts"></div>
@@ -603,7 +612,7 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 // ═══════════════════════════════════════════════════════
 const STATE = {
   lang:'en', tab:'projects', feedTab:'nearby',
-  query:'', filter:'All',
+  query:'', filter:'',
   user:null, // null = logged out; {name, type, email}
   feedMode:'list', // 'list' | 'detail' | 'messages' | 'projects' | 'project-dash' | 'profile' | 'biz-profile' | 'saved-searches' | 'web-results'
   selectedPost:null,
@@ -645,14 +654,51 @@ const BIZ_PROFILES = {
 // ═══════════════════════════════════════════════════════
 // MAP
 // ═══════════════════════════════════════════════════════
-let map, markers={};
+let map, markers={}, mapReady=false;
+
 function initMap(){
-  map=L.map('map',{center:[60.1695,24.9354],zoom:13,zoomControl:false});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'©OpenStreetMap ©CartoDB',maxZoom:19}).addTo(map);
+  const mapEl=document.getElementById('map');
+  if(!mapEl||map) return;
+
+  // Leaflet not loaded yet — retry shortly
+  if(typeof L==='undefined'){
+    setTimeout(initMap,250);
+    return;
+  }
+
+  // Create map — this works even offline; only tiles need network
+  map=L.map('map',{
+    center:[60.1695,24.9354],
+    zoom:13,
+    zoomControl:false,
+    preferCanvas:true
+  });
+
+  // Tile layer — CartoDB has good CORS and works on file:// and deployed
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
+    subdomains:'abcd',
+    maxZoom:19,
+    errorTileUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+  }).addTo(map);
+
   L.control.zoom({position:'bottomright'}).addTo(map);
+
+  mapReady=true;
+
+  // Force Leaflet to recalculate container size — critical for fixed-layout pages
+  const resize=()=>{ if(map) map.invalidateSize({animate:false}); };
+  resize();
+  setTimeout(resize,100);
+  setTimeout(resize,500);
+  setTimeout(resize,1500);
+
+  // Re-render markers now map is ready
   renderMarkers();
 }
+
 function renderMarkers(){
+  if(!map||!mapReady) return;
   Object.values(markers).forEach(m=>m.remove()); markers={};
   [...getFiltered(),...STATE.pendingPosts].forEach(post=>{
     if(STATE.dismissedCards.has(post.id)) return;
@@ -805,7 +851,17 @@ function toggleFeed(){
   const panel=document.getElementById('feed-panel');
   const btn=document.getElementById('feed-toggle');
   panel.classList.toggle('collapsed',STATE.feedCollapsed);
-  btn.textContent=STATE.feedCollapsed?'▶':'◀';
+  if(STATE.feedCollapsed){
+    btn.textContent='▶';
+    btn.style.left='0px';
+    btn.title='Show feed';
+  } else {
+    btn.textContent='◀';
+    btn.style.left='';
+    btn.title='Hide feed';
+  }
+  // Resize map after transition
+  setTimeout(()=>{ if(map&&mapReady) map.invalidateSize({animate:false}); },320);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -890,7 +946,7 @@ function openDetail(post){
   `;
 
   panel.classList.add('open');
-  map.flyTo([post.lat,post.lng],15,{duration:1.2});
+  if(map&&mapReady) map.flyTo([post.lat,post.lng],15,{duration:1.2});
 }
 
 function closeDetail(){
@@ -2078,9 +2134,10 @@ function setLang(lang){
   if(ssCancel) ssCancel.textContent=L('cancel');
   const ssSave=document.getElementById('ss-save');
   if(ssSave) ssSave.textContent=L('saveSearch').replace('💾 ','');
-    renderTypeGrid();
-    renderPostDyn(STATE.selectedPostType);
-  }
+
+  // Re-render feed
+  STATE.filter='';
+  if(STATE.feedMode==='list'){ setFeedMode('list'); renderFilters(); renderFeed(); }
   else if(STATE.feedMode==='messages') showMessages();
   else if(STATE.feedMode==='projects') showMyProjects();
   else if(STATE.feedMode==='profile') showProfile();
@@ -2090,6 +2147,13 @@ function setLang(lang){
     openDetail(STATE.selectedPost);
   }
 
+  // Re-render post type grid if modal open
+  if(document.getElementById('post-overlay').classList.contains('open')){
+    renderTypeGrid();
+    renderPostDyn(STATE.selectedPostType);
+  }
+
+  renderMarkers();
   showToast(`${meta.flag} ${meta.label}`);
 }
 
@@ -2105,9 +2169,17 @@ function showToast(msg){ const t=document.getElementById('toast'); t.textContent
 // ═══════════════════════════════════════════════════════
 // BOOT
 // ═══════════════════════════════════════════════════════
-window.addEventListener('DOMContentLoaded',()=>{
-  renderFilters(); renderFeed(); initMap();
-});
+// Boot — try on DOMContentLoaded, also retry on full window load as fallback
+let booted=false;
+function boot(){
+  if(booted) return;
+  booted=true;
+  renderFilters();
+  renderFeed();
+  initMap();
+}
+document.addEventListener('DOMContentLoaded', boot);
+window.addEventListener('load', boot); // fallback if DOMContentLoaded already fired
 </script>
 </body>
 </html>
