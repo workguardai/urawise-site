@@ -6,8 +6,15 @@
 <title>UraWise — Renovation Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+// Fallback: if cdnjs failed, try unpkg
+if(typeof L === 'undefined'){
+  document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""><\/script>');
+}
+</script>
 <style>
 :root{
   --ink:#0e0e0e;--bone:#f5f2ec;--warm:#faf8f4;
@@ -46,10 +53,10 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 .nbtn-p:hover{background:#d44515}
 
 /* ── LAYOUT ── */
-.app{display:flex;position:fixed;top:56px;left:0;right:0;bottom:0;overflow:hidden}
+.app{display:flex;position:fixed;top:56px;left:0;right:0;bottom:0;overflow:hidden;height:calc(100vh - 56px)}
 
 /* ── FEED PANEL ── */
-.feed-panel{width:var(--feed-w);flex-shrink:0;background:var(--warm);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100;position:relative;transition:width .3s;height:100%}
+.feed-panel{width:var(--feed-w);flex-shrink:0;background:var(--warm);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;z-index:100;position:relative;transition:width .3s;height:100%;height:calc(100vh - 56px)}
 .feed-panel.collapsed{width:0;min-width:0}
 /* Toggle button is fixed so it always shows even when feed is collapsed */
 .feed-toggle{position:fixed;top:50%;z-index:400;width:28px;height:28px;border-radius:50%;background:var(--card);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;transition:left .3s,all .2s;left:calc(var(--feed-w) - 14px);transform:translateY(-50%)}
@@ -97,8 +104,8 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 .status-completed{background:#e3e8ff;color:#3730a3}
 
 /* ── MAP ── */
-.map-wrap{flex:1;position:relative;height:100%;min-width:0;min-height:400px}
-#map{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#e8e4dd}
+.map-wrap{flex:1;position:relative;min-width:0}
+#map{position:absolute;top:0;left:0;width:100%;height:100%;background:#e8e4dd}
 .map-marker{background:var(--card);border-radius:11px;border:2px solid var(--accent);overflow:hidden;box-shadow:0 3px 12px rgba(0,0,0,.18);cursor:pointer;width:60px;height:60px}
 .map-marker img{width:100%;height:100%;object-fit:cover}
 .map-marker-e{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px}
@@ -633,78 +640,213 @@ const STATE = {
 // DATA
 // ═══════════════════════════════════════════════════════
 const POSTS = [
+  // ── HELSINKI ──
   {id:1,type:'project',subtype:'Kitchen Renovation',title:'Full Kitchen Renovation – Open Plan',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Complete kitchen gut renovation. Looking for experienced contractors. Includes cabinetry, countertops (quartz preferred), plumbing relocation, and electrical.',budget:'€18,000–€25,000',timeline:'Starts April 2025',tags:['Kitchen','Plumbing','Electrical','Cabinetry'],user:'Anna K.',userId:'user_anna',userType:'homeowner',lat:60.169,lng:24.935,bids:4,status:'pending',milestones:[{name:'Demolition',done:true,active:false,date:'Apr 1',amount:2000},{name:'Plumbing',done:true,active:false,date:'Apr 8',amount:4000},{name:'Cabinetry',done:false,active:true,date:'Apr 20',amount:8000},{name:'Final Finish',done:false,active:false,date:'May 5',amount:11000}]},
   {id:2,type:'project',subtype:'Bathroom Renovation',title:'Master Bathroom Retile & Refit',emoji:'🛁',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'Full retile of master bath. Replace old bathtub with walk-in shower. Flooring, waterproofing, and fixture replacement included.',budget:'€6,000–€9,000',timeline:'Starts May 2025',tags:['Bathroom','Tiling','Plumbing'],user:'Mikael J.',userId:'user_mikael',userType:'homeowner',lat:60.175,lng:24.945,bids:7,status:'active',milestones:[{name:'Waterproofing',done:true,active:false,date:'May 5',amount:1500},{name:'Tiling',done:false,active:true,date:'May 15',amount:3000},{name:'Fixtures',done:false,active:false,date:'May 25',amount:4500}]},
-  {id:3,type:'material',subtype:'Leftover Paint',title:'14× Tikkurila Interior Paint (5L cans)',emoji:'🪣',img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=70',desc:'Unopened and barely used cans of Tikkurila Harmony interior paint, white and off-white shades.',budget:'€8/can or €90 all',timeline:'Available now',tags:['Paint','Tikkurila','White','Interior'],user:'NordBuilders Oy',userId:'biz_nord',userType:'business',lat:60.183,lng:24.950,bids:0,status:'active',milestones:[]},
-  {id:4,type:'material',subtype:'Timber & Planks',title:'Spruce Structural Timber — 50+ pcs',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'Surplus spruce timber from a framing project. Various lengths 2.4m–4.8m, 45×120mm profile. Dry-stored, excellent condition.',budget:'€3.50/m',timeline:'Available now',tags:['Timber','Spruce','Framing'],user:'BuildStock Oy',userId:'biz_build',userType:'business',lat:60.160,lng:24.920,bids:0,status:'active',milestones:[]},
-  {id:5,type:'vehicle',subtype:'Work Van',title:'2019 Mercedes Sprinter 316 CDI – Fitted Out',emoji:'🚐',img:'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&q=70',desc:'Full builder van with racking, shelving, and lockable storage. 148,000 km, full service history, new tyres.',budget:'€22,500',timeline:'Available immediately',tags:['Mercedes','Sprinter','Van','2019'],user:'Heikkinen Rakennus',userId:'biz_heikk',userType:'business',lat:60.155,lng:24.955,bids:0,status:'active',milestones:[]},
-  {id:6,type:'project',subtype:'Painting',title:'Interior Painting — 3-Bedroom Apartment',emoji:'🖌️',img:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=70',desc:'Full repaint of 3-bed apartment, 85m². Ceilings, walls, trims. Painter to supply materials.',budget:'€1,800–€2,800',timeline:'Flexible, June–July',tags:['Painting','Interior','Apartment'],user:'Laura M.',userId:'user_laura',userType:'homeowner',lat:60.178,lng:24.928,bids:2,status:'pending',milestones:[]},
-  {id:7,type:'service',subtype:'Plumbing',title:'Certified Plumber — Available for Projects',emoji:'🔧',img:null,desc:'Licensed plumber with 12 years experience. Specialising in bathroom renovations, pipe replacement, and kitchen reconfigurations.',budget:'From €65/hr',timeline:'Available from April',tags:['Plumbing','Bathroom','Kitchen'],user:'Virtanen Plumbing',userId:'biz_virt',userType:'business',lat:60.165,lng:24.940,bids:0,status:'active',milestones:[]},
-  {id:8,type:'stores',subtype:'Hardware Store',title:'K-Rauta Helsinki Centrum',emoji:'🏪',img:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',desc:'Finland\'s leading DIY and building materials store. Wide range of tools, timber, tiles, paints, plumbing, and electrical supplies.',budget:'Visit store',timeline:'Mon–Sat 8–20',tags:['Hardware','Tools','Paint','Timber'],user:'K-Rauta',userId:'store_krauta',userType:'store',lat:60.172,lng:24.962,bids:0,status:'active',milestones:[],storeUrl:'https://www.k-rauta.fi'},
-  {id:9,type:'stores',subtype:'Hardware Store',title:'Bauhaus Helsinki',emoji:'🔨',img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',desc:'Large-format hardware and home improvement superstore. Tools, materials, flooring, lighting, garden, and bathroom fixtures.',budget:'Visit store',timeline:'Mon–Sun 8–21',tags:['Hardware','Flooring','Bathroom','Lighting'],user:'Bauhaus',userId:'store_bhaus',userType:'store',lat:60.210,lng:25.000,bids:0,status:'active',milestones:[],storeUrl:'https://www.bauhaus.fi'}
+  {id:3,type:'material',subtype:'Leftover Paint',title:'14x Tikkurila Interior Paint (5L cans)',emoji:'🪣',img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=70',desc:'Unopened and barely used cans of Tikkurila Harmony interior paint, white and off-white shades. Pick-up in Kallio.',budget:'€8/can or €90 all',timeline:'Available now',tags:['Paint','Tikkurila','White','Interior'],user:'NordBuilders Oy',userId:'biz_nord',userType:'business',lat:60.183,lng:24.950,bids:0,status:'active',milestones:[]},
+  {id:4,type:'material',subtype:'Timber & Planks',title:'Spruce Structural Timber 50+ pcs',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'Surplus spruce timber from a framing project. Various lengths 2.4m-4.8m, 45x120mm profile. Dry-stored, excellent condition.',budget:'€3.50/m',timeline:'Available now',tags:['Timber','Spruce','Framing'],user:'BuildStock Oy',userId:'biz_build',userType:'business',lat:60.160,lng:24.920,bids:0,status:'active',milestones:[]},
+  {id:5,type:'vehicle',subtype:'Work Van',title:'2019 Mercedes Sprinter 316 CDI Fitted Out',emoji:'🚐',img:'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&q=70',desc:'Full builder van with racking, shelving, and lockable storage. 148,000 km, full service history, new tyres.',budget:'€22,500',timeline:'Available immediately',tags:['Mercedes','Sprinter','Van','2019'],user:'Heikkinen Rakennus',userId:'biz_heikk',userType:'business',lat:60.155,lng:24.955,bids:0,status:'active',milestones:[]},
+  {id:6,type:'project',subtype:'Painting',title:'Interior Painting 3-Bedroom Apartment',emoji:'🖌️',img:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=70',desc:'Full repaint of 3-bed apartment, 85m2. Ceilings, walls, trims. Painter to supply materials.',budget:'€1,800-€2,800',timeline:'Flexible, June-July',tags:['Painting','Interior','Apartment'],user:'Laura M.',userId:'user_laura',userType:'homeowner',lat:60.178,lng:24.928,bids:2,status:'pending',milestones:[]},
+  {id:7,type:'service',subtype:'Plumbing',title:'Certified Plumber Available for Projects',emoji:'🔧',img:null,desc:'Licensed plumber with 12 years experience. Specialising in bathroom renovations, pipe replacement, and kitchen reconfigurations.',budget:'From €65/hr',timeline:'Available from April',tags:['Plumbing','Bathroom','Kitchen'],user:'Virtanen Plumbing',userId:'biz_virt',userType:'business',lat:60.165,lng:24.940,bids:0,status:'active',milestones:[]},
+  {id:8,type:'stores',subtype:'Hardware Store',title:'K-Rauta Helsinki Centrum',emoji:'🏪',img:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',desc:"Finland's leading DIY and building materials store.",budget:'Visit store',timeline:'Mon-Sat 8-20',tags:['Hardware','Tools','Paint','Timber'],user:'K-Rauta',userId:'store_krauta',userType:'store',lat:60.172,lng:24.962,bids:0,status:'active',milestones:[],storeUrl:'https://www.k-rauta.fi'},
+  {id:9,type:'stores',subtype:'Hardware Store',title:'Bauhaus Helsinki',emoji:'🔨',img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',desc:'Large-format hardware and home improvement superstore.',budget:'Visit store',timeline:'Mon-Sun 8-21',tags:['Hardware','Flooring','Bathroom','Lighting'],user:'Bauhaus',userId:'store_bhaus',userType:'store',lat:60.210,lng:25.000,bids:0,status:'active',milestones:[],storeUrl:'https://www.bauhaus.fi'},
+  // ── VANTAA ──
+  {id:10,type:'project',subtype:'Flooring',title:'Hardwood Floor Installation 4-Room Apartment',emoji:'🪵',img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=70',desc:'Replacing old laminate with solid hardwood flooring across 90m2. All rooms and hallway. Materials to be agreed.',budget:'€4,500-€7,000',timeline:'Starts June 2025',tags:['Flooring','Hardwood','Apartment'],user:'Pekka V.',userId:'user_pekka',userType:'homeowner',lat:60.295,lng:25.040,bids:3,status:'pending',milestones:[{name:'Old floor removal',done:false,active:true,date:'Jun 3',amount:800},{name:'Underlay prep',done:false,active:false,date:'Jun 8',amount:1200},{name:'Floor installation',done:false,active:false,date:'Jun 15',amount:5000}]},
+  {id:11,type:'material',subtype:'Surplus Tiles',title:'Porcelain Floor Tiles 80m2 stock',emoji:'⬜',img:'https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=400&q=70',desc:'Surplus porcelain floor tiles from a commercial project in Vantaa. 60x60cm, light grey, first quality.',budget:'€12/m2',timeline:'Available now',tags:['Tiles','Porcelain','Flooring','Grey'],user:'Vantaa Tiles Oy',userId:'biz_vantiles',userType:'business',lat:60.298,lng:25.035,bids:0,status:'active',milestones:[]},
+  {id:12,type:'service',subtype:'Electrical',title:'Certified Electrician Renovation Specialist',emoji:'⚡',img:null,desc:'Authorised electrician, 15 years in renovation work. Consumer unit upgrades, EV charger installation, full rewires. Based in Vantaa.',budget:'From €70/hr',timeline:'Available immediately',tags:['Electrical','Rewire','EV Charger'],user:'Sahko Pro Oy',userId:'biz_sahko',userType:'business',lat:60.302,lng:25.022,bids:0,status:'active',milestones:[]},
+  // ── ESPOO ──
+  {id:13,type:'project',subtype:'Roof Repair',title:'Flat Roof Replacement Detached House',emoji:'🏠',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=70',desc:'Flat roof on 200m2 detached house needs full replacement. Seeking quotes for new membrane system with 20-year warranty.',budget:'€12,000-€18,000',timeline:'Starts July 2025',tags:['Roof','Waterproofing','Detached'],user:'Johanna S.',userId:'user_johanna',userType:'homeowner',lat:60.205,lng:24.656,bids:5,status:'pending',milestones:[{name:'Remove old roof',done:false,active:true,date:'Jul 7',amount:3000},{name:'Substrate repair',done:false,active:false,date:'Jul 14',amount:4000},{name:'New membrane',done:false,active:false,date:'Jul 21',amount:11000}]},
+  {id:14,type:'material',subtype:'Bricks & Blocks',title:'Reclaimed Red Bricks 2000 pieces',emoji:'🧱',img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=70',desc:'High-quality reclaimed red bricks from a 1960s demolition in Espoo. Clean, solid, ideal for feature walls or garden projects.',budget:'€0.60/brick',timeline:'Available now',tags:['Bricks','Reclaimed','Feature Wall'],user:'Espoo Demolition Ltd',userId:'biz_espoo_dem',userType:'business',lat:60.212,lng:24.670,bids:0,status:'active',milestones:[]},
+  {id:15,type:'vehicle',subtype:'Work Truck',title:'2020 Volvo FM Flatbed Construction Ready',emoji:'🚛',img:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=400&q=70',desc:'Volvo FM 420 flatbed with crane. 78,000 km, full service, crane recently inspected. Perfect for construction material delivery.',budget:'€68,000',timeline:'Available now',tags:['Volvo','Flatbed','Crane','Truck'],user:'Nordic Fleet Oy',userId:'biz_nordicfleet',userType:'business',lat:60.200,lng:24.640,bids:0,status:'active',milestones:[]},
+  // ── TIRANA ──
+  {id:16,type:'project',subtype:'Bathroom Renovation',title:'Luxury Bathroom Renovation City Centre Flat',emoji:'🛁',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'Transforming an outdated bathroom into a modern wet room. Italian tiles, rain shower, underfloor heating. Tirana Blloku district.',budget:'€3,500-€6,000',timeline:'Starts May 2025',tags:['Bathroom','Tiles','Wet Room','Underfloor'],user:'Artan B.',userId:'user_artan',userType:'homeowner',lat:41.330,lng:19.822,bids:6,status:'active',milestones:[{name:'Demolition',done:true,active:false,date:'May 2',amount:500},{name:'Waterproofing',done:false,active:true,date:'May 8',amount:1000},{name:'Tiling',done:false,active:false,date:'May 18',amount:3000},{name:'Fixtures',done:false,active:false,date:'May 25',amount:1500}]},
+  {id:17,type:'material',subtype:'Surplus Tiles',title:'Finca Porcelain Tiles 60m2 Surplus',emoji:'⬜',img:'https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=400&q=70',desc:'Surplus Italian porcelain tiles imported for a hotel project in Tirana. 40x80cm, off-white matte. 60m2 available below cost.',budget:'€18/m2',timeline:'Available now',tags:['Tiles','Italian','Porcelain','Matte'],user:'Tirana Import SH.P.K.',userId:'biz_tirana_imp',userType:'business',lat:41.335,lng:19.818,bids:0,status:'active',milestones:[]},
+  {id:18,type:'service',subtype:'General Construction',title:'Experienced Construction Team Tirana',emoji:'🏗️',img:null,desc:'Full-service construction team of 8 workers available for renovation, new builds, and commercial fit-outs in Tirana and surrounds.',budget:'From ALL 3,500/day',timeline:'Available now',tags:['Construction','Renovation','Commercial'],user:'Ndertim Pro SH.P.K.',userId:'biz_ndertim',userType:'business',lat:41.328,lng:19.830,bids:0,status:'active',milestones:[]},
+  {id:19,type:'project',subtype:'Kitchen Renovation',title:'Kitchen and Living Room Open-Plan Merge',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Knocking through wall between kitchen and living room to create open-plan space. New kitchen island, integrated appliances. Tirana Blloku.',budget:'€5,000-€9,000',timeline:'Starts June 2025',tags:['Kitchen','Open Plan','Structural'],user:'Besa H.',userId:'user_besa',userType:'homeowner',lat:41.325,lng:19.820,bids:4,status:'pending',milestones:[]},
+  // ── DURRES ──
+  {id:20,type:'project',subtype:'Terrace Renovation',title:'Sea-View Terrace Renovation and Waterproofing',emoji:'🌊',img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400&q=70',desc:'Beachfront apartment terrace in Durres needs full waterproofing and new non-slip tiles. Include new balustrade. Spectacular sea view.',budget:'€2,500-€4,500',timeline:'Starts April 2025',tags:['Terrace','Waterproofing','Tiles','Seaside'],user:'Ilir M.',userId:'user_ilir',userType:'homeowner',lat:41.323,lng:19.458,bids:3,status:'pending',milestones:[]},
+  {id:21,type:'material',subtype:'Steel & Metal',title:'Steel Rebar Bundle 10 tonnes available',emoji:'⚙️',img:null,desc:'10 tonnes of B500B 12mm steel rebar from completed construction project in Durres port area. Cut lengths and full bars available.',budget:'€550/tonne',timeline:'Available now',tags:['Steel','Rebar','Construction'],user:'Durres Steel SH.A.',userId:'biz_durres_steel',userType:'business',lat:41.319,lng:19.455,bids:0,status:'active',milestones:[]},
+  {id:22,type:'service',subtype:'Tiling',title:'Master Tiler Durres and Tirana',emoji:'🪟',img:null,desc:'Certified tiler with 18 years experience. Specialising in large-format tiles, wet rooms, and outdoor terraces. Free quote within 24h.',budget:'From ALL 1,200/m2',timeline:'Available now',tags:['Tiling','Wet Room','Terrace','Large Format'],user:'Nik Tilers SH.P.K.',userId:'biz_nik_tile',userType:'business',lat:41.325,lng:19.462,bids:0,status:'active',milestones:[]},
+  // ── LEZHA ──
+  {id:23,type:'project',subtype:'Wall Repair',title:'Exterior Wall Repair and Insulation Older Villa',emoji:'🏚️',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=70',desc:'Traditional stone villa near Lezha needing exterior wall repointing and external insulation system. Approx 180m2 of wall area.',budget:'€4,000-€7,500',timeline:'Starts May 2025',tags:['Wall Repair','Insulation','Stone','Villa'],user:'Gjergj K.',userId:'user_gjergj',userType:'homeowner',lat:41.784,lng:19.643,bids:2,status:'pending',milestones:[]},
+  {id:24,type:'material',subtype:'Timber & Planks',title:'Seasoned Oak Beams 25 pieces',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'25 pieces of air-dried oak structural beams from old barn in Lezha region. 150x150mm, lengths 3-6m. Excellent for restoration projects.',budget:'€35/m',timeline:'Available now',tags:['Oak','Beams','Structural','Restoration'],user:'Lezha Wood SH.P.K.',userId:'biz_lezha_wood',userType:'business',lat:41.782,lng:19.640,bids:0,status:'active',milestones:[]},
+  // ── SHKODER ──
+  {id:25,type:'project',subtype:'Bathroom Renovation',title:'Traditional Hamam-Style Bathroom Conversion',emoji:'🛁',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'Unique project to convert a large bathroom into hamam-inspired wet room with marble tiles, steam bench, and copper fixtures. Heritage apartment in Shkoder.',budget:'€6,000-€10,000',timeline:'Flexible 2025',tags:['Bathroom','Marble','Steam','Heritage'],user:'Fatmira D.',userId:'user_fatmira',userType:'homeowner',lat:42.068,lng:19.514,bids:2,status:'pending',milestones:[]},
+  {id:26,type:'service',subtype:'Carpentry',title:'Master Carpenter Bespoke Joinery',emoji:'🪚',img:null,desc:'Traditional Albanian carpenter specialising in bespoke wooden doors, windows, and interior joinery. Works with oak, walnut, and chestnut.',budget:'From ALL 4,000/day',timeline:'Available May onwards',tags:['Carpentry','Joinery','Bespoke','Oak'],user:'Marku Woodworks',userId:'biz_marku',userType:'business',lat:42.070,lng:19.518,bids:0,status:'active',milestones:[]},
+  // ── VLORE ──
+  {id:27,type:'project',subtype:'Terrace Renovation',title:'Hilltop Villa Terrace and Pool Surround',emoji:'🏊',img:'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=400&q=70',desc:'Large terrace renovation around private pool on hillside villa with Adriatic views in Vlore. Non-slip outdoor tiles, drainage, pergola.',budget:'€8,000-€14,000',timeline:'Starts May 2025',tags:['Terrace','Pool','Outdoor Tiles','Pergola'],user:'Sokol P.',userId:'user_sokol',userType:'homeowner',lat:40.466,lng:19.490,bids:4,status:'active',milestones:[{name:'Site prep drainage',done:true,active:false,date:'May 5',amount:2000},{name:'Tiling',done:false,active:true,date:'May 15',amount:6000},{name:'Pergola finishing',done:false,active:false,date:'May 28',amount:6000}]},
+  {id:28,type:'material',subtype:'Natural Stone',title:'Vlora Limestone Slabs 120m2',emoji:'🪨',img:null,desc:'Local Vlore limestone floor slabs, hand-cut. 40x40cm, 3cm thick. Perfect for outdoor terraces, garden paths, and villa courtyards.',budget:'€22/m2',timeline:'Available now',tags:['Limestone','Natural Stone','Outdoor','Slabs'],user:'Guri Dekor SH.P.K.',userId:'biz_guri',userType:'business',lat:40.462,lng:19.488,bids:0,status:'active',milestones:[]},
+  // ── SARANDA ──
+  {id:29,type:'project',subtype:'Kitchen Renovation',title:'Modern Kitchen Beachfront Holiday Apartment',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Full kitchen renovation of holiday rental in Saranda. Compact open-plan design, durable marine-grade materials, integrated appliances. Close to seafront.',budget:'€4,000-€7,000',timeline:'Before summer 2025',tags:['Kitchen','Holiday','Compact','Marine'],user:'Elton R.',userId:'user_elton',userType:'homeowner',lat:39.876,lng:20.004,bids:3,status:'pending',milestones:[]},
+  {id:30,type:'service',subtype:'Painting',title:'Exterior Painting and Plastering Saranda',emoji:'🖌️',img:null,desc:'Experienced team specialising in exterior render and painting for apartments and villas in Saranda area. Sun-resistant materials, fast turnaround.',budget:'From ALL 800/m2',timeline:'Available now',tags:['Painting','Exterior','Render','Villa'],user:'Ngjyra Pro SH.P.K.',userId:'biz_ngjyra',userType:'business',lat:39.878,lng:20.008,bids:0,status:'active',milestones:[]},
+  // ── ELBASAN ──
+  {id:31,type:'project',subtype:'Wall Repair',title:'Structural Wall Crack Repair and Repointing',emoji:'🏚️',img:null,desc:'Townhouse in Elbasan centre with structural cracks in load-bearing walls. Need survey, repointing, and crack injection. Also needs exterior repaint.',budget:'€2,500-€5,000',timeline:'Urgent April 2025',tags:['Structural','Wall Repair','Repointing'],user:'Agron L.',userId:'user_agron',userType:'homeowner',lat:41.112,lng:20.082,bids:5,status:'active',milestones:[]},
+  {id:32,type:'material',subtype:'Leftover Paint',title:'Dulux Weathershield Exterior Paint 20 tins',emoji:'🪣',img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=70',desc:'20x10L tins of Dulux Weathershield in cream white. Surplus from a commercial block in Elbasan. Unopened, still in date.',budget:'ALL 3,500 all',timeline:'Available now',tags:['Paint','Dulux','Exterior','White'],user:'Ndertim Elbasan SH.P.K.',userId:'biz_elbasan',userType:'business',lat:41.115,lng:20.085,bids:0,status:'active',milestones:[]},
+  // ── LISBON ──
+  {id:33,type:'project',subtype:'Flooring',title:'Azulejo Tile Restoration Historic Alfama Apartment',emoji:'🟦',img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=70',desc:'Restoring original 19th century azulejo tile floors in heritage apartment in Alfama. Careful matching of period tiles, professional restoration.',budget:'€8,000-€14,000',timeline:'Starts May 2025',tags:['Azulejo','Heritage','Restoration','Flooring'],user:'Margarida F.',userId:'user_margarida',userType:'homeowner',lat:38.714,lng:-9.132,bids:5,status:'active',milestones:[{name:'Survey tile sourcing',done:true,active:false,date:'May 1',amount:2000},{name:'Old tile removal',done:false,active:true,date:'May 10',amount:3000},{name:'Restoration grouting',done:false,active:false,date:'May 24',amount:9000}]},
+  {id:34,type:'project',subtype:'Painting',title:'Full Exterior Repaint Pombaline Building',emoji:'🖌️',img:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=70',desc:'Classic Pombaline-era building in Chiado needs full exterior repaint with heritage-approved colours. Includes window trims and ironwork.',budget:'€6,000-€10,000',timeline:'Starts September 2025',tags:['Exterior','Heritage','Painting'],user:'Joao C.',userId:'user_joao',userType:'homeowner',lat:38.710,lng:-9.141,bids:3,status:'pending',milestones:[]},
+  {id:35,type:'material',subtype:'Surplus Tiles',title:'Handmade Azulejo Tiles 200 pieces',emoji:'🟦',img:'https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=400&q=70',desc:'Original handmade azulejo tiles, cobalt blue pattern, sourced from renovation of 1890s house in Lisbon. 15x15cm. Sold as-is.',budget:'€4.50/tile',timeline:'Available now',tags:['Azulejo','Handmade','Heritage','Blue'],user:'Lisboa Reuse Lda.',userId:'biz_lisboa',userType:'business',lat:38.716,lng:-9.137,bids:0,status:'active',milestones:[]},
+  {id:36,type:'service',subtype:'Carpentry',title:'Heritage Joinery and Window Restoration Lisbon',emoji:'🪚',img:null,desc:'Specialist in restoring and replicating traditional Portuguese wooden windows, shutters, and doors for heritage buildings in Lisbon.',budget:'From €90/hr',timeline:'Available June onwards',tags:['Carpentry','Heritage','Windows','Shutters'],user:'Madeira Antiga Lda.',userId:'biz_madeira',userType:'business',lat:38.718,lng:-9.143,bids:0,status:'active',milestones:[]},
+  {id:37,type:'stores',subtype:'Hardware Store',title:'Leroy Merlin Lisboa Colombo',emoji:'🏪',img:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',desc:'Large DIY and home improvement store in Lisbon. Full range of tools, building materials, tiling, flooring, plumbing and electrical.',budget:'Visit store',timeline:'Mon-Sun 9-21',tags:['Hardware','Tools','Flooring','Tiles'],user:'Leroy Merlin',userId:'store_leroylis',userType:'store',lat:38.756,lng:-9.159,bids:0,status:'active',milestones:[],storeUrl:'https://www.leroymerlin.pt'},
+  // ── PORTO ──
+  {id:38,type:'project',subtype:'Kitchen Renovation',title:'Industrial-Style Kitchen Boavista Loft',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Converting open-plan loft kitchen to industrial aesthetic. Exposed steel shelving, concrete countertop, reclaimed wood island. Creative contractors welcome.',budget:'€12,000-€20,000',timeline:'Starts July 2025',tags:['Kitchen','Industrial','Loft','Concrete'],user:'Rui A.',userId:'user_rui',userType:'homeowner',lat:41.157,lng:-8.629,bids:4,status:'pending',milestones:[]},
+  {id:39,type:'material',subtype:'Reclaimed Wood',title:'Reclaimed Chestnut Floorboards 85m2',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'Original chestnut floorboards recovered from 1930s Porto townhouse. 8-12cm wide, 22mm thick, excellent condition.',budget:'€38/m2',timeline:'Available now',tags:['Reclaimed','Chestnut','Flooring','Original'],user:'Porto Salvados Lda.',userId:'biz_porto_salv',userType:'business',lat:41.149,lng:-8.615,bids:0,status:'active',milestones:[]},
+  {id:40,type:'service',subtype:'Plumbing',title:'Certified Plumber Porto and Greater Area',emoji:'🔧',img:null,desc:'Fully certified plumber with 20 years experience. Specialises in old building pipe replacement, gas retrofits, and bathroom renovations.',budget:'From €55/hr',timeline:'Available now',tags:['Plumbing','Gas','Pipe Replacement','Bathroom'],user:'AquaFix Porto Lda.',userId:'biz_aquafix',userType:'business',lat:41.153,lng:-8.620,bids:0,status:'active',milestones:[]},
+  {id:41,type:'stores',subtype:'Hardware Store',title:'AKI Porto Antas',emoji:'🔨',img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',desc:'Popular Portuguese DIY chain. Comprehensive stock of paints, tiles, tools, timber, and garden supplies.',budget:'Visit store',timeline:'Mon-Sat 9-20',tags:['Hardware','Paint','Tools','Timber'],user:'AKI',userId:'store_aki',userType:'store',lat:41.163,lng:-8.588,bids:0,status:'active',milestones:[],storeUrl:'https://www.aki.pt'},
+  // ── COPENHAGEN ──
+  {id:42,type:'project',subtype:'Bathroom Renovation',title:'Scandi Minimalist Bathroom Frederiksberg',emoji:'🛁',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'Full renovation to classic Scandinavian style. Freestanding tub, wood-effect tiles, heated floor. Frederiksberg period apartment.',budget:'DKK 80,000-130,000',timeline:'Starts August 2025',tags:['Bathroom','Scandi','Freestanding','Heated Floor'],user:'Astrid N.',userId:'user_astrid',userType:'homeowner',lat:55.676,lng:12.562,bids:6,status:'pending',milestones:[]},
+  {id:43,type:'material',subtype:'Leftover Paint',title:'Flugger Interior Paint 18 cans',emoji:'🪣',img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=70',desc:'Surplus Flugger interior paint in warm white and light grey. From a just-completed project in Copenhagen. Collect from Osterbro.',budget:'DKK 40/can',timeline:'Available now',tags:['Paint','Flugger','Interior','White'],user:'KBH Byg ApS',userId:'biz_kbh',userType:'business',lat:55.693,lng:12.582,bids:0,status:'active',milestones:[]},
+  {id:44,type:'service',subtype:'Carpentry',title:'Bespoke Cabinetmaker Kitchens and Built-ins',emoji:'🪚',img:null,desc:'Copenhagen-based cabinetmaker specialising in bespoke Scandi kitchens, wardrobes, and built-in storage. Clean lines, high quality.',budget:'From DKK 750/hr',timeline:'Booking June 2025',tags:['Carpentry','Kitchen','Built-in','Scandi'],user:'Snedker Holm ApS',userId:'biz_holm',userType:'business',lat:55.680,lng:12.570,bids:0,status:'active',milestones:[]},
+  {id:45,type:'stores',subtype:'Hardware Store',title:'Bauhaus Copenhagen Valby',emoji:'🔨',img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',desc:'Major Copenhagen DIY and building supplies store. Full range of construction materials, tools, flooring, garden.',budget:'Visit store',timeline:'Mon-Fri 7-19, Sat 8-17',tags:['Hardware','Tools','Flooring','Garden'],user:'Bauhaus DK',userId:'store_bauhaus_cph',userType:'store',lat:55.660,lng:12.520,bids:0,status:'active',milestones:[],storeUrl:'https://www.bauhaus.dk'},
+  // ── ODENSE ──
+  {id:46,type:'project',subtype:'Kitchen Renovation',title:'Retro Kitchen Upgrade 1970s Townhouse',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Full kitchen renovation of original 1970s townhouse in Odense. New cabinets, quartz worktops, integrated appliances.',budget:'DKK 60,000-95,000',timeline:'Starts September 2025',tags:['Kitchen','Retro','Townhouse','Quartz'],user:'Lars B.',userId:'user_lars',userType:'homeowner',lat:55.396,lng:10.386,bids:3,status:'pending',milestones:[]},
+  {id:47,type:'material',subtype:'Surplus Tiles',title:'Bathroom Wall Tiles 45m2 Unsold Stock',emoji:'⬜',img:'https://images.unsplash.com/photo-1620121692029-d088224ddc74?w=400&q=70',desc:'Surplus white subway tiles from an Odense bathroom project. 10x20cm, gloss white. 45m2 available, sold by the box.',budget:'DKK 85/m2',timeline:'Available now',tags:['Tiles','Subway','White','Bathroom'],user:'Flise Fynske ApS',userId:'biz_flise',userType:'business',lat:55.400,lng:10.390,bids:0,status:'active',milestones:[]},
+  {id:48,type:'service',subtype:'Roofing',title:'Thatched Roof Specialist Funen Region',emoji:'🏠',img:null,desc:'Traditional thatched roof craftsman with 25 years experience. Full re-thatching, repairs, ridge work. Serving Odense and all of Funen island.',budget:'From DKK 1,200/m2',timeline:'Booking 2025 season',tags:['Roofing','Thatched','Traditional','Funen'],user:'Straatakning Petersen',userId:'biz_petersen',userType:'business',lat:55.393,lng:10.383,bids:0,status:'active',milestones:[]},
+  // ── VEJLE ──
+  {id:49,type:'project',subtype:'Flooring',title:'Engineered Oak Flooring New Build House',emoji:'🪵',img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=70',desc:'New build house in Vejle, 160m2 of engineered oak flooring to be installed. All on one level, underfloor heating pre-installed. Supply and fit.',budget:'DKK 55,000-80,000',timeline:'Ready July 2025',tags:['Flooring','Oak','New Build','Underfloor'],user:'Mette H.',userId:'user_mette',userType:'homeowner',lat:55.710,lng:9.537,bids:2,status:'pending',milestones:[]},
+  {id:50,type:'material',subtype:'Steel & Metal',title:'Galvanised Steel Purlins 40 lengths',emoji:'⚙️',img:null,desc:'40x6m galvanised steel Z-purlins from a cancelled roofing project near Vejle. 200mm depth, suitable for agricultural or industrial buildings.',budget:'DKK 280/length',timeline:'Available now',tags:['Steel','Purlins','Galvanised','Roofing'],user:'Stal Vejle A/S',userId:'biz_staal',userType:'business',lat:55.714,lng:9.540,bids:0,status:'active',milestones:[]},
+  // ── HERNING ──
+  {id:51,type:'project',subtype:'Wall Repair',title:'Industrial Unit Interior Refurbishment',emoji:'🏭',img:null,desc:'1,200m2 industrial warehouse in Herning needing full interior refurbishment: walls, floor, lighting, partition walls for offices.',budget:'DKK 400,000-700,000',timeline:'Starts Q3 2025',tags:['Commercial','Industrial','Refurbishment','Partition'],user:'Midwest Logistics A/S',userId:'user_midwest',userType:'homeowner',lat:56.136,lng:8.974,bids:4,status:'pending',milestones:[]},
+  {id:52,type:'service',subtype:'Electrical',title:'Industrial Electrician Jutland',emoji:'⚡',img:null,desc:'Industrial and commercial electrician covering Jutland. Specialises in factory wiring, 3-phase installations, and LED lighting retrofits.',budget:'From DKK 680/hr',timeline:'Available now',tags:['Electrical','Industrial','3-Phase','LED'],user:'Elektro Midt A/S',userId:'biz_elektro',userType:'business',lat:56.140,lng:8.978,bids:0,status:'active',milestones:[]},
+  // ── AARHUS ──
+  {id:53,type:'project',subtype:'Bathroom Renovation',title:'Spa Bathroom Conversion Aarhus Apartment',emoji:'🛁',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'Converting standard bathroom into spa experience with Japanese soaking tub, steam shower, heated tiles, and mood lighting. Central Aarhus.',budget:'DKK 120,000-180,000',timeline:'Starts October 2025',tags:['Bathroom','Spa','Japanese Tub','Steam'],user:'Sofie E.',userId:'user_sofie',userType:'homeowner',lat:56.162,lng:10.203,bids:5,status:'pending',milestones:[]},
+  {id:54,type:'material',subtype:'Reclaimed Wood',title:'Reclaimed Douglas Fir Cladding 200m2',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'Reclaimed Douglas fir exterior cladding boards, lightly weathered, from a 1980s building in Aarhus harbour. Great patina, ideal for feature facades.',budget:'DKK 220/m2',timeline:'Available now',tags:['Reclaimed','Douglas Fir','Cladding','Facade'],user:'Genbrugstrae Aarhus',userId:'biz_genbrugstrae',userType:'business',lat:56.155,lng:10.210,bids:0,status:'active',milestones:[]},
+  {id:55,type:'stores',subtype:'Hardware Store',title:'XL-Byg Aarhus Nord',emoji:'🏪',img:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',desc:'Large Danish building supplies cooperative. Competitive prices on timber, insulation, roofing, tools, and fixings.',budget:'Visit store',timeline:'Mon-Fri 7-18, Sat 8-15',tags:['Hardware','Timber','Roofing','Insulation'],user:'XL-Byg',userId:'store_xlbyg',userType:'store',lat:56.180,lng:10.185,bids:0,status:'active',milestones:[],storeUrl:'https://www.xl-byg.dk'},
+  // ── LONDON ──
+  {id:56,type:'project',subtype:'Kitchen Renovation',title:'Victorian Terrace Kitchen Extension Hackney',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Side-return kitchen extension on Victorian terrace in Hackney. New bifold doors, skylight, bespoke cabinets, polished concrete floor.',budget:'£45,000-£70,000',timeline:'Starts September 2025',tags:['Kitchen','Extension','Victorian','Concrete'],user:'Sarah T.',userId:'user_sarah',userType:'homeowner',lat:51.545,lng:-0.054,bids:8,status:'active',milestones:[{name:'Structural works',done:true,active:false,date:'Sep 5',amount:15000},{name:'Roofing glazing',done:false,active:true,date:'Sep 20',amount:18000},{name:'Fit-out',done:false,active:false,date:'Oct 10',amount:37000}]},
+  {id:57,type:'project',subtype:'Bathroom Renovation',title:'Ensuite Luxury Renovation Notting Hill',emoji:'🛁',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'High-spec ensuite renovation in Notting Hill maisonette. Freestanding bath, walk-in shower with body jets, marble tiles, underfloor heating.',budget:'£22,000-£35,000',timeline:'Starts July 2025',tags:['Bathroom','Luxury','Marble','Ensuite'],user:'Oliver H.',userId:'user_oliver',userType:'homeowner',lat:51.515,lng:-0.204,bids:6,status:'pending',milestones:[]},
+  {id:58,type:'material',subtype:'Reclaimed Wood',title:'Victorian Pitch Pine Floorboards 120m2',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'Original Victorian pitch pine tongue-and-groove floorboards salvaged from a decommissioned Hackney school. 120mm wide, 22mm thick.',budget:'£45/m2',timeline:'Available now',tags:['Victorian','Pitch Pine','Reclaimed','Flooring'],user:'London Salvage Ltd',userId:'biz_londonsal',userType:'business',lat:51.550,lng:-0.060,bids:0,status:'active',milestones:[]},
+  {id:59,type:'service',subtype:'General Construction',title:'Main Contractor London Extensions and Loft Conversions',emoji:'🏗️',img:null,desc:'Established London contractor specialising in single-storey extensions, loft conversions, and full house refurbs. Fully insured, 100+ completed projects.',budget:'From £350/day per worker',timeline:'Booking Q3 2025',tags:['Extensions','Loft','Refurb','London'],user:'Capital Build Ltd',userId:'biz_capital',userType:'business',lat:51.540,lng:-0.080,bids:0,status:'active',milestones:[]},
+  {id:60,type:'stores',subtype:'Hardware Store',title:'Travis Perkins Hackney',emoji:'🔨',img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=70',desc:"UK's leading builders' merchant. Timber, masonry, insulation, roofing, plumbing and fixings. Trade accounts available.",budget:'Visit store',timeline:'Mon-Fri 7-17:30',tags:['Builders Merchant','Timber','Masonry','Trade'],user:'Travis Perkins',userId:'store_travis',userType:'store',lat:51.553,lng:-0.062,bids:0,status:'active',milestones:[],storeUrl:'https://www.travisperkins.co.uk'},
+  // ── MANCHESTER ──
+  {id:61,type:'project',subtype:'Flooring',title:'Victorian Parquet Floor Restoration Didsbury',emoji:'🪵',img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=70',desc:'Original 1890s herringbone parquet floor in Didsbury Victorian terrace needs full strip, repair, and refinish. Estimated 75m2.',budget:'£3,500-£6,000',timeline:'Starts May 2025',tags:['Parquet','Herringbone','Restoration','Victorian'],user:'Emma W.',userId:'user_emma',userType:'homeowner',lat:53.411,lng:-2.228,bids:4,status:'active',milestones:[{name:'Strip assess',done:true,active:false,date:'May 8',amount:1000},{name:'Repairs',done:false,active:true,date:'May 15',amount:2000},{name:'Sand finish',done:false,active:false,date:'May 22',amount:3000}]},
+  {id:62,type:'material',subtype:'Bricks & Blocks',title:'Reclaimed Manchester Red Bricks 5000 pieces',emoji:'🧱',img:'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=70',desc:'Authentic Victorian Manchester red bricks from a Salford demolition project. Cleaned and stacked. Ideal for extensions or feature work.',budget:'£0.85/brick',timeline:'Available now',tags:['Manchester Brick','Victorian','Reclaimed','Red'],user:'Northern Reclaim Ltd',userId:'biz_northern',userType:'business',lat:53.490,lng:-2.245,bids:0,status:'active',milestones:[]},
+  {id:63,type:'service',subtype:'Roofing',title:'Slate Roofing Specialist Greater Manchester',emoji:'🏠',img:null,desc:'Traditional Welsh slate roofing specialist covering Greater Manchester. Re-roofing, repairs, lead work, and chimney repointing. 20-year workmanship guarantee.',budget:'From £75/m2',timeline:'Booking May 2025',tags:['Roofing','Slate','Lead Work','Chimney'],user:'Peak Roofing Ltd',userId:'biz_peak',userType:'business',lat:53.400,lng:-2.230,bids:0,status:'active',milestones:[]},
+  {id:64,type:'stores',subtype:'Hardware Store',title:'Jewson Manchester Ancoats',emoji:'🏪',img:'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&q=70',desc:"Major builders' merchant in Ancoats. Comprehensive stock of all construction materials, insulation, flooring, roofing, and timber.",budget:'Visit store',timeline:'Mon-Fri 7-17',tags:["Builders' Merchant",'Timber','Roofing','Insulation'],user:'Jewson',userId:'store_jewson',userType:'store',lat:53.482,lng:-2.218,bids:0,status:'active',milestones:[],storeUrl:'https://www.jewson.co.uk'},
+  // ── ROVANIEMI ──
+  {id:65,type:'project',subtype:'Kitchen Renovation',title:'Log Cabin Kitchen Modernisation Lapland',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Modernising a traditional log cabin kitchen in Rovaniemi. New insulated units, wood-burning stove integration, and Scandinavian minimalist design.',budget:'€9,000-€15,000',timeline:'Spring 2025',tags:['Kitchen','Log Cabin','Lapland','Wood Stove'],user:'Paavo H.',userId:'user_paavo',userType:'homeowner',lat:66.503,lng:25.731,bids:2,status:'pending',milestones:[]},
+  {id:66,type:'material',subtype:'Timber & Planks',title:'Arctic Pine Structural Logs 30m3',emoji:'🪵',img:'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=400&q=70',desc:'Slow-grown Arctic pine structural logs from a Lapland forestry operation. 20-30cm diameter, 4-8m lengths. Ideal for log cabin construction or repair.',budget:'€180/m3',timeline:'Available April 2025',tags:['Arctic Pine','Logs','Structural','Log Cabin'],user:'Lapin Puu Oy',userId:'biz_lapin',userType:'business',lat:66.508,lng:25.740,bids:0,status:'active',milestones:[]},
+  // ── VAASA ──
+  {id:67,type:'project',subtype:'Painting',title:'Wooden House Full Exterior Repaint',emoji:'🖌️',img:'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=400&q=70',desc:'Traditional wooden house in Vaasa needs full exterior repaint with Falu red paint and white trim. Surface preparation, priming, and two coats.',budget:'€3,500-€6,000',timeline:'Summer 2025',tags:['Exterior','Painting','Wooden House','Falu'],user:'Timo L.',userId:'user_timo',userType:'homeowner',lat:63.096,lng:21.615,bids:3,status:'pending',milestones:[]},
+  {id:68,type:'service',subtype:'Carpentry',title:'Wooden House Renovation Specialist Vaasa',emoji:'🪚',img:null,desc:'Specialist in traditional Finnish wooden house renovation. Window replacement, sill repairs, corner board work, and structural carpentry.',budget:'From €55/hr',timeline:'Available from May',tags:['Wooden House','Carpentry','Windows','Traditional'],user:'Vasa Snickeri Oy',userId:'biz_vasa',userType:'business',lat:63.092,lng:21.618,bids:0,status:'active',milestones:[]},
+  // ── LAPPEENRANTA ──
+  {id:69,type:'project',subtype:'Bathroom Renovation',title:'Sauna Suite Renovation Lakeside Cottage',emoji:'🧖',img:'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=400&q=70',desc:'Full renovation of sauna suite at lakeside cottage near Lappeenranta. New sauna room, changing area, and outdoor shower. Birch wood interior.',budget:'€7,000-€12,000',timeline:'Before summer 2025',tags:['Sauna','Cottage','Lakeside','Birch'],user:'Kaarina V.',userId:'user_kaarina',userType:'homeowner',lat:61.058,lng:28.189,bids:4,status:'active',milestones:[{name:'Demo prep',done:true,active:false,date:'Apr 10',amount:1500},{name:'Sauna structure',done:false,active:true,date:'Apr 22',amount:5000},{name:'Finishing outdoor shower',done:false,active:false,date:'May 5',amount:5500}]},
+  {id:70,type:'material',subtype:'Surplus Tiles',title:'Granite Sauna Stones and Floor Tiles',emoji:'🪨',img:null,desc:'200kg of genuine sauna stones (kiuas stones) and 30m2 of dark grey granite floor tiles. From a sauna refurbishment in Lappeenranta.',budget:'€200 all / tiles €25/m2',timeline:'Available now',tags:['Sauna','Granite','Stones','Tiles'],user:'Sauna Shop Oy',userId:'biz_sauna',userType:'business',lat:61.060,lng:28.192,bids:0,status:'active',milestones:[]},
+  // ── LAHTI ──
+  {id:71,type:'project',subtype:'Flooring',title:'Ski Lodge Floor Renovation Lahti Hills',emoji:'⛷️',img:'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=70',desc:'Ski lodge near Lahti ski jumps needs 200m2 of hard-wearing floor renovation. High-traffic areas, need durable and easy-clean solution.',budget:'€8,000-€13,000',timeline:'Autumn 2025',tags:['Flooring','Ski Lodge','High Traffic','Durable'],user:'Lahti Sports Club',userId:'user_lahti_sports',userType:'homeowner',lat:60.987,lng:25.656,bids:3,status:'pending',milestones:[]},
+  {id:72,type:'service',subtype:'General Construction',title:'Construction and Renovation Paijat-Hame Region',emoji:'🏗️',img:null,desc:'Full-service construction company covering Lahti and the Paijat-Hame region. Renovations, new builds, commercial projects.',budget:'From €65/hr',timeline:'Available now',tags:['Construction','Renovation','Commercial','Region'],user:'Lahden Rakennus Oy',userId:'biz_lahden',userType:'business',lat:60.983,lng:25.660,bids:0,status:'active',milestones:[]},
+  // ── OULU ──
+  {id:73,type:'project',subtype:'Kitchen Renovation',title:'Modern Kitchen Oulu City Centre Block',emoji:'🍳',img:'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&q=70',desc:'Kitchen renovation in a 1990s apartment block in central Oulu. Full replacement of cabinets, worktops, and appliances. Modern Scandinavian style.',budget:'€6,000-€10,000',timeline:'Starts June 2025',tags:['Kitchen','Scandi','Apartment','1990s'],user:'Eeva-Liisa K.',userId:'user_eeva',userType:'homeowner',lat:65.012,lng:25.473,bids:3,status:'pending',milestones:[]},
+  {id:74,type:'material',subtype:'Leftover Paint',title:'Teknos Exterior Paint 30 tins',emoji:'🪣',img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=70',desc:'Surplus Teknos Futura exterior paint in classic red and white. From a large housing company project in Oulu. 30 tins available.',budget:'€15/tin',timeline:'Available now',tags:['Paint','Teknos','Exterior','Red'],user:'Oulu Kiinteistot Oy',userId:'biz_oulu_kiin',userType:'business',lat:65.015,lng:25.476,bids:0,status:'active',milestones:[]},
+  {id:75,type:'service',subtype:'Plumbing',title:'Plumbing and Heating Northern Finland',emoji:'🔧',img:null,desc:'Fully licensed plumbing and heating company covering Oulu and northern Finland. District heating connections, pipe replacement, bathroom renovations.',budget:'From €70/hr',timeline:'Available now',tags:['Plumbing','Heating','District Heating','Northern Finland'],user:'Pohjolan Putki Oy',userId:'biz_pohjolan',userType:'business',lat:65.008,lng:25.469,bids:0,status:'active',milestones:[]}
 ];
 
 const BIZ_PROFILES = {
   'biz_nord':{name:'NordBuilders Oy',cat:'Construction & Renovation',rating:4.7,reviews:23,completedProjects:47,photos:['🏠','🔧','🛁','🏗'],services:['Kitchen Renovation','General Construction','Plumbing'],desc:'Helsinki-based renovation company with 10+ years of experience.'},
   'biz_build':{name:'BuildStock Oy',cat:'Material Supplier',rating:4.5,reviews:14,completedProjects:0,photos:['🪵','🧱','🪨','📦'],services:['Timber Supply','Material Delivery'],desc:'Surplus construction materials at competitive prices.'},
-  'biz_heikk':{name:'Heikkinen Rakennus',cat:'Construction Company',rating:4.8,reviews:31,completedProjects:89,photos:['🏗','🔨','🚐','🏠'],services:['Full Renovations','Vehicle Sales','Structural Work'],desc:'Established construction firm operating across Greater Helsinki.'},
+  'biz_heikk':{name:'Heikkinen Rakennus',cat:'Construction Company',rating:4.8,reviews:31,completedProjects:89,photos:['🏗','🔨','🚐','🏠'],services:['Full Renovations','Vehicle Sales','Structural Work'],desc:'Established construction firm operating across Greater Helsinki since 1998.'},
   'biz_virt':{name:'Virtanen Plumbing',cat:'Plumbing Services',rating:4.9,reviews:52,completedProjects:134,photos:['🔧','🚰','🛁','💧'],services:['Bathroom Renovation','Pipe Work','Kitchen Plumbing'],desc:'Licensed plumber. Fast, clean, and reliable.'},
+  'biz_sahko':{name:'Sahko Pro Oy',cat:'Electrical Services',rating:4.8,reviews:19,completedProjects:63,photos:['⚡','🔌','💡','🏠'],services:['Consumer Unit Upgrades','EV Chargers','Full Rewires'],desc:'Authorised electrician based in Vantaa covering the Helsinki metropolitan area.'},
+  'biz_lapin':{name:'Lapin Puu Oy',cat:'Timber & Materials',rating:4.6,reviews:8,completedProjects:0,photos:['🪵','🌲','🏔️','🪓'],services:['Arctic Pine Logs','Structural Timber','Lapland Delivery'],desc:'Forestry operation specialising in slow-grown Arctic pine for log cabin construction and restoration.'},
+  'biz_vasa':{name:'Vasa Snickeri Oy',cat:'Carpentry & Joinery',rating:4.9,reviews:27,completedProjects:88,photos:['🪚','🏠','🪟','🚪'],services:['Wooden House Renovation','Window Replacement','Traditional Carpentry'],desc:'Specialist in traditional Finnish wooden house renovation. Based in Vaasa.'},
+  'biz_sauna':{name:'Sauna Shop Oy',cat:'Sauna & Wellness',rating:4.7,reviews:31,completedProjects:44,photos:['🧖','🪨','🌊','🌲'],services:['Sauna Renovation','Sauna Stones','Accessories'],desc:'Everything for the Finnish sauna experience. Based in Lappeenranta.'},
+  'biz_lahden':{name:'Lahden Rakennus Oy',cat:'Construction & Renovation',rating:4.6,reviews:22,completedProjects:71,photos:['🏗','🏠','🔨','📐'],services:['Renovations','New Builds','Commercial'],desc:'Full-service construction company serving Lahti and the Paijat-Hame region.'},
+  'biz_pohjolan':{name:'Pohjolan Putki Oy',cat:'Plumbing & Heating',rating:4.8,reviews:35,completedProjects:98,photos:['🔧','🚿','🌡️','🏘️'],services:['District Heating','Pipe Replacement','Bathroom Renovation'],desc:'Licensed plumbing and heating specialists. Oulu and all of northern Finland.'},
+  'biz_oulu_kiin':{name:'Oulu Kiinteistot Oy',cat:'Property & Materials',rating:4.3,reviews:11,completedProjects:0,photos:['🏢','🪣','🏗','📦'],services:['Surplus Materials','Property Management'],desc:'Housing company based in Oulu supplying surplus renovation materials.'},
+  'biz_vantiles':{name:'Vantaa Tiles Oy',cat:'Tile Supplier',rating:4.5,reviews:16,completedProjects:0,photos:['⬜','🏗','🚚','📦'],services:['Tile Supply','Commercial Surplus','Delivery'],desc:'Tile importer and distributor based in Vantaa.'},
+  'biz_nordicfleet':{name:'Nordic Fleet Oy',cat:'Vehicle Sales',rating:4.7,reviews:9,completedProjects:0,photos:['🚛','🚐','🔧','📋'],services:['Construction Vehicle Sales','Fleet Management'],desc:'Construction vehicle dealership in Espoo.'},
+  'biz_espoo_dem':{name:'Espoo Demolition Ltd',cat:'Demolition & Salvage',rating:4.4,reviews:13,completedProjects:22,photos:['🧱','⛏️','🏚️','♻️'],services:['Demolition','Salvage Materials','Site Clearance'],desc:'Responsible demolition contractor selling quality salvaged materials in Espoo.'},
+  'biz_ndertim':{name:'Ndertim Pro SH.P.K.',cat:'Construction & Renovation',rating:4.6,reviews:18,completedProjects:55,photos:['🏗','🏠','🔨','👷'],services:['Renovations','New Builds','Commercial Fit-out'],desc:'Full construction team of 8 workers based in Tirana. Available for all renovation and construction work across Albania.'},
+  'biz_tirana_imp':{name:'Tirana Import SH.P.K.',cat:'Material Importer',rating:4.5,reviews:12,completedProjects:0,photos:['⬜','📦','🚢','🏗'],services:['Italian Tiles','Stone Import','Bulk Materials'],desc:'Specialist importer of Italian construction materials serving the Albanian market.'},
+  'biz_nik_tile':{name:'Nik Tilers SH.P.K.',cat:'Tiling Services',rating:4.9,reviews:41,completedProjects:112,photos:['⬜','🛁','🏊','🏠'],services:['Bathroom Tiling','Outdoor Terraces','Large Format Tiles'],desc:'Master tiler with 18 years experience across Durres and Tirana.'},
+  'biz_durres_steel':{name:'Durres Steel SH.A.',cat:'Steel Supplier',rating:4.4,reviews:9,completedProjects:0,photos:['⚙️','🔩','🏗','🚢'],services:['Rebar Supply','Steel Sections','Port Delivery'],desc:'Steel supplier near Durres port. Specialising in surplus construction steel.'},
+  'biz_lezha_wood':{name:'Lezha Wood SH.P.K.',cat:'Timber Merchant',rating:4.7,reviews:15,completedProjects:0,photos:['🪵','🌲','🏚️','🔨'],services:['Structural Timber','Reclaimed Beams','Delivery'],desc:'Timber merchant in Lezha specialising in seasoned hardwoods and reclaimed structural beams.'},
+  'biz_marku':{name:'Marku Woodworks',cat:'Carpentry & Joinery',rating:4.8,reviews:24,completedProjects:67,photos:['🪚','🚪','🪟','🌰'],services:['Bespoke Doors','Windows','Interior Joinery'],desc:'Traditional Albanian carpenter. Bespoke joinery in oak, walnut, and chestnut.'},
+  'biz_guri':{name:'Guri Dekor SH.P.K.',cat:'Natural Stone',rating:4.6,reviews:18,completedProjects:0,photos:['🪨','🏊','🏠','🌿'],services:['Limestone Slabs','Marble','Outdoor Paving'],desc:'Local stone supplier in Vlore. Quarried Albanian limestone and marble.'},
+  'biz_ngjyra':{name:'Ngjyra Pro SH.P.K.',cat:'Painting & Plastering',rating:4.7,reviews:29,completedProjects:83,photos:['🖌️','🏠','🌊','☀️'],services:['Exterior Painting','Render','Sun-Resistant Finishes'],desc:'Exterior painting and plastering team based in Saranda. Coastal property specialists.'},
+  'biz_elbasan':{name:'Ndertim Elbasan SH.P.K.',cat:'Construction & Materials',rating:4.3,reviews:8,completedProjects:19,photos:['🏗','🪣','🔨','🏚️'],services:['Construction','Surplus Materials','Structural Repair'],desc:'Construction company and surplus material supplier in Elbasan centre.'},
+  'biz_lisboa':{name:'Lisboa Reuse Lda.',cat:'Architectural Salvage',rating:4.8,reviews:34,completedProjects:0,photos:['🟦','🏺','🏚️','🛒'],services:['Azulejo Tiles','Heritage Salvage','Period Materials'],desc:'Lisbon-based architectural salvage specialising in original azulejo tiles and period building materials.'},
+  'biz_madeira':{name:'Madeira Antiga Lda.',cat:'Heritage Carpentry',rating:4.9,reviews:28,completedProjects:76,photos:['🪚','🪟','🚪','🏛'],services:['Window Restoration','Shutter Repair','Bespoke Joinery'],desc:'Specialist in restoring traditional Portuguese wooden windows, shutters, and doors.'},
+  'biz_porto_salv':{name:'Porto Salvados Lda.',cat:'Architectural Salvage',rating:4.7,reviews:22,completedProjects:0,photos:['🪵','🏚️','🛒','♻️'],services:['Reclaimed Flooring','Period Timber','Salvage'],desc:'Porto-based salvage dealer specialising in reclaimed timber and period architectural elements.'},
+  'biz_aquafix':{name:'AquaFix Porto Lda.',cat:'Plumbing Services',rating:4.8,reviews:37,completedProjects:101,photos:['🔧','🚰','🛁','⛽'],services:['Bathroom Renovation','Gas Retrofit','Pipe Replacement'],desc:'Fully certified plumber serving Porto and surrounding area. 20 years experience in old buildings.'},
+  'biz_londonsal':{name:'London Salvage Ltd',cat:'Architectural Salvage',rating:4.7,reviews:41,completedProjects:0,photos:['🪵','🧱','🏚️','🛒'],services:['Victorian Timber','Reclaimed Bricks','Period Fireplaces'],desc:'East London architectural salvage dealer. Specialising in Victorian and Edwardian building materials.'},
+  'biz_capital':{name:'Capital Build Ltd',cat:'Construction & Renovation',rating:4.8,reviews:58,completedProjects:143,photos:['🏗','🏠','🪟','🔨'],services:['Extensions','Loft Conversions','Full Refurbs'],desc:'Established London main contractor. Specialising in residential extensions, loft conversions, and full renovations.'},
+  'biz_northern':{name:'Northern Reclaim Ltd',cat:'Salvage & Demolition',rating:4.6,reviews:19,completedProjects:0,photos:['🧱','⛏️','🏚️','♻️'],services:['Reclaimed Bricks','Demolition','Site Clearance'],desc:'Manchester-based salvage and demolition contractor. Suppliers of authentic Victorian red bricks.'},
+  'biz_peak':{name:'Peak Roofing Ltd',cat:'Roofing Services',rating:4.9,reviews:44,completedProjects:118,photos:['🏠','🪨','🔨','⛰️'],services:['Welsh Slate','Lead Work','Chimney Repointing'],desc:'Traditional slate roofing specialist serving Greater Manchester and the Peak District.'},
+  'biz_kbh':{name:'KBH Byg ApS',cat:'Construction & Materials',rating:4.5,reviews:16,completedProjects:38,photos:['🏗','🪣','🔨','🏠'],services:['Renovations','Surplus Materials','General Build'],desc:'Copenhagen-based building company with surplus materials from completed projects.'},
+  'biz_holm':{name:'Snedker Holm ApS',cat:'Cabinetmaking & Joinery',rating:4.9,reviews:33,completedProjects:95,photos:['🪚','🍳','🚪','🌿'],services:['Bespoke Kitchens','Built-in Storage','Scandi Joinery'],desc:'Copenhagen cabinetmaker. Clean Scandinavian design, premium materials, exceptional finish.'},
+  'biz_flise':{name:'Flise Fynske ApS',cat:'Tile Supplier',rating:4.6,reviews:14,completedProjects:0,photos:['⬜','🚐','📦','🏗'],services:['Wall Tiles','Floor Tiles','Surplus Stock'],desc:'Funen-based tile supplier offering competitively priced surplus stock.'},
+  'biz_petersen':{name:'Straatakning Petersen',cat:'Thatched Roofing',rating:5.0,reviews:21,completedProjects:62,photos:['🏠','🌾','🔨','🌿'],services:['Re-thatching','Roof Repairs','Ridge Work'],desc:'Third-generation thatcher serving Funen island and the wider Odense area.'},
+  'biz_staal':{name:'Stal Vejle A/S',cat:'Steel Supplier',rating:4.4,reviews:7,completedProjects:0,photos:['⚙️','🔩','🏭','🚚'],services:['Structural Steel','Purlins','Surplus Materials'],desc:'Steel stockholder in Vejle. Surplus structural steel sections at competitive prices.'},
+  'biz_elektro':{name:'Elektro Midt A/S',cat:'Electrical Services',rating:4.7,reviews:26,completedProjects:74,photos:['⚡','🏭','💡','🔌'],services:['Industrial Wiring','3-Phase','LED Retrofits'],desc:'Industrial and commercial electricians covering all of Jutland.'},
+  'biz_genbrugstrae':{name:'Genbrugstrae Aarhus',cat:'Reclaimed Timber',rating:4.8,reviews:18,completedProjects:0,photos:['🪵','♻️','🏠','🌲'],services:['Reclaimed Cladding','Period Flooring','Structural Timber'],desc:'Aarhus dealer in reclaimed and salvaged timber. Specialists in Douglas fir and Danish hardwoods.'}
 };
-
 // ═══════════════════════════════════════════════════════
 // MAP
 // ═══════════════════════════════════════════════════════
 let map, markers={}, mapReady=false;
 
-function initMap(){
+function setMapHeight(){
   const mapEl=document.getElementById('map');
-  if(!mapEl||map) return;
+  const wrap=document.querySelector('.map-wrap');
+  if(!mapEl||!wrap) return;
+  const h=window.innerHeight-56;
+  mapEl.style.height=h+'px';
+  wrap.style.height=h+'px';
+}
 
-  // Leaflet not loaded yet — retry shortly
+function initMap(){
+  if(map||mapReady) return;
+  const mapEl=document.getElementById('map');
+  if(!mapEl) return;
+
   if(typeof L==='undefined'){
-    setTimeout(initMap,250);
+    // Leaflet CDN not loaded yet — retry
+    setTimeout(initMap,300);
     return;
   }
 
-  // Create map — this works even offline; only tiles need network
+  setMapHeight();
+
   map=L.map('map',{
     center:[60.1695,24.9354],
     zoom:13,
-    zoomControl:false,
-    preferCanvas:true
+    zoomControl:false
   });
 
-  // Tile layer — CartoDB has good CORS and works on file:// and deployed
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
     attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CARTO</a>',
     subdomains:'abcd',
-    maxZoom:19,
-    errorTileUrl:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+    maxZoom:19
   }).addTo(map);
 
   L.control.zoom({position:'bottomright'}).addTo(map);
-
   mapReady=true;
 
-  // Force Leaflet to recalculate container size — critical for fixed-layout pages
-  const resize=()=>{ if(map) map.invalidateSize({animate:false}); };
-  resize();
-  setTimeout(resize,100);
-  setTimeout(resize,500);
-  setTimeout(resize,1500);
+  // Multiple invalidateSize calls to handle async layout
+  [50,300,800,2000].forEach(ms=>
+    setTimeout(()=>{ setMapHeight(); if(map) map.invalidateSize({animate:false}); }, ms)
+  );
 
-  // Re-render markers now map is ready
   renderMarkers();
 }
 
+window.addEventListener('resize',()=>{
+  setMapHeight();
+  if(map&&mapReady) map.invalidateSize({animate:false});
+});
+
 function renderMarkers(){
   if(!map||!mapReady) return;
-  Object.values(markers).forEach(m=>m.remove()); markers={};
+  Object.values(markers).forEach(m=>m.remove());
+  markers={};
   [...getFiltered(),...STATE.pendingPosts].forEach(post=>{
     if(STATE.dismissedCards.has(post.id)) return;
     const el=document.createElement('div');
     el.className='map-marker'+(post._pending?' pending-marker':'');
-    el.innerHTML=post.img?`<img src="${post.img}" loading="lazy">`:`<div class="map-marker-e">${post.emoji}</div>`;
+    el.innerHTML=post.img
+      ?`<img src="${post.img}" loading="lazy" style="width:100%;height:100%;object-fit:cover">`
+      :`<div class="map-marker-e">${post.emoji}</div>`;
     const icon=L.divIcon({html:el,className:'',iconSize:[60,60],iconAnchor:[30,30]});
     const m=L.marker([post.lat,post.lng],{icon}).addTo(map);
     m.on('click',()=>openDetail(post));
@@ -721,7 +863,7 @@ const FILTERS={projects:['All','Kitchen','Bathroom','Painting','Tiling','Repair'
 function getFiltered(){
   const tk=TAB_TYPE[STATE.tab]||STATE.tab;
   const filterKey={projects:'projectFilters',materials:'materialFilters',vehicles:'vehicleFilters',stores:'storeFilters'}[STATE.tab];
-  const chips=L(filterKey)||[];
+  const chips=t(filterKey)||[];
   const allVal=chips[0]||'';
   let list=[...POSTS,...STATE.pendingPosts].filter(p=>{
     if(STATE.tab==='projects') return p.type==='project'||p.type==='service';
@@ -743,28 +885,28 @@ function renderFeed(){
   if(!el) return;
   if(STATE.feedTab==='saved'){
     const saved=[...POSTS,...STATE.pendingPosts].filter(p=>STATE.savedPosts.has(p.id));
-    el.innerHTML=saved.length?saved.map(cardHTML).join(''):`<div style="text-align:center;padding:30px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">💾</div><p style="font-size:12px">${L('noSaved')}</p></div>`;
+    el.innerHTML=saved.length?saved.map(cardHTML).join(''):`<div style="text-align:center;padding:30px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">💾</div><p style="font-size:12px">${t('noSaved')}</p></div>`;
     return;
   }
   if(STATE.feedTab==='favs'){
     const favs=[...POSTS,...STATE.pendingPosts].filter(p=>STATE.favPosts.has(p.id));
-    el.innerHTML=favs.length?favs.map(cardHTML).join(''):`<div style="text-align:center;padding:30px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">❤️</div><p style="font-size:12px">${L('noFavs')}</p></div>`;
+    el.innerHTML=favs.length?favs.map(cardHTML).join(''):`<div style="text-align:center;padding:30px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">❤️</div><p style="font-size:12px">${t('noFavs')}</p></div>`;
     return;
   }
   const posts=getFiltered();
-  el.innerHTML=posts.length?posts.map(cardHTML).join(''):`<div style="text-align:center;padding:30px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">🔍</div><p style="font-size:12px">${L('noResults')}</p></div>`;
+  el.innerHTML=posts.length?posts.map(cardHTML).join(''):`<div style="text-align:center;padding:30px;color:var(--muted)"><div style="font-size:32px;margin-bottom:8px">🔍</div><p style="font-size:12px">${t('noResults')}</p></div>`;
 }
 
 function cardHTML(p){
   const isSel=STATE.selectedPost&&STATE.selectedPost.id===p.id;
   const img=p.img?`<img class="cimg" src="${p.img}" loading="lazy">`:`<div class="cph">${p.emoji}</div>`;
   const bc=p.type==='material'?'bm':p.type==='vehicle'?'bv':p.type==='service'?'bs':p.type==='stores'?'bst':'bp';
-  let act=`<button class="cact cbid" onclick="tryAction(event,${p.id},'bid')">${L('bid')}</button>`;
-  if(p.type==='material'||p.type==='vehicle') act=`<button class="cact cbuy" onclick="tryAction(event,${p.id},'buy')">${L('enquire')}</button>`;
-  if(p.type==='service') act=`<button class="cact cview" onclick="tryAction(event,${p.id},'contact')">${L('contact')}</button>`;
-  if(p.type==='stores') act=`<button class="cact cbuy" onclick="goStore(event,'${p.storeUrl}')">${L('visit')}</button>`;
+  let act=`<button class="cact cbid" onclick="tryAction(event,${p.id},'bid')">${t('bid')}</button>`;
+  if(p.type==='material'||p.type==='vehicle') act=`<button class="cact cbuy" onclick="tryAction(event,${p.id},'buy')">${t('enquire')}</button>`;
+  if(p.type==='service') act=`<button class="cact cview" onclick="tryAction(event,${p.id},'contact')">${t('contact')}</button>`;
+  if(p.type==='stores') act=`<button class="cact cbuy" onclick="goStore(event,'${p.storeUrl}')">${t('visit')}</button>`;
   const bids=p.bids>0?`<span>${p.bids} bids</span><span class="cdot"></span>`:'';
-  const pending=p._pending?`<span class="post-status-badge status-pending" style="margin-left:4px">⏳ ${L('pendingTab')}</span>`:'';
+  const pending=p._pending?`<span class="post-status-badge status-pending" style="margin-left:4px">⏳ ${t('pendingTab')}</span>`:'';
   return `<div class="fcard${isSel?' sel':''}" onclick="openDetail(getPost(${p.id}))" data-id="${p.id}" style="position:relative">
     <button class="fcard-dismiss" onclick="dismissCard(event,${p.id})" title="Remove from list">✕</button>
     ${img}
@@ -784,7 +926,7 @@ function renderFilters(){
   const c=document.getElementById('feed-filters');
   if(!c) return;
   const filterKey={projects:'projectFilters',materials:'materialFilters',vehicles:'vehicleFilters',stores:'storeFilters'}[STATE.tab];
-  const chips=L(filterKey)||[];
+  const chips=t(filterKey)||[];
   if(!STATE.filter||!chips.includes(STATE.filter)) STATE.filter=chips[0]||'';
   c.innerHTML=chips.map(f=>`<div class="fchip${f===STATE.filter?' active':''}" onclick="setFilter('${f}')">${f}</div>`).join('');
 }
@@ -819,24 +961,24 @@ function setFeedMode(mode){
     inner.innerHTML=`
       <div class="feed-header">
         <div class="feed-tabs">
-          <div class="ftab active" id="tab-nearby" onclick="setFeedTab('nearby')">${L('tabNearby')}</div>
-          <div class="ftab" id="tab-recent" onclick="setFeedTab('recent')">${L('tabRecent')}</div>
-          <div class="ftab" id="tab-saved" onclick="setFeedTab('saved')">${L('tabSaved')}</div>
-          <div class="ftab" id="tab-favs" onclick="setFeedTab('favs')">${L('tabFavs')}</div>
+          <div class="ftab active" id="tab-nearby" onclick="setFeedTab('nearby')">${t('tabNearby')}</div>
+          <div class="ftab" id="tab-recent" onclick="setFeedTab('recent')">${t('tabRecent')}</div>
+          <div class="ftab" id="tab-saved" onclick="setFeedTab('saved')">${t('tabSaved')}</div>
+          <div class="ftab" id="tab-favs" onclick="setFeedTab('favs')">${t('tabFavs')}</div>
         </div>
         <div class="feed-filters" id="feed-filters"></div>
       </div>
       <div style="padding:6px 13px;border-bottom:1px solid var(--border)">
-        <button style="width:100%;padding:6px 10px;border-radius:8px;background:var(--bone);border:1.5px solid var(--border);font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;justify-content:center" onclick="toggleAdvSearch()">🔍 ${L('advSearch')}</button>
+        <button style="width:100%;padding:6px 10px;border-radius:8px;background:var(--bone);border:1.5px solid var(--border);font-size:11px;font-weight:600;display:flex;align-items:center;gap:6px;justify-content:center" onclick="toggleAdvSearch()">🔍 ${t('advSearch')}</button>
       </div>
       <div id="adv-search-area" style="display:none">
         <div class="adv-search-panel">
-          <div class="adv-row"><input class="adv-input" id="adv-q" type="text" placeholder="${L('keywords')}"></div>
-          <div class="adv-row"><span class="adv-label">${L('radius')}</span><input class="radius-slider" id="adv-radius" type="range" min="1" max="100" value="25" oninput="document.getElementById('radius-val').textContent=this.value+'km'"><span id="radius-val" style="font-size:11px;font-weight:600;width:38px">25km</span></div>
-          <div class="adv-row"><input class="adv-input" id="adv-city" type="text" placeholder="${L('cityFilter')}"></div>
+          <div class="adv-row"><input class="adv-input" id="adv-q" type="text" placeholder="${t('keywords')}"></div>
+          <div class="adv-row"><span class="adv-label">${t('radius')}</span><input class="radius-slider" id="adv-radius" type="range" min="1" max="100" value="25" oninput="document.getElementById('radius-val').textContent=this.value+'km'"><span id="radius-val" style="font-size:11px;font-weight:600;width:38px">25km</span></div>
+          <div class="adv-row"><input class="adv-input" id="adv-city" type="text" placeholder="${t('cityFilter')}"></div>
           <div class="adv-row" style="justify-content:flex-end;gap:6px">
-            <button class="adv-reset-btn" onclick="resetAdvSearch()">${L('reset')}</button>
-            <button class="adv-save-btn" onclick="saveSearch()">${L('saveSearch')}</button>
+            <button class="adv-reset-btn" onclick="resetAdvSearch()">${t('reset')}</button>
+            <button class="adv-save-btn" onclick="saveSearch()">${t('saveSearch')}</button>
           </div>
           <div id="saved-searches-list" style="margin-top:8px;display:flex;flex-direction:column;gap:5px"></div>
         </div>
@@ -861,7 +1003,10 @@ function toggleFeed(){
     btn.title='Hide feed';
   }
   // Resize map after transition
-  setTimeout(()=>{ if(map&&mapReady) map.invalidateSize({animate:false}); },320);
+  setTimeout(()=>{
+    setMapHeight();
+    if(map&&mapReady) map.invalidateSize({animate:false});
+  },320);
 }
 
 // ═══════════════════════════════════════════════════════
@@ -903,7 +1048,7 @@ function openDetail(post){
     milestoneHTML=`
       <div class="dash-section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <div class="dash-section-title" style="margin-bottom:0">${L('progress')}</div>
+          <div class="dash-section-title" style="margin-bottom:0">${t('progress')}</div>
           <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:16px">${pct}%</div>
         </div>
         <div class="milestone-bar">
@@ -918,7 +1063,7 @@ function openDetail(post){
 
   content.innerHTML=`
     <div class="cbadge ${bc}" style="margin-bottom:7px">${post.emoji} ${post.subtype}</div>
-    ${post._pending?`<span class="post-status-badge status-pending" style="margin-bottom:8px;display:inline-flex">⏳ ${L('pendingTab')}</span>`:''}
+    ${post._pending?`<span class="post-status-badge status-pending" style="margin-bottom:8px;display:inline-flex">⏳ ${t('pendingTab')}</span>`:''}
     <h2 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;line-height:1.25;margin-bottom:7px">${post.title}</h2>
     <div class="dtags">${tags}</div>
     <p class="ddesc">${post.desc}</p>
@@ -929,20 +1074,20 @@ function openDetail(post){
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
       <span style="text-decoration:underline;color:var(--teal)">${post.user}</span><span style="color:var(--muted);margin-left:4px">· ${post.userType}</span>
     </div>
-    ${post.bids>0?`<div style="margin-top:10px;background:var(--teal-s);border-radius:9px;padding:8px 12px;font-size:11px;color:var(--teal)"><strong>${post.bids} ${L('contractorsBid')}</strong></div>`:''}
+    ${post.bids>0?`<div style="margin-top:10px;background:var(--teal-s);border-radius:9px;padding:8px 12px;font-size:11px;color:var(--teal)"><strong>${post.bids} ${t('contractorsBid')}</strong></div>`:''}
     ${milestoneHTML}
-    ${isOwn?`<div style="margin-top:12px;display:flex;gap:6px"><button class="dash-edit-btn" onclick="editPost(${post.id})">${L('editPost')}</button><button class="dash-delete-btn" onclick="deletePost(${post.id})">${L('deletePost')}</button></div>`:''}
+    ${isOwn?`<div style="margin-top:12px;display:flex;gap:6px"><button class="dash-edit-btn" onclick="editPost(${post.id})">${t('editPost')}</button><button class="dash-delete-btn" onclick="deletePost(${post.id})">${t('deletePost')}</button></div>`:''}
   `;
 
-  let primaryLabel=L('placeBid'), primaryFn=`tryAction(null,${post.id},'bid')`;
-  if(post.type==='material'||post.type==='vehicle'){primaryLabel=L('sendEnquiry');primaryFn=`tryAction(null,${post.id},'buy')`;}
-  if(post.type==='service'){primaryLabel=L('contactBusiness');primaryFn=`tryAction(null,${post.id},'contact')`;}
-  if(post.type==='stores'){primaryLabel=L('visitStore');primaryFn=`goStore(null,'${post.storeUrl}')`;}
+  let primaryLabel=t('placeBid'), primaryFn=`tryAction(null,${post.id},'bid')`;
+  if(post.type==='material'||post.type==='vehicle'){primaryLabel=t('sendEnquiry');primaryFn=`tryAction(null,${post.id},'buy')`;}
+  if(post.type==='service'){primaryLabel=t('contactBusiness');primaryFn=`tryAction(null,${post.id},'contact')`;}
+  if(post.type==='stores'){primaryLabel=t('visitStore');primaryFn=`goStore(null,'${post.storeUrl}')`;}
 
   acts.innerHTML=`
     <button class="dprim" onclick="${primaryFn}">${primaryLabel}</button>
-    <button class="dsec" onclick="toggleSave(${post.id})">${isSaved?L('saved'):L('save')}</button>
-    <button class="dfav${isFav?' saved':''}" onclick="toggleFav(${post.id})">${isFav?L('favSaved'):L('fav')}</button>
+    <button class="dsec" onclick="toggleSave(${post.id})">${isSaved?t('saved'):t('save')}</button>
+    <button class="dfav${isFav?' saved':''}" onclick="toggleFav(${post.id})">${isFav?t('favSaved'):t('fav')}</button>
   `;
 
   panel.classList.add('open');
@@ -956,19 +1101,19 @@ function closeDetail(){
 }
 
 function toggleSave(id){
-  if(STATE.savedPosts.has(id)){STATE.savedPosts.delete(id);showToast(L('toastUnsaved'));}
-  else{STATE.savedPosts.add(id);showToast(L('toastSaved'));}
+  if(STATE.savedPosts.has(id)){STATE.savedPosts.delete(id);showToast(t('toastUnsaved'));}
+  else{STATE.savedPosts.add(id);showToast(t('toastSaved'));}
   if(STATE.selectedPost&&STATE.selectedPost.id===id) openDetail(getPost(id));
 }
 function toggleFav(id){
-  if(STATE.favPosts.has(id)){STATE.favPosts.delete(id);showToast(L('toastUnfav'));}
-  else{STATE.favPosts.add(id);showToast(L('toastFav'));}
+  if(STATE.favPosts.has(id)){STATE.favPosts.delete(id);showToast(t('toastUnfav'));}
+  else{STATE.favPosts.add(id);showToast(t('toastFav'));}
   if(STATE.selectedPost&&STATE.selectedPost.id===id) openDetail(getPost(id));
 }
 
 function editPost(id){
   const p=getPost(id);
-  if(!STATE.user||STATE.user.id!==p.userId){showToast(L('ownPost'));return;}
+  if(!STATE.user||STATE.user.id!==p.userId){showToast(t('ownPost'));return;}
   showToast('Edit mode — coming in next release');
 }
 function deletePost(id){
@@ -1036,23 +1181,23 @@ function renderChatBubble(){
 function renderProposalBlock(m){
   const d=m.data;
   const accepted=m.status==='accepted', declined=m.status==='declined';
-  const btns=accepted?`<button class="mprop-btn accepted" disabled>${L('accepted')}</button>`
-    :declined?`<button class="mprop-btn declined" disabled>${L('declined')}</button>`
+  const btns=accepted?`<button class="mprop-btn accepted" disabled>${t('accepted')}</button>`
+    :declined?`<button class="mprop-btn declined" disabled>${t('declined')}</button>`
     :`<div class="mprop-btns">
-      <button class="mprop-btn accept" onclick="respondProposal('${m.id}','accept')">${L('accept')}</button>
-      <button class="mprop-btn decline" onclick="respondProposal('${m.id}','decline')">${L('decline')}</button>
-      <button class="mprop-btn counter" onclick="respondProposal('${m.id}','counter')">${L('counter')}</button>
+      <button class="mprop-btn accept" onclick="respondProposal('${m.id}','accept')">${t('accept')}</button>
+      <button class="mprop-btn decline" onclick="respondProposal('${m.id}','decline')">${t('decline')}</button>
+      <button class="mprop-btn counter" onclick="respondProposal('${m.id}','counter')">${t('counter')}</button>
     </div>`;
   return `<div class="msg-proposal-block">
-    <div class="mprop-title">📋 ${L('proposalFrom')} ${m.from==='me'?STATE.user.name:'Contractor'}</div>
-    <div class="mprop-row"><span>${L('propTitle')}</span><strong>${d.title}</strong></div>
-    <div class="mprop-row"><span>${L('propPrice')}</span><strong>€${Number(d.price).toLocaleString()}</strong></div>
-    <div class="mprop-row"><span>${L('propStart')}</span><strong>${d.start}</strong></div>
-    <div class="mprop-row"><span>${L('propDuration')}</span><strong>${d.duration}</strong></div>
-    <div class="mprop-row"><span>${L('propMats')}</span><strong>${d.materials}</strong></div>
-    <div class="mprop-row"><span>${L('propPayment')}</span><strong>${d.payment}</strong></div>
-    ${d.milestones?`<div class="mprop-row" style="flex-direction:column;align-items:flex-start;margin-top:4px"><span style="margin-bottom:3px">${L('propMilestones')}</span><pre style="font-size:9px;white-space:pre-wrap;color:var(--ink)">${d.milestones}</pre></div>`:''}
-    ${m.from!=='me'&&!accepted&&!declined?btns:m.from==='me'?`<div style="font-size:10px;color:var(--teal);margin-top:6px">${L('awaitingResponse')}</div>`:''}
+    <div class="mprop-title">📋 ${t('proposalFrom')} ${m.from==='me'?STATE.user.name:'Contractor'}</div>
+    <div class="mprop-row"><span>${t('propTitle')}</span><strong>${d.title}</strong></div>
+    <div class="mprop-row"><span>${t('propPrice')}</span><strong>€${Number(d.price).toLocaleString()}</strong></div>
+    <div class="mprop-row"><span>${t('propStart')}</span><strong>${d.start}</strong></div>
+    <div class="mprop-row"><span>${t('propDuration')}</span><strong>${d.duration}</strong></div>
+    <div class="mprop-row"><span>${t('propMats')}</span><strong>${d.materials}</strong></div>
+    <div class="mprop-row"><span>${t('propPayment')}</span><strong>${d.payment}</strong></div>
+    ${d.milestones?`<div class="mprop-row" style="flex-direction:column;align-items:flex-start;margin-top:4px"><span style="margin-bottom:3px">${t('propMilestones')}</span><pre style="font-size:9px;white-space:pre-wrap;color:var(--ink)">${d.milestones}</pre></div>`:''}
+    ${m.from!=='me'&&!accepted&&!declined?btns:m.from==='me'?`<div style="font-size:10px;color:var(--teal);margin-top:6px">${t('awaitingResponse')}</div>`:''}
     ${accepted||declined?btns:''}
   </div>`;
 }
@@ -1061,18 +1206,18 @@ function renderPaymentBlock(m){
   const d=m.data;
   const paid=m.paid;
   return `<div class="msg-payment-block">
-    <div class="mpb-title">💳 ${L('paymentReq')} · ${d.inv}</div>
+    <div class="mpb-title">💳 ${t('paymentReq')} · ${d.inv}</div>
     <div class="mpb-amount">€${Number(d.amount).toLocaleString()}</div>
     <div style="font-size:10px;color:var(--muted);margin-bottom:8px">${d.desc}</div>
-    ${paid?`<button class="mpb-pay-btn paid" disabled>${L('paid')}</button>`:`<button class="mpb-pay-btn" onclick="payMilestone('${m.id}')">${L('payNow')}</button>`}
+    ${paid?`<button class="mpb-pay-btn paid" disabled>${t('paid')}</button>`:`<button class="mpb-pay-btn" onclick="payMilestone('${m.id}')">${t('payNow')}</button>`}
   </div>`;
 }
 
 function renderReceiptBlock(m){
   const d=m.data;
   return `<div class="receipt-block">
-    <div class="receipt-title">${L('receipt')} · ${d.inv}</div>
-    <div style="display:flex;justify-content:space-between;font-size:10px"><span>${L('amountPaid')}</span><strong>€${Number(d.amount).toLocaleString()}</strong></div>
+    <div class="receipt-title">${t('receipt')} · ${d.inv}</div>
+    <div style="display:flex;justify-content:space-between;font-size:10px"><span>${t('amountPaid')}</span><strong>€${Number(d.amount).toLocaleString()}</strong></div>
     <div style="font-size:10px;color:var(--muted);margin-top:3px">${d.desc} · ${d.time}</div>
   </div>`;
 }
@@ -1086,7 +1231,7 @@ function sendMessage(){
   msgs.push({from:'me',text,time:now});
   // Auto-reply simulation
   setTimeout(()=>{
-    msgs.push({from:'them',text:L('autoReply'),time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
+    msgs.push({from:'them',text:t('autoReply'),time:new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})});
     renderChatBubble();
   },1200);
   input.value='';
@@ -1114,7 +1259,7 @@ function sendProposal(){
   const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   STATE.conversations[STATE.activeChatId].push({id,from:'me',type:'proposal',data:d,time:now,status:'pending'});
   cm('proposal-overlay'); renderChatBubble();
-  showToast(L('toastProposal'));
+  showToast(t('toastProposal'));
 }
 
 function respondProposal(propId, action){
@@ -1123,15 +1268,15 @@ function respondProposal(propId, action){
   if(!msg) return;
   if(action==='accept'){
     msg.status='accepted';
-    showToast(L('accepted')+' ✅');
+    showToast(t('accepted')+' ✅');
     if(STATE.selectedPost) STATE.selectedPost.status='agreed';
   } else if(action==='decline'){
     msg.status='declined';
-    showToast(L('declined'));
+    showToast(t('declined'));
   } else {
     cm('proposal-overlay');
     setTimeout(()=>openProposalModal(),200);
-    showToast(L('counter'));
+    showToast(t('counter'));
   }
   renderChatBubble();
 }
@@ -1147,7 +1292,7 @@ function sendPaymentRequest(){
   const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   STATE.conversations[STATE.activeChatId].push({id,from:'me',type:'payment',data:d,time:now,paid:false});
   cm('payment-overlay'); renderChatBubble();
-  showToast(L('toastPayment'));
+  showToast(t('toastPayment'));
 }
 
 function payMilestone(payId){
@@ -1159,7 +1304,7 @@ function payMilestone(payId){
   const now=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
   msgs.push({from:'me',type:'receipt',data:{...msg.data,time:now},time:now});
   renderChatBubble();
-  showToast(L('toastPaid'));
+  showToast(t('toastPaid'));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1179,7 +1324,7 @@ function showMessages(){
   inner.innerHTML=`
     <div class="msg-inbox-header">
       <button style="border:none;background:none;font-size:16px;cursor:pointer" onclick="setFeedMode('list')">◀</button>
-      <h3>${L('messagesTitle')}</h3>
+      <h3>${t('messagesTitle')}</h3>
     </div>
     <div class="conv-list">
       ${convs.length?convs.map(c=>`
@@ -1190,7 +1335,7 @@ function showMessages(){
             <div class="conv-preview">${c.last?c.last.text||'[Proposal]':''}</div>
           </div>
           <div class="conv-time">${c.last?c.last.time:''}</div>
-        </div>`).join(''):`<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">${L('noMessages').replace('\n','<br>')}</div>`}
+        </div>`).join(''):`<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">${t('noMessages').replace('\n','<br>')}</div>`}
     </div>`;
 }
 
@@ -1211,14 +1356,14 @@ function showMyProjects(){
 
 function renderProjectList(inner,statusFilter){
   const myPosts=[...POSTS,...STATE.pendingPosts].filter(p=>p.userId===STATE.user?.id||p._mine);
-  const tabs=[['all',L('allTab')],['pending',L('pendingTab')],['active',L('activeTab')],['agreed',L('agreedTab')],['completed',L('completedTab')]];
+  const tabs=[['all',t('allTab')],['pending',t('pendingTab')],['active',t('activeTab')],['agreed',t('agreedTab')],['completed',t('completedTab')]];
   const tabBar=tabs.map(([key,label])=>`<div class="pstab${statusFilter===key?' active':''}" onclick="renderProjectList(document.getElementById('feed-inner'),'${key}')">${label}</div>`).join('');
   const filtered=statusFilter==='all'?myPosts:myPosts.filter(p=>p.status===statusFilter);
   inner.innerHTML=`
     <div class="proj-list-header">
       <button style="border:none;background:none;font-size:16px;cursor:pointer" onclick="setFeedMode('list')">◀</button>
-      <h3>${L('myProjects')}</h3>
-      <button class="cact cbuy" style="font-size:10px" onclick="openPostModal()">${L('newPost')}</button>
+      <h3>${t('myProjects')}</h3>
+      <button class="cact cbuy" style="font-size:10px" onclick="openPostModal()">${t('newPost')}</button>
     </div>
     <div class="proj-status-tabs">${tabBar}</div>
     <div style="flex:1;overflow-y:auto;padding:9px">
@@ -1226,12 +1371,12 @@ function renderProjectList(inner,statusFilter){
         <div class="pcard" onclick="openProjectDash(${p.id})">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
             <div class="pcard-title">${p.title}</div>
-            <span class="post-status-badge status-${p.status||'pending'}">${p.status||L('pendingTab')}</span>
+            <span class="post-status-badge status-${p.status||'pending'}">${p.status||t('pendingTab')}</span>
           </div>
           <div class="pcard-meta">${p.budget} · ${p.timeline}</div>
           ${p.milestones&&p.milestones.length?`<div style="margin-top:6px"><div class="milestone-track" style="height:4px"><div class="milestone-fill" style="width:${Math.round((p.milestones.filter(m=>m.done).length/p.milestones.length)*100)}%"></div></div></div>`:''}
         </div>`).join(''):
-        `<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">${L('noMyPosts')}</div>`}
+        `<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">${t('noMyPosts')}</div>`}
     </div>`;
 }
 
@@ -1259,10 +1404,10 @@ function showProfile(){
         <div class="profile-rating"><span class="stars">★★★★★</span><span style="font-size:11px;color:var(--muted);margin-left:4px">5.0 · New member</span></div>
       </div>
       <div class="profile-nav">
-        <div class="profile-nav-item active" onclick="showProfileTab('projects',this)">${L('myProjects')}</div>
-        <div class="profile-nav-item" onclick="showProfileTab('messages',this)">${L('messagesTitle')}</div>
-        <div class="profile-nav-item" onclick="showProfileTab('searches',this)">${L('savedSearchesTitle')}</div>
-        <div class="profile-nav-item" onclick="showProfileTab('settings',this)">${L('settingsTitle')}</div>
+        <div class="profile-nav-item active" onclick="showProfileTab('projects',this)">${t('myProjects')}</div>
+        <div class="profile-nav-item" onclick="showProfileTab('messages',this)">${t('messagesTitle')}</div>
+        <div class="profile-nav-item" onclick="showProfileTab('searches',this)">${t('savedSearchesTitle')}</div>
+        <div class="profile-nav-item" onclick="showProfileTab('settings',this)">${t('settingsTitle')}</div>
       </div>
       <div class="profile-content" id="profile-content">
         ${profileProjectsTab()}
@@ -1277,26 +1422,26 @@ function showProfileTab(tab,el){
   if(tab==='projects') c.innerHTML=profileProjectsTab();
   if(tab==='messages'){ showMessages(); }
   if(tab==='searches') c.innerHTML=profileSearchesTab();
-  if(tab==='settings') c.innerHTML=`<div style="padding:10px;font-size:12px;color:var(--muted)">${L('settingsSoon')}</div>`;
+  if(tab==='settings') c.innerHTML=`<div style="padding:10px;font-size:12px;color:var(--muted)">${t('settingsSoon')}</div>`;
 }
 
 function profileProjectsTab(){
   const myPosts=[...POSTS,...STATE.pendingPosts].filter(p=>p._mine);
-  return `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${L('myPostsTitle')}</div>
+  return `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('myPostsTitle')}</div>
     ${myPosts.length?myPosts.map(p=>`
       <div class="pcard" onclick="openDetail(getPost(${p.id}))">
         <div class="pcard-title">${p.title}</div>
-        <div class="pcard-meta">${p.budget} · <span class="post-status-badge status-${p.status||'pending'}" style="display:inline-flex">${p.status||L('pendingTab')}</span></div>
+        <div class="pcard-meta">${p.budget} · <span class="post-status-badge status-${p.status||'pending'}" style="display:inline-flex">${p.status||t('pendingTab')}</span></div>
       </div>`).join(''):
-      `<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">${L('noMyPosts')}<br><button class="cact cbuy" style="margin-top:10px" onclick="openPostModal()">${L('createPost')}</button></div>`}
-    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${L('savedPostsTitle')}</div>
-    ${[...STATE.savedPosts].length?[...STATE.savedPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))"><div class="pcard-title">${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${L('noSavedPosts')}</div>`}
-    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${L('favsTitle')}</div>
-    ${[...STATE.favPosts].length?[...STATE.favPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))"><div class="pcard-title">${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${L('noFavPosts')}</div>`}`;
+      `<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">${t('noMyPosts')}<br><button class="cact cbuy" style="margin-top:10px" onclick="openPostModal()">${t('createPost')}</button></div>`}
+    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('savedPostsTitle')}</div>
+    ${[...STATE.savedPosts].length?[...STATE.savedPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))"><div class="pcard-title">${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${t('noSavedPosts')}</div>`}
+    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('favsTitle')}</div>
+    ${[...STATE.favPosts].length?[...STATE.favPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))"><div class="pcard-title">${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${t('noFavPosts')}</div>`}`;
 }
 
 function profileSearchesTab(){
-  return `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${L('savedSearchesTitle')}</div>
+  return `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('savedSearchesTitle')}</div>
     ${STATE.savedSearches.length?STATE.savedSearches.map((s,i)=>`
       <div class="ssearch-item">
         <div class="ssearch-info">
@@ -1304,11 +1449,11 @@ function profileSearchesTab(){
           <div class="ssearch-meta">${s.query||'—'} · ${s.radius}km · ${s.city||'—'}</div>
         </div>
         <div class="ssearch-actions">
-          <button class="ssearch-btn" onclick="runSavedSearch(${i})">${L('runSearch')}</button>
-          <button class="ssearch-btn del" onclick="deleteSavedSearch(${i})">${L('deleteSearch')}</button>
+          <button class="ssearch-btn" onclick="runSavedSearch(${i})">${t('runSearch')}</button>
+          <button class="ssearch-btn del" onclick="deleteSavedSearch(${i})">${t('deleteSearch')}</button>
         </div>
       </div>`).join(''):
-    `<div style="color:var(--muted);font-size:12px">${L('noSavedSearches')}</div>`}`;
+    `<div style="color:var(--muted);font-size:12px">${t('noSavedSearches')}</div>`}`;
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1325,29 +1470,29 @@ function openBizProfile(userId){
     <div class="biz-profile">
       <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
         <button style="border:none;background:none;font-size:16px;cursor:pointer" onclick="setFeedMode('list');renderFeed()">◀</button>
-        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">${L('profileTitle')}</span>
+        <span style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px">${t('profileTitle')}</span>
       </div>
       <div class="biz-header"><div class="biz-cover">🏗</div></div>
       <div style="flex:1;overflow-y:auto">
         <div class="biz-info">
           <div class="biz-name">${biz.name}</div>
           <div class="biz-cat">${biz.cat}</div>
-          <div class="profile-rating" style="justify-content:flex-start;margin-bottom:10px"><span class="stars">${'★'.repeat(Math.floor(avgRating))}${'☆'.repeat(5-Math.floor(avgRating))}</span><span style="font-size:11px;color:var(--muted);margin-left:6px">${avgRating} · ${biz.reviews} ${L('reviews').toLowerCase()}</span></div>
+          <div class="profile-rating" style="justify-content:flex-start;margin-bottom:10px"><span class="stars">${'★'.repeat(Math.floor(avgRating))}${'☆'.repeat(5-Math.floor(avgRating))}</span><span style="font-size:11px;color:var(--muted);margin-left:6px">${avgRating} · ${biz.reviews} ${t('reviews').toLowerCase()}</span></div>
           <div class="biz-stats">
-            <div class="biz-stat"><div class="biz-stat-n">${biz.completedProjects}</div><div class="biz-stat-l">${L('myProjects')}</div></div>
-            <div class="biz-stat"><div class="biz-stat-n">${biz.reviews}</div><div class="biz-stat-l">${L('reviews')}</div></div>
-            <div class="biz-stat"><div class="biz-stat-n">${avgRating}</div><div class="biz-stat-l">${L('ratingLabel')}</div></div>
+            <div class="biz-stat"><div class="biz-stat-n">${biz.completedProjects}</div><div class="biz-stat-l">${t('myProjects')}</div></div>
+            <div class="biz-stat"><div class="biz-stat-n">${biz.reviews}</div><div class="biz-stat-l">${t('reviews')}</div></div>
+            <div class="biz-stat"><div class="biz-stat-n">${avgRating}</div><div class="biz-stat-l">${t('ratingLabel')}</div></div>
           </div>
           <p style="font-size:12px;color:#444;line-height:1.6;margin-bottom:12px">${biz.desc}</p>
-          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;margin-bottom:6px">${L('services')}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;margin-bottom:6px">${t('services')}</div>
           <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px">${biz.services.map(s=>`<span class="dtag">${s}</span>`).join('')}</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;margin-bottom:6px">${L('projectPhotos')}</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;margin-bottom:6px">${t('projectPhotos')}</div>
           <div class="biz-photos">${biz.photos.map(p=>`<div class="biz-photo">${p}</div>`).join('')}</div>
-          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;margin-bottom:8px">${L('reviews')} (${reviews.length})</div>
+          <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;margin-bottom:8px">${t('reviews')} (${reviews.length})</div>
           ${reviews.length?reviews.map(r=>`<div class="review-item"><div class="review-top"><div class="review-author">${r.author}</div><span class="stars" style="font-size:12px">${'★'.repeat(r.rating)}</span></div><p class="review-text">${r.text}</p></div>`).join(''):
-          `<div style="font-size:11px;color:var(--muted);margin-bottom:10px">${L('noReviews')}</div>`}
-          <button class="btn-s" style="width:100%;margin-top:8px" onclick="STATE.activeChatId='chat_review_${userId}';document.getElementById('review-overlay').classList.add('open')">${L('leaveReview')}</button>
-          <button class="dprim" style="margin-top:8px;width:100%" onclick="contactBiz('${userId}')">${L('contactBiz')}</button>
+          `<div style="font-size:11px;color:var(--muted);margin-bottom:10px">${t('noReviews')}</div>`}
+          <button class="btn-s" style="width:100%;margin-top:8px" onclick="STATE.activeChatId='chat_review_${userId}';document.getElementById('review-overlay').classList.add('open')">${t('leaveReview')}</button>
+          <button class="dprim" style="margin-top:8px;width:100%" onclick="contactBiz('${userId}')">${t('contactBiz')}</button>
         </div>
       </div>
     </div>`;
@@ -1386,7 +1531,7 @@ function submitReview(){
   if(!STATE.reviews[bizId]) STATE.reviews[bizId]=[];
   STATE.reviews[bizId].push({author:STATE.user?.name||'Anonymous',rating,text});
   cm('review-overlay');
-  showToast('⭐ '+L('submitReview')+' ✓');
+  showToast('⭐ '+t('submitReview')+' ✓');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1407,7 +1552,7 @@ function resetAdvSearch(){
   if(c) c.value='';
   STATE.query=''; document.getElementById('nav-q').value='';
   renderFeed(); renderMarkers();
-  showToast(L('toastReset'));
+  showToast(t('toastReset'));
 }
 
 function saveSearch(){
@@ -1428,7 +1573,7 @@ function confirmSaveSearch(){
   STATE.savedSearches.push({name,query:q,radius:r,city});
   cm('save-search-overlay');
   renderSavedSearchesList();
-  showToast(L('toastSearch'));
+  showToast(t('toastSearch'));
 }
 
 function renderSavedSearchesList(){
@@ -1441,8 +1586,8 @@ function renderSavedSearchesList(){
         <div class="ssearch-meta">${s.query||'—'} · ${s.radius}km</div>
       </div>
       <div class="ssearch-actions">
-        <button class="ssearch-btn" onclick="runSavedSearch(${i})">${L('runSearch')}</button>
-        <button class="ssearch-btn del" onclick="deleteSavedSearch(${i})">${L('deleteSearch')}</button>
+        <button class="ssearch-btn" onclick="runSavedSearch(${i})">${t('runSearch')}</button>
+        <button class="ssearch-btn del" onclick="deleteSavedSearch(${i})">${t('deleteSearch')}</button>
       </div>
     </div>`).join('');
 }
@@ -1458,7 +1603,7 @@ function runSavedSearch(i){
 function deleteSavedSearch(i){
   STATE.savedSearches.splice(i,1);
   renderSavedSearchesList();
-  showToast(L('toastSearchDel'));
+  showToast(t('toastSearchDel'));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1474,7 +1619,7 @@ async function doWebSearch(query){
       <div style="flex:1;font-family:'Syne',sans-serif;font-weight:700;font-size:13px">Results for "${query}"</div>
     </div>
     <div style="flex:1;overflow-y:auto;padding:9px" id="web-results-list">
-      <div style="text-align:center;padding:30px"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div style="font-size:11px;color:var(--muted);margin-top:8px">${L('searchingMsg')}</div></div>
+      <div style="text-align:center;padding:30px"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div style="font-size:11px;color:var(--muted);margin-top:8px">${t('searchingMsg')}</div></div>
     </div>`;
 
   try {
@@ -1500,14 +1645,14 @@ Respond ONLY with JSON array: [{"name":"...","category":"...","desc":"...","loca
             <div class="web-title">${r.name}</div>
             <div class="web-url">${r.location} · ${r.category}</div>
             <div class="web-desc">${r.desc}</div>
-            <button class="web-visit-btn" onclick="window.open('${r.url}','_blank')">${L('visit')}</button>
+            <button class="web-visit-btn" onclick="window.open('${r.url}','_blank')">${t('visit')}</button>
           </div>
           <button class="web-dismiss" onclick="document.getElementById('wr-${i}').remove()" title="Remove">✕</button>
         </div>`).join('');
     }
   } catch(e){
     const el=document.getElementById('web-results-list');
-    if(el) el.innerHTML=`<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">${L('searchUnavail')}</div>`;
+    if(el) el.innerHTML=`<div style="text-align:center;padding:30px;color:var(--muted);font-size:12px">${t('searchUnavail')}</div>`;
   }
 }
 
@@ -1527,7 +1672,7 @@ function openPostModal(){
 
 function renderTypeGrid(){
   document.getElementById('post-type-grid').innerHTML=POST_TYPES.map((t,i)=>
-    `<div class="topt${STATE.selectedPostType===t?' sel':''}" onclick="selType('${t}',this)"><div class="ic">${POST_ICONS[i]}</div><div class="lb">${(L('postTypes')||[])[i]||t}</div></div>`
+    `<div class="topt${STATE.selectedPostType===t?' sel':''}" onclick="selType('${t}',this)"><div class="ic">${POST_ICONS[i]}</div><div class="lb">${(t('postTypes')||[])[i]||t}</div></div>`
   ).join('');
 }
 
@@ -1542,31 +1687,31 @@ function renderPostDyn(type){
   const o=x=>x.map(c=>`<option>${c}</option>`).join('');
   let html='';
   if(type==='project') html=`
-    <div class="msec"><span class="mlbl">${L('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(L('projCats'))}</select></div>
-    <div class="mrow"><div><span class="mlbl">${L('budgetLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€5,000–€8,000"></div><div><span class="mlbl">${L('startLabel')}</span><input class="minput" id="pf-start" type="date"></div></div>
-    <div class="msec"><span class="mlbl">${L('matsLabel')}</span><select class="msel" id="pf-mats">${o(L('matOptions'))}</select></div>
-    <div class="msec"><span class="mlbl">${L('milestonesLabel')}</span><textarea class="mtarea" id="pf-milestones" placeholder="${L('milestonesPlaceholder')}"></textarea></div>
-    <div class="msec"><span class="mlbl">${L('photosLabel')}</span><input class="minput" type="file" accept="image/*,video/*" multiple></div>`;
+    <div class="msec"><span class="mlbl">${t('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(t('projCats'))}</select></div>
+    <div class="mrow"><div><span class="mlbl">${t('budgetLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€5,000–€8,000"></div><div><span class="mlbl">${t('startLabel')}</span><input class="minput" id="pf-start" type="date"></div></div>
+    <div class="msec"><span class="mlbl">${t('matsLabel')}</span><select class="msel" id="pf-mats">${o(t('matOptions'))}</select></div>
+    <div class="msec"><span class="mlbl">${t('milestonesLabel')}</span><textarea class="mtarea" id="pf-milestones" placeholder="${t('milestonesPlaceholder')}"></textarea></div>
+    <div class="msec"><span class="mlbl">${t('photosLabel')}</span><input class="minput" type="file" accept="image/*,video/*" multiple></div>`;
   else if(type==='material') html=`
-    <div class="msec"><span class="mlbl">${L('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(L('matCats'))}</select></div>
-    <div class="mrow"><div><span class="mlbl">${L('qtyLabel')}</span><input class="minput" id="pf-qty" type="text"></div><div><span class="mlbl">${L('priceLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€90"></div></div>
-    <div class="msec"><span class="mlbl">${L('photosLabel')}</span><input class="minput" type="file" accept="image/*" multiple></div>`;
+    <div class="msec"><span class="mlbl">${t('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(t('matCats'))}</select></div>
+    <div class="mrow"><div><span class="mlbl">${t('qtyLabel')}</span><input class="minput" id="pf-qty" type="text"></div><div><span class="mlbl">${t('priceLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€90"></div></div>
+    <div class="msec"><span class="mlbl">${t('photosLabel')}</span><input class="minput" type="file" accept="image/*" multiple></div>`;
   else if(type==='vehicle') html=`
-    <div class="mrow"><div><span class="mlbl">${L('makeLabel')}</span><input class="minput" id="pf-make" type="text" placeholder="Mercedes"></div><div><span class="mlbl">${L('modelLabel')}</span><input class="minput" id="pf-model" type="text" placeholder="Sprinter"></div></div>
-    <div class="mrow"><div><span class="mlbl">${L('yearLabel')}</span><input class="minput" id="pf-year" type="number" placeholder="2019"></div><div><span class="mlbl">${L('priceLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€22,500"></div></div>
-    <div class="msec"><span class="mlbl">${L('photosLabel')}</span><input class="minput" type="file" accept="image/*" multiple></div>`;
+    <div class="mrow"><div><span class="mlbl">${t('makeLabel')}</span><input class="minput" id="pf-make" type="text" placeholder="Mercedes"></div><div><span class="mlbl">${t('modelLabel')}</span><input class="minput" id="pf-model" type="text" placeholder="Sprinter"></div></div>
+    <div class="mrow"><div><span class="mlbl">${t('yearLabel')}</span><input class="minput" id="pf-year" type="number" placeholder="2019"></div><div><span class="mlbl">${t('priceLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€22,500"></div></div>
+    <div class="msec"><span class="mlbl">${t('photosLabel')}</span><input class="minput" type="file" accept="image/*" multiple></div>`;
   else if(type==='tool') html=`
-    <div class="mrow"><div><span class="mlbl">${L('brandLabel')}</span><input class="minput" id="pf-make" type="text" placeholder="Makita DHP484"></div><div><span class="mlbl">${L('priceLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€120"></div></div>
-    <div class="msec"><span class="mlbl">${L('photosLabel')}</span><input class="minput" type="file" accept="image/*" multiple></div>`;
+    <div class="mrow"><div><span class="mlbl">${t('brandLabel')}</span><input class="minput" id="pf-make" type="text" placeholder="Makita DHP484"></div><div><span class="mlbl">${t('priceLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€120"></div></div>
+    <div class="msec"><span class="mlbl">${t('photosLabel')}</span><input class="minput" type="file" accept="image/*" multiple></div>`;
   else if(type==='service') html=`
-    <div class="msec"><span class="mlbl">${L('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(L('svcCats'))}</select></div>
-    <div class="mrow"><div><span class="mlbl">${L('rateLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="From €65/hr"></div><div><span class="mlbl">${L('availLabel')}</span><input class="minput" id="pf-start" type="text"></div></div>
-    <div class="msec"><span class="mlbl">${L('expLabel')}</span><textarea class="mtarea" placeholder="${L('expPlaceholder')}"></textarea></div>`;
+    <div class="msec"><span class="mlbl">${t('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(t('svcCats'))}</select></div>
+    <div class="mrow"><div><span class="mlbl">${t('rateLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="From €65/hr"></div><div><span class="mlbl">${t('availLabel')}</span><input class="minput" id="pf-start" type="text"></div></div>
+    <div class="msec"><span class="mlbl">${t('expLabel')}</span><textarea class="mtarea" placeholder="${t('expPlaceholder')}"></textarea></div>`;
   else if(type==='transport') html=`
-    <div class="msec"><span class="mlbl">${L('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(L('transCats'))}</select></div>
-    <div class="mrow"><div><span class="mlbl">${L('rateLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€2.50/km"></div><div><span class="mlbl">${L('availLabel')}</span><input class="minput" id="pf-start" type="text"></div></div>`;
+    <div class="msec"><span class="mlbl">${t('postTypeLabel')}</span><select class="msel" id="pf-cat">${o(t('transCats'))}</select></div>
+    <div class="mrow"><div><span class="mlbl">${t('rateLabel')}</span><input class="minput" id="pf-budget" type="text" placeholder="€2.50/km"></div><div><span class="mlbl">${t('availLabel')}</span><input class="minput" id="pf-start" type="text"></div></div>`;
   document.getElementById('post-dyn').innerHTML=html;
-  document.getElementById('ai-prev').textContent=L('aiPlaceholder');
+  document.getElementById('ai-prev').textContent=t('aiPlaceholder');
 }
 
 async function genAI(){
@@ -1583,7 +1728,7 @@ async function genAI(){
     const text=data.content?.map(c=>c.text||'').join('')||'{}';
     const parsed=JSON.parse(text.replace(/```json|```/g,'').trim());
     prev.innerHTML=`<strong style="display:block;font-family:'Syne',sans-serif;font-size:12px;margin-bottom:4px">${parsed.title}</strong>${parsed.description}`;
-  }catch(e){ prev.textContent=L('searchUnavail'); }
+  }catch(e){ prev.textContent=t('searchUnavail'); }
   btn.disabled=false;
 }
 
@@ -1611,7 +1756,7 @@ function submitPost(){
   STATE.pendingPosts.push(newPost);
   cm('post-overlay');
   renderFeed(); renderMarkers();
-  showToast(L('toastPosted'));
+  showToast(t('toastPosted'));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1623,9 +1768,9 @@ function swAuth(mode){
   authMode=mode;
   document.getElementById('at-signup').classList.toggle('active',mode==='signup');
   document.getElementById('at-login').classList.toggle('active',mode==='login');
-  document.getElementById('at-signup').textContent=L('signup');
-  document.getElementById('at-login').textContent=L('login');
-  document.getElementById('auth-title').textContent=mode==='signup'?L('authJoin'):L('authBack');
+  document.getElementById('at-signup').textContent=t('signup');
+  document.getElementById('at-login').textContent=t('login');
+  document.getElementById('auth-title').textContent=mode==='signup'?t('authJoin'):t('authBack');
   document.getElementById('auth-signup-sec').style.display=mode==='signup'?'block':'none';
 }
 function selUtype(type,el){ document.querySelectorAll('.utype').forEach(e=>e.classList.remove('sel')); el.classList.add('sel'); }
@@ -1640,7 +1785,7 @@ function handleAuth(){
   document.getElementById('nav-signup').style.display='none';
   document.getElementById('nav-profile').style.display='inline-flex';
   document.getElementById('nav-messages-btn').style.display='inline-flex';
-  showToast(authMode==='signup'?`${L('toastWelcome')}, ${fname}!`:L('toastBack'));
+  showToast(authMode==='signup'?`${t('toastWelcome')}, ${fname}!`:t('toastBack'));
 }
 
 // ═══════════════════════════════════════════════════════
@@ -2034,7 +2179,7 @@ const LANGS = {
   }
 };
 
-function L(key){ return (LANGS[STATE.lang]||LANGS.en)[key] || LANGS.en[key] || key; }
+function t(key){ return (LANGS[STATE.lang]||LANGS.en)[key] || LANGS.en[key] || key; }
 
 function toggleLang(){ document.getElementById('lang-drop').classList.toggle('open'); }
 
@@ -2052,88 +2197,88 @@ function setLang(lang){
   document.documentElement.lang=lang;
 
   // Nav
-  document.getElementById('nav-projects').textContent=L('navProjects');
-  document.getElementById('nav-materials').textContent=L('navMaterials');
-  document.getElementById('nav-vehicles').textContent=L('navVehicles');
-  document.getElementById('nav-stores').textContent=L('navStores');
-  document.getElementById('nav-login').textContent=L('login');
-  document.getElementById('nav-signup').textContent=L('signup');
-  document.getElementById('nav-profile').textContent=L('profile');
-  document.getElementById('nav-messages-btn').textContent=L('messages');
-  document.getElementById('nav-q').placeholder=L('keywords');
-  document.getElementById('fab-lbl').textContent=L('post');
+  document.getElementById('nav-projects').textContent=t('navProjects');
+  document.getElementById('nav-materials').textContent=t('navMaterials');
+  document.getElementById('nav-vehicles').textContent=t('navVehicles');
+  document.getElementById('nav-stores').textContent=t('navStores');
+  document.getElementById('nav-login').textContent=t('login');
+  document.getElementById('nav-signup').textContent=t('signup');
+  document.getElementById('nav-profile').textContent=t('profile');
+  document.getElementById('nav-messages-btn').textContent=t('messages');
+  document.getElementById('nav-q').placeholder=t('keywords');
+  document.getElementById('fab-lbl').textContent=t('post');
 
   // Post modal static labels
   const pmTitle=document.getElementById('pm-title');
-  if(pmTitle) pmTitle.textContent=L('postModalTitle');
+  if(pmTitle) pmTitle.textContent=t('postModalTitle');
   const pmTypeLbl=document.getElementById('pm-type-lbl');
-  if(pmTypeLbl) pmTypeLbl.textContent=L('postTypeLabel');
+  if(pmTypeLbl) pmTypeLbl.textContent=t('postTypeLabel');
   const aiPrev=document.getElementById('ai-prev');
-  if(aiPrev&&!aiPrev.querySelector('strong')) aiPrev.textContent=L('aiPlaceholder');
+  if(aiPrev&&!aiPrev.querySelector('strong')) aiPrev.textContent=t('aiPlaceholder');
   const aiBtn=document.getElementById('ai-btn');
-  if(aiBtn) aiBtn.innerHTML=`${L('aiGenerate')}`;
+  if(aiBtn) aiBtn.innerHTML=`${t('aiGenerate')}`;
   const postLoc=document.getElementById('post-loc');
-  if(postLoc) postLoc.placeholder=L('locationPlaceholder');
+  if(postLoc) postLoc.placeholder=t('locationPlaceholder');
   const btnCancelPost=document.getElementById('btn-cancel-post');
-  if(btnCancelPost) btnCancelPost.textContent=L('cancel');
+  if(btnCancelPost) btnCancelPost.textContent=t('cancel');
   const btnPublish=document.getElementById('btn-publish');
-  if(btnPublish) btnPublish.textContent=L('publish');
+  if(btnPublish) btnPublish.textContent=t('publish');
 
   // Auth modal static labels
   const iamLbl=document.getElementById('iam-lbl');
-  if(iamLbl) iamLbl.textContent=L('iAm');
+  if(iamLbl) iamLbl.textContent=t('iAm');
   const hwLabel=document.getElementById('hw-label');
-  if(hwLabel) hwLabel.textContent=L('homeowner');
+  if(hwLabel) hwLabel.textContent=t('homeowner');
   const hwSub=document.getElementById('hw-sub');
-  if(hwSub) hwSub.textContent=L('homeownerSub');
+  if(hwSub) hwSub.textContent=t('homeownerSub');
   const bizLabel=document.getElementById('biz-label');
-  if(bizLabel) bizLabel.textContent=L('business');
+  if(bizLabel) bizLabel.textContent=t('business');
   const bizSub=document.getElementById('biz-sub');
-  if(bizSub) bizSub.textContent=L('businessSub');
+  if(bizSub) bizSub.textContent=t('businessSub');
   const fnLbl=document.getElementById('fn-lbl');
-  if(fnLbl) fnLbl.textContent=L('firstName');
+  if(fnLbl) fnLbl.textContent=t('firstName');
   const lnLbl=document.getElementById('ln-lbl');
-  if(lnLbl) lnLbl.textContent=L('lastName');
+  if(lnLbl) lnLbl.textContent=t('lastName');
   const emLbl=document.getElementById('em-lbl');
-  if(emLbl) emLbl.textContent=L('email');
+  if(emLbl) emLbl.textContent=t('email');
   const pwLbl=document.getElementById('pw-lbl');
-  if(pwLbl) pwLbl.textContent=L('password');
+  if(pwLbl) pwLbl.textContent=t('password');
   const authContinue=document.getElementById('auth-continue');
-  if(authContinue) authContinue.textContent=L('continueBtn');
+  if(authContinue) authContinue.textContent=t('continueBtn');
 
   // Message bubble buttons
   const msgSendProposal=document.getElementById('msg-send-proposal');
-  if(msgSendProposal) msgSendProposal.textContent=L('sendProposal');
+  if(msgSendProposal) msgSendProposal.textContent=t('sendProposal');
   const msgPayment=document.getElementById('msg-payment');
-  if(msgPayment) msgPayment.textContent=L('requestPayment');
+  if(msgPayment) msgPayment.textContent=t('requestPayment');
   const msgInvoice=document.getElementById('msg-invoice');
-  if(msgInvoice) msgInvoice.textContent=L('invoice');
+  if(msgInvoice) msgInvoice.textContent=t('invoice');
 
   // Review modal
   const revTitle=document.getElementById('review-modal-title');
-  if(revTitle) revTitle.textContent='⭐ '+L('leaveReview').replace('⭐ ','');
+  if(revTitle) revTitle.textContent='⭐ '+t('leaveReview').replace('⭐ ','');
   const revRatingLbl=document.getElementById('review-rating-lbl');
-  if(revRatingLbl) revRatingLbl.textContent=L('ratingLabel');
+  if(revRatingLbl) revRatingLbl.textContent=t('ratingLabel');
   const revTextLbl=document.getElementById('review-text-lbl');
-  if(revTextLbl) revTextLbl.textContent=L('reviewLabel');
+  if(revTextLbl) revTextLbl.textContent=t('reviewLabel');
   const revTextArea=document.getElementById('review-text');
-  if(revTextArea) revTextArea.placeholder=L('reviewPlaceholder');
+  if(revTextArea) revTextArea.placeholder=t('reviewPlaceholder');
   const revCancel=document.getElementById('review-cancel');
-  if(revCancel) revCancel.textContent=L('cancel');
+  if(revCancel) revCancel.textContent=t('cancel');
   const revSubmit=document.getElementById('review-submit');
-  if(revSubmit) revSubmit.textContent=L('submitReview');
+  if(revSubmit) revSubmit.textContent=t('submitReview');
 
   // Save search modal
   const ssModalTitle=document.getElementById('ss-modal-title');
-  if(ssModalTitle) ssModalTitle.textContent=L('saveSearchTitle');
+  if(ssModalTitle) ssModalTitle.textContent=t('saveSearchTitle');
   const ssNameLbl=document.getElementById('ss-name-lbl');
-  if(ssNameLbl) ssNameLbl.textContent=L('searchName');
+  if(ssNameLbl) ssNameLbl.textContent=t('searchName');
   const ssNameInput=document.getElementById('ss-name');
-  if(ssNameInput) ssNameInput.placeholder=L('searchNamePlaceholder');
+  if(ssNameInput) ssNameInput.placeholder=t('searchNamePlaceholder');
   const ssCancel=document.getElementById('ss-cancel');
-  if(ssCancel) ssCancel.textContent=L('cancel');
+  if(ssCancel) ssCancel.textContent=t('cancel');
   const ssSave=document.getElementById('ss-save');
-  if(ssSave) ssSave.textContent=L('saveSearch').replace('💾 ','');
+  if(ssSave) ssSave.textContent=t('saveSearch').replace('💾 ','');
 
   // Re-render feed
   STATE.filter='';
@@ -2174,6 +2319,7 @@ let booted=false;
 function boot(){
   if(booted) return;
   booted=true;
+  setMapHeight();
   renderFilters();
   renderFeed();
   initMap();
