@@ -633,7 +633,9 @@ const STATE = {
   pendingPosts:[],
   dismissedCards:new Set(),
   webResults:[],
-  reviews:{} // bizId → [{author,rating,text}]
+  reviews:{},
+  editingPostId:null,
+  hiddenPosts:new Set()
 };
 
 // ═══════════════════════════════════════════════════════
@@ -840,8 +842,7 @@ function renderMarkers(){
   if(!map||!mapReady) return;
   Object.values(markers).forEach(m=>m.remove());
   markers={};
-  [...getFiltered(),...STATE.pendingPosts].forEach(post=>{
-    if(STATE.dismissedCards.has(post.id)) return;
+  getFiltered().forEach(post=>{
     const el=document.createElement('div');
     el.className='map-marker'+(post._pending?' pending-marker':'');
     el.innerHTML=post.img
@@ -868,7 +869,7 @@ function getFiltered(){
   let list=[...POSTS,...STATE.pendingPosts].filter(p=>{
     if(STATE.tab==='projects') return p.type==='project'||p.type==='service';
     return p.type===tk;
-  }).filter(p=>!STATE.dismissedCards.has(p.id));
+  }).filter(p=>!STATE.dismissedCards.has(p.id)&&!STATE.hiddenPosts.has(p.id));
   if(STATE.filter&&STATE.filter!==allVal){
     list=list.filter(p=>p.tags.some(t=>t.toLowerCase()===STATE.filter.toLowerCase())||p.subtype.toLowerCase().includes(STATE.filter.toLowerCase()));
   }
@@ -1113,16 +1114,57 @@ function toggleFav(id){
 
 function editPost(id){
   const p=getPost(id);
+  if(!p){showToast('Post not found');return;}
   if(!STATE.user||STATE.user.id!==p.userId){showToast(t('ownPost'));return;}
-  showToast('Edit mode — coming in next release');
+  // Pre-fill modal and open it in edit mode
+  STATE.selectedPostType=p.type;
+  STATE.editingPostId=id;
+  renderTypeGrid();
+  renderPostDyn(p.type);
+  // Pre-fill fields after render
+  setTimeout(()=>{
+    const catEl=document.getElementById('pf-cat');
+    const budgetEl=document.getElementById('pf-budget');
+    const locEl=document.getElementById('post-loc');
+    const prevEl=document.getElementById('ai-prev');
+    if(catEl) catEl.value=p.subtype;
+    if(budgetEl) budgetEl.value=p.budget;
+    if(locEl) locEl.value=p.lat.toFixed(3)+', '+p.lng.toFixed(3);
+    if(prevEl) prevEl.innerHTML=`<strong style="display:block;font-family:'Syne',sans-serif;font-size:12px;margin-bottom:4px">${p.title}</strong>${p.desc}`;
+    // Update modal title and publish button
+    const titleEl=document.getElementById('pm-title');
+    const pubBtn=document.getElementById('btn-publish');
+    if(titleEl) titleEl.textContent='Edit Post';
+    if(pubBtn) pubBtn.textContent='Save Changes';
+  },10);
+  document.getElementById('post-overlay').classList.add('open');
 }
+
 function deletePost(id){
   const p=getPost(id);
-  if(!STATE.user||STATE.user.id!==p.userId){showToast('You can only delete your own posts');return;}
+  if(!p){showToast('Post not found');return;}
+  if(!STATE.user||STATE.user.id!==p.userId){showToast(t('ownPost'));return;}
+  // Show confirm dialog inline
+  if(!confirm('Delete this post permanently? This cannot be undone.')) return;
   const idx=STATE.pendingPosts.findIndex(x=>x.id===id);
   if(idx>-1) STATE.pendingPosts.splice(idx,1);
-  closeDetail(); renderFeed(); renderMarkers();
-  showToast('Post deleted');
+  else STATE.hiddenPosts=(STATE.hiddenPosts||new Set()).add(id);
+  closeDetail();
+  // Refresh profile if open
+  if(STATE.feedMode==='profile') showProfile();
+  else { renderFeed(); renderMarkers(); }
+  showToast('🗑 Post deleted');
+}
+
+function hidePostFromFeed(id){
+  const p=getPost(id);
+  if(!p){showToast('Post not found');return;}
+  if(!STATE.user||STATE.user.id!==p.userId){showToast(t('ownPost'));return;}
+  STATE.dismissedCards.add(id);
+  closeDetail();
+  if(STATE.feedMode==='profile') showProfile();
+  else { renderFeed(); renderMarkers(); }
+  showToast('Post hidden from feed. You can still see it in My Posts.');
 }
 
 // ═══════════════════════════════════════════════════════
@@ -1426,18 +1468,42 @@ function showProfileTab(tab,el){
 }
 
 function profileProjectsTab(){
-  const myPosts=[...POSTS,...STATE.pendingPosts].filter(p=>p._mine);
-  return `<div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('myPostsTitle')}</div>
+  const myPosts=[...POSTS,...STATE.pendingPosts].filter(p=>p._mine&&!STATE.hiddenPosts.has(p.id));
+  const hiddenMyPosts=[...STATE.pendingPosts].filter(p=>p._mine&&STATE.hiddenPosts.has(p.id));
+  return `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px">${t('myPostsTitle')}</div>
+      <button class="cact cbuy" style="font-size:10px;padding:4px 10px" onclick="openPostModal()">+ ${t('newPost')}</button>
+    </div>
     ${myPosts.length?myPosts.map(p=>`
-      <div class="pcard" onclick="openDetail(getPost(${p.id}))">
-        <div class="pcard-title">${p.title}</div>
-        <div class="pcard-meta">${p.budget} · <span class="post-status-badge status-${p.status||'pending'}" style="display:inline-flex">${p.status||t('pendingTab')}</span></div>
+      <div class="pcard" style="margin-bottom:8px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px">
+          <div class="pcard-title" style="cursor:pointer;flex:1" onclick="openDetail(getPost(${p.id}))">${p.emoji} ${p.title}</div>
+          <span class="post-status-badge status-${p.status||'pending'}" style="display:inline-flex;margin-left:6px;flex-shrink:0">${p.status||t('pendingTab')}</span>
+        </div>
+        <div class="pcard-meta" style="margin-bottom:8px">${p.budget} · ${p.timeline}</div>
+        ${p.milestones&&p.milestones.length?`<div style="margin-bottom:8px"><div class="milestone-track" style="height:4px"><div class="milestone-fill" style="width:${Math.round((p.milestones.filter(m=>m.done).length/p.milestones.length)*100)}%"></div></div></div>`:''}
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button class="dash-edit-btn" onclick="editPost(${p.id})">✏️ ${t('editPost')}</button>
+          <button style="padding:4px 10px;border-radius:20px;background:#fff3cd;border:1.5px solid #f0c040;font-size:10px;font-weight:600;cursor:pointer" onclick="hidePostFromFeed(${p.id})">🙈 Hide from feed</button>
+          <button class="dash-delete-btn" onclick="deletePost(${p.id})">🗑 ${t('deletePost')}</button>
+        </div>
       </div>`).join(''):
-      `<div style="color:var(--muted);font-size:12px;text-align:center;padding:20px">${t('noMyPosts')}<br><button class="cact cbuy" style="margin-top:10px" onclick="openPostModal()">${t('createPost')}</button></div>`}
-    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('savedPostsTitle')}</div>
-    ${[...STATE.savedPosts].length?[...STATE.savedPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))"><div class="pcard-title">${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${t('noSavedPosts')}</div>`}
-    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:10px">${t('favsTitle')}</div>
-    ${[...STATE.favPosts].length?[...STATE.favPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))"><div class="pcard-title">${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${t('noFavPosts')}</div>`}`;
+      `<div style="color:var(--muted);font-size:12px;text-align:center;padding:16px">${t('noMyPosts')}</div>`}
+    ${hiddenMyPosts.length?`
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--muted);margin:10px 0 6px">Hidden posts (${hiddenMyPosts.length})</div>
+      ${hiddenMyPosts.map(p=>`
+        <div class="pcard" style="opacity:.6;margin-bottom:6px">
+          <div class="pcard-title">${p.emoji} ${p.title}</div>
+          <div style="display:flex;gap:5px;margin-top:6px">
+            <button class="dash-edit-btn" onclick="STATE.hiddenPosts.delete(${p.id});renderFeed();renderMarkers();showProfile();showToast('Post restored to feed')">👁 Restore</button>
+            <button class="dash-delete-btn" onclick="deletePost(${p.id})">🗑 Delete</button>
+          </div>
+        </div>`).join('')}`:''}
+    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:8px">${t('savedPostsTitle')}</div>
+    ${[...STATE.savedPosts].length?[...STATE.savedPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))" style="margin-bottom:6px"><div class="pcard-title">${p.emoji} ${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${t('noSavedPosts')}</div>`}
+    <div style="margin-top:14px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;margin-bottom:8px">${t('favsTitle')}</div>
+    ${[...STATE.favPosts].length?[...STATE.favPosts].map(id=>{const p=getPost(id);return p?`<div class="pcard" onclick="openDetail(getPost(${id}))" style="margin-bottom:6px"><div class="pcard-title">${p.emoji} ${p.title}</div><div class="pcard-meta">${p.budget}</div></div>`:''}).join(''):`<div style="color:var(--muted);font-size:12px">${t('noFavPosts')}</div>`}`;
 }
 
 function profileSearchesTab(){
@@ -1665,14 +1731,21 @@ const POST_LABELS=['Project','Material','Vehicle','Tool','Service','Transport'];
 
 function openPostModal(){
   if(!STATE.user){openAuth('signup');return;}
+  // Reset edit mode
+  STATE.editingPostId=null;
+  STATE.selectedPostType='project';
+  const titleEl=document.getElementById('pm-title');
+  const pubBtn=document.getElementById('btn-publish');
+  if(titleEl) titleEl.textContent=t('postModalTitle');
+  if(pubBtn) pubBtn.textContent=t('publish');
   renderTypeGrid();
   renderPostDyn('project');
   document.getElementById('post-overlay').classList.add('open');
 }
 
 function renderTypeGrid(){
-  document.getElementById('post-type-grid').innerHTML=POST_TYPES.map((t,i)=>
-    `<div class="topt${STATE.selectedPostType===t?' sel':''}" onclick="selType('${t}',this)"><div class="ic">${POST_ICONS[i]}</div><div class="lb">${(t('postTypes')||[])[i]||t}</div></div>`
+  document.getElementById('post-type-grid').innerHTML=POST_TYPES.map((pt,i)=>
+    `<div class="topt${STATE.selectedPostType===pt?' sel':''}" onclick="selType('${pt}',this)"><div class="ic">${POST_ICONS[i]}</div><div class="lb">${(t('postTypes')||[])[i]||pt}</div></div>`
   ).join('');
 }
 
@@ -1744,18 +1817,57 @@ function submitPost(){
   });
   if(milestones.length) milestones[0].active=true;
 
+  // EDIT MODE — update existing post
+  if(STATE.editingPostId){
+    const idx=STATE.pendingPosts.findIndex(x=>x.id===STATE.editingPostId);
+    if(idx>-1){
+      const existing=STATE.pendingPosts[idx];
+      STATE.pendingPosts[idx]={
+        ...existing,
+        title,
+        budget,
+        subtype:document.getElementById('pf-cat')?.value||existing.subtype,
+        desc:document.getElementById('ai-prev').textContent||existing.desc,
+        milestones:milestones.length?milestones:existing.milestones,
+      };
+    }
+    STATE.editingPostId=null;
+    // Reset modal title and button
+    const titleEl=document.getElementById('pm-title');
+    const pubBtn=document.getElementById('btn-publish');
+    if(titleEl) titleEl.textContent=t('postModalTitle');
+    if(pubBtn) pubBtn.textContent=t('publish');
+    cm('post-overlay');
+    renderFeed(); renderMarkers();
+    if(STATE.feedMode==='profile') showProfile();
+    showToast('✏️ Post updated!');
+    return;
+  }
+
+  // CREATE MODE — new post
   const newPost={
-    id:Date.now(),type:STATE.selectedPostType,subtype:document.getElementById('pf-cat')?.value||STATE.selectedPostType,
-    title,emoji:POST_ICONS[POST_TYPES.indexOf(STATE.selectedPostType)]||'📌',
-    img:null,desc:document.getElementById('ai-prev').textContent||'',
-    budget,timeline:'Posted just now',tags:[document.getElementById('pf-cat')?.value||'General'],
-    user:STATE.user.name,userId:STATE.user.id,userType:STATE.user.type,
-    lat:60.1695+(Math.random()-.5)*.04,lng:24.9354+(Math.random()-.5)*.06,
+    id:Date.now(),
+    type:STATE.selectedPostType,
+    subtype:document.getElementById('pf-cat')?.value||STATE.selectedPostType,
+    title,
+    emoji:POST_ICONS[POST_TYPES.indexOf(STATE.selectedPostType)]||'📌',
+    img:null,
+    desc:document.getElementById('ai-prev').textContent||'',
+    budget,
+    timeline:'Posted just now',
+    tags:[document.getElementById('pf-cat')?.value||'General'],
+    user:STATE.user.name,
+    userId:STATE.user.id,
+    userType:STATE.user.type,
+    lat:60.1695+(Math.random()-.5)*.04,
+    lng:24.9354+(Math.random()-.5)*.06,
     bids:0,status:'pending',milestones,_pending:true,_mine:true
   };
   STATE.pendingPosts.push(newPost);
   cm('post-overlay');
   renderFeed(); renderMarkers();
+  // If profile is open, refresh it too
+  if(STATE.feedMode==='profile') setTimeout(showProfile,100);
   showToast(t('toastPosted'));
 }
 
