@@ -662,56 +662,65 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
 
 <!-- TOOLS SECTION STARTS -->
 <div id="tools">
-<div class="tools-hero">
-  <div class="container tools-hero-inner">
-    <div class="stag reveal" data-en="Free AI Tools" data-es="Herramientas Gratuitas" data-sq="Mjetet Falas" data-da="Gratis AI Værktøjer">Free AI Tools</div>
-    <h2 class="reveal" style="color:#fff" data-en="Four tools. Completely free. Powered by AI." data-es="Cuatro herramientas. Completamente gratis. Con IA." data-sq="Katër mjete. Plotësisht falas. Fuqizuar nga IA." data-da="Fire værktøjer. Helt gratis. Drevet af AI.">Four tools. Completely free. Powered by AI.</h2>
-    <p class="sdesc reveal" data-en="Try them now — no sign-up, no credit card. Generate real Google Ads assets, get a live website audit, simulate your Optiscore, and forecast your ad budget return." data-es="Pruébalas ahora — sin registro, sin tarjeta. Genera activos reales de Google Ads, obtén una auditoría de tu web, simula tu Optiscore y prevé el rendimiento de tu presupuesto." data-sq="Provojini tani — pa regjistrim, pa kartë kredie. Gjenero asete reale Google Ads, merr auditim live të faqes, simuloje Optiscore-in dhe parashiko kthimin e buxhetit." data-da="Prøv dem nu — ingen tilmelding, intet kreditkort. Generer rigtige Google Ads-aktiver, få en live webstedsrevision, simuler din Optiscore og forudsig dit annoncebudgets afkast.">Try them now — no sign-up, no credit card. Generate real Google Ads assets, get a live website audit, simulate your Optiscore, and forecast your ad budget return.</p>
-    <p class="sdesc2 reveal" data-en="Based on what you get, you decide if Urawise is the right partner to take it further." data-es="Según los resultados, decides si Urawise es el socio adecuado para ir más lejos." data-sq="Bazuar në atë që merr, vendos nëse Urawise është partneri i duhur për të shkuar më tej." data-da="Baseret på hvad du får, bestemmer du om Urawise er den rette partner til at tage det videre.">Based on what you get, you decide if Urawise is the right partner to take it further.</p>
+<div style="background:linear-gradient(135deg,#0d0d14 0%,#1a1030 50%,#0d0d14 100%);padding:72px 0 0;position:relative;">
+  <div style="max-width:1140px;margin:0 auto;padding:0 40px;text-align:center;padding-bottom:52px;">
+    <div style="display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:14px;" id="tools-tag">Free AI Tools</div>
+    <h2 style="font-family:'Inter',sans-serif;font-weight:900;font-size:42px;letter-spacing:-2px;line-height:1.06;color:#fff;margin-bottom:12px;" id="tools-h2">Four tools. Completely free. Powered by AI.</h2>
+    <p style="font-size:16px;color:rgba(255,255,255,0.55);max-width:540px;margin:0 auto 8px;" id="tools-p1">Try them now — no sign-up, no credit card needed.</p>
+    <p style="font-size:13px;color:rgba(255,255,255,0.3);max-width:500px;margin:0 auto 44px;" id="tools-p2">Based on what you get, you decide if Urawise is the right partner.</p>
   </div>
-  <div class="tool-tabs container" id="tool-tabs-bar">
-    <button class="tool-tab active" data-tool="ads" onclick="switchTool('ads')"><span class="tool-tab-icon">📈</span> <span data-en="Ads Generator" data-es="Generador de Anuncios" data-sq="Gjenerator Reklamash" data-da="Annoncesgenerator">Ads Generator</span></button>
-    <button class="tool-tab" data-tool="audit" onclick="switchTool('audit')"><span class="tool-tab-icon">🔍</span> <span data-en="Website Audit" data-es="Auditoría Web" data-sq="Auditim Faqeje" data-da="Webstedrevision">Website Audit</span></button>
-    <button class="tool-tab" data-tool="optiscore" onclick="switchTool('optiscore')"><span class="tool-tab-icon">⚡</span> <span data-en="Optiscore Sim" data-es="Sim. Optiscore" data-sq="Sim. Optiscore" data-da="Optiscore Sim">Optiscore Sim</span></button>
-    <button class="tool-tab" data-tool="forecast" onclick="switchTool('forecast')"><span class="tool-tab-icon">📊</span> <span data-en="Budget Forecast" data-es="Previsión Presupuesto" data-sq="Parashikim Buxheti" data-da="Budgetprognose">Budget Forecast</span></button>
+
+  <!-- TAB BAR -->
+  <div id="tool-tabs-bar" style="max-width:1140px;margin:0 auto;padding:0 40px;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;">
+    <button id="tab-ads" onclick="switchTool('ads')" style="display:flex;align-items:center;gap:8px;padding:13px 22px;border:none;background:rgba(91,71,224,0.25);color:#a78bfa;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid #7c3aed;transition:all 0.2s;">
+      📈 <span id="tab-ads-label">Ads Generator</span>
+    </button>
+    <button id="tab-audit" onclick="switchTool('audit')" style="display:flex;align-items:center;gap:8px;padding:13px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;">
+      🔍 <span id="tab-audit-label">Website Audit</span>
+    </button>
+    <button id="tab-optiscore" onclick="switchTool('optiscore')" style="display:flex;align-items:center;gap:8px;padding:13px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;">
+      ⚡ <span id="tab-optiscore-label">Optiscore Sim</span>
+    </button>
+    <button id="tab-forecast" onclick="switchTool('forecast')" style="display:flex;align-items:center;gap:8px;padding:13px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;">
+      📊 <span id="tab-forecast-label">Budget Forecast</span>
+    </button>
   </div>
 </div>
 
-<div class="tool-panels">
+<!-- PANELS WRAPPER -->
+<div style="background:#f8f8fc;border-top:2px solid #e4e3f0;">
 
-  <!-- ══════════════════════════════════════
-       TOOL 1: GOOGLE ADS GENERATOR
-  ══════════════════════════════════════ -->
-  <div class="tool-panel active" id="panel-ads">
-    <div class="tool-form">
-      <span class="free-badge" data-en="✓ 100% Free" data-es="✓ 100% Gratis" data-sq="✓ 100% Falas" data-da="✓ 100% Gratis">✓ 100% Free</span>
-      <h3 data-en="Google Ads Starter Kit Generator" data-es="Generador de Kit Google Ads" data-sq="Gjenerator Kiti Google Ads" data-da="Google Ads Startpakke Generator">Google Ads Starter Kit Generator</h3>
-      <p class="tool-desc" data-en="Tell us about your business and goal. We will generate a full campaign starter pack — headlines, descriptions, sitelinks, negative keywords and a bidding strategy — ready to copy straight into Google Ads." data-es="Cuéntanos tu negocio y objetivo. Generaremos un paquete completo — títulos, descripciones, sitelinks, palabras clave negativas y estrategia de puja — listo para copiar en Google Ads." data-sq="Na tregoni biznesin dhe qëllimin tuaj. Do të gjenerojmë një paketë të plotë — tituj, përshkrime, sitelinks, fjalëkyçe negative dhe strategji ofertash — gati për të kopjuar në Google Ads." data-da="Fortæl os om din virksomhed og dit mål. Vi genererer en komplet startpakke — overskrifter, beskrivelser, sitelinks, negative søgeord og en budstrategi — klar til at kopiere ind i Google Ads.">Tell us about your business and goal. We will generate a full campaign starter pack — headlines, descriptions, sitelinks, negative keywords and a bidding strategy — ready to copy straight into Google Ads.</p>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Business Type</label>
-          <input type="text" id="ads-business" placeholder="e.g. Dental clinic, Plumber, E-commerce store">
+  <!-- PANEL: ADS GENERATOR -->
+  <div id="panel-ads" style="display:block;padding:52px 0 72px;">
+    <div style="max-width:780px;margin:0 auto;padding:0 24px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:18px;" id="ads-free-badge">✓ 100% Free</span>
+      <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:8px;" id="ads-title">Google Ads Starter Kit Generator</h3>
+      <p style="font-size:15px;color:#5c5b72;margin-bottom:28px;line-height:1.65;" id="ads-desc">Tell us about your business and goal. We generate headlines, descriptions, sitelinks, negative keywords and a bidding strategy — ready to copy into Google Ads.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="ads-lbl-biz">Business Type</label>
+          <input id="ads-business" type="text" placeholder="e.g. Dental clinic, Plumber, Online shop" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;">
         </div>
-        <div class="form-field">
-          <label>Location / Market</label>
-          <input type="text" id="ads-location" placeholder="e.g. Barcelona, Denmark, UK">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="ads-lbl-loc">Location / Market</label>
+          <input id="ads-location" type="text" placeholder="e.g. Barcelona, Denmark, UK" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;">
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Primary Goal</label>
-          <select id="ads-goal">
-            <option value="">Select your goal</option>
-            <option value="phone calls">Phone calls / Direct enquiries</option>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="ads-lbl-goal">Primary Goal</label>
+          <select id="ads-goal" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
+            <option value="" id="ads-goal-0">Select your goal</option>
+            <option value="phone calls">Phone calls / Enquiries</option>
             <option value="form leads">Lead form submissions</option>
-            <option value="website sales">Online sales / E-commerce</option>
-            <option value="store visits">In-store / physical visits</option>
+            <option value="website sales">Online sales</option>
+            <option value="store visits">In-store visits</option>
             <option value="brand awareness">Brand awareness</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>Monthly Budget (€)</label>
-          <select id="ads-budget">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="ads-lbl-budget">Monthly Budget</label>
+          <select id="ads-budget" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select budget range</option>
             <option value="under €300">Under €300/month</option>
             <option value="€300–€700">€300–€700/month</option>
@@ -721,277 +730,239 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
           </select>
         </div>
       </div>
-      <div class="form-row single">
-        <div class="form-field">
-          <label>What makes you different from competitors? (optional)</label>
-          <input type="text" id="ads-usp" placeholder="e.g. Same-day service, 20 years experience, free consultation...">
-        </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px;">
+        <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="ads-lbl-usp">What makes you different? (optional)</label>
+        <input id="ads-usp" type="text" placeholder="e.g. Same-day service, 20 years experience, free consultation" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;">
       </div>
-      <button class="tool-submit" id="ads-btn" onclick="runAdsGenerator()">
+      <button id="ads-btn" onclick="runAdsGenerator()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);">
         <span id="ads-btn-text">✨ Generate My Google Ads Kit</span>
       </button>
-    </div>
-    <div class="tool-result" id="ads-result">
-      <div class="result-box">
-        <div class="result-header">
-          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Google Ads Starter Kit — ready to copy</span></div>
-          <div class="result-actions">
-            <button class="result-btn" id="ads-copy-btn" onclick="copyResult('ads-output','ads-copy-btn')">📋 Copy All</button>
+      <div id="ads-result" style="display:none;margin-top:24px;">
+        <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);">
+            <span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Google Ads Starter Kit</span>
+            <button onclick="copyResult('ads-output','ads-copy-btn')" id="ads-copy-btn" style="padding:7px 14px;border:1.5px solid #e4e3f0;border-radius:7px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#5c5b72;cursor:pointer;">📋 Copy All</button>
           </div>
-        </div>
-        <div class="result-content" id="ads-output"></div>
-        <div class="share-row" style="padding:0 24px 18px">
-          <input class="share-input" id="ads-share-url" readonly placeholder="Shareable link will appear here...">
-          <button class="share-copy-btn" onclick="copyShare('ads-share-url')">🔗 Copy Link</button>
-        </div>
-        <div class="result-upgrade">
-          <div class="upgrade-text"><strong>Want us to build and run this campaign for you?</strong> We handle the setup, tracking, bidding and optimisation — you focus on your business.</div>
-          <a href="#contact" class="upgrade-cta">🚀 Get It Running →</a>
+          <div id="ads-output" style="padding:24px;font-size:14px;color:#5c5b72;line-height:1.75;white-space:pre-wrap;max-height:520px;overflow-y:auto;"></div>
+          <div style="background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:13px;color:#5c5b72;" id="ads-upgrade-text"><strong>Want us to build and run this for you?</strong> We handle setup, tracking and optimisation.</span>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;" id="ads-upgrade-btn">🚀 Get It Running →</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════
-       TOOL 2: WEBSITE AUDIT
-  ══════════════════════════════════════ -->
-  <div class="tool-panel" id="panel-audit">
-    <div class="tool-form">
-      <span class="free-badge" data-en="✓ 100% Free" data-es="✓ 100% Gratis" data-sq="✓ 100% Falas" data-da="✓ 100% Gratis">✓ 100% Free</span>
-      <h3 data-en="60-Second Website Audit" data-es="Auditoría Web en 60 Segundos" data-sq="Auditim Faqeje në 60 Sekonda" data-da="60-Sekunders Webstedsrevision">60-Second Website Audit</h3>
-      <p class="tool-desc" data-en="Tell us your website and what is frustrating you most. Our AI will analyse your digital setup and give you three concrete, actionable recommendations — personalised to your business." data-es="Dinos tu web y qué te frustra más. Nuestra IA analizará tu configuración digital y te dará tres recomendaciones concretas y accionables — personalizadas para tu negocio." data-sq="Na tregoni faqen tuaj dhe çfarë ju frustron më shumë. IA jonë do të analizojë konfigurimin tuaj dixhital dhe do t'ju japë tre rekomandime konkrete." data-da="Fortæl os om din hjemmeside og hvad der frustrerer dig mest. Vores AI analyserer din digitale opsætning og giver dig tre konkrete, handlingsorienterede anbefalinger.">Tell us your website and what is frustrating you most. Our AI will analyse your digital setup and give you three concrete, actionable recommendations — personalised to your business.</p>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Your Website URL</label>
-          <input type="text" id="audit-url" placeholder="https://yourwebsite.com">
+  <!-- PANEL: WEBSITE AUDIT -->
+  <div id="panel-audit" style="display:none;padding:52px 0 72px;">
+    <div style="max-width:780px;margin:0 auto;padding:0 24px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:18px;" id="audit-free-badge">✓ 100% Free</span>
+      <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:8px;" id="audit-title">60-Second Website Audit</h3>
+      <p style="font-size:15px;color:#5c5b72;margin-bottom:28px;line-height:1.65;" id="audit-desc">Tell us your website and your biggest frustration. Our AI gives you three concrete, actionable recommendations personalised to your business.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="audit-lbl-url">Your Website URL</label>
+          <input id="audit-url" type="text" placeholder="https://yourwebsite.com" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;">
         </div>
-        <div class="form-field">
-          <label>Business Type</label>
-          <input type="text" id="audit-business" placeholder="e.g. Restaurant, Law firm, Online shop">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="audit-lbl-biz">Business Type</label>
+          <input id="audit-business" type="text" placeholder="e.g. Restaurant, Law firm, Online shop" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;">
         </div>
       </div>
-      <div class="form-row single">
-        <div class="form-field">
-          <label>What is your biggest frustration or challenge right now?</label>
-          <textarea id="audit-frustration" placeholder="e.g. We get traffic but nobody contacts us. Our booking page has a high dropout rate. We barely show up on Google..."></textarea>
-        </div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px;">
+        <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="audit-lbl-frustration">What is your biggest frustration right now?</label>
+        <textarea id="audit-frustration" placeholder="e.g. We get traffic but nobody contacts us. Our booking page has high dropout..." style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;resize:vertical;min-height:90px;line-height:1.6;"></textarea>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Your Main Goal</label>
-          <select id="audit-goal">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="audit-lbl-goal">Main Goal</label>
+          <select id="audit-goal" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select goal</option>
             <option value="more leads">More leads / enquiries</option>
             <option value="better Google ranking">Better Google ranking</option>
             <option value="more sales">More online sales</option>
-            <option value="faster website">Faster website performance</option>
             <option value="better user experience">Better user experience</option>
             <option value="stronger brand">Stronger brand presence</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>Market / Language</label>
-          <select id="audit-market">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="audit-lbl-market">Market</label>
+          <select id="audit-market" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select market</option>
             <option value="Spain / Spanish">Spain / Spanish</option>
             <option value="Denmark / Danish">Denmark / Danish</option>
             <option value="UK / English">UK / English</option>
             <option value="Albania / Albanian">Albania / Albanian</option>
-            <option value="International / English">International / English</option>
-            <option value="Other">Other</option>
+            <option value="International / English">International</option>
           </select>
         </div>
       </div>
-      <button class="tool-submit" id="audit-btn" onclick="runWebsiteAudit()">
+      <button id="audit-btn" onclick="runWebsiteAudit()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);">
         <span id="audit-btn-text">🔍 Audit My Website</span>
       </button>
-    </div>
-    <div class="tool-result" id="audit-result">
-      <div class="result-box">
-        <div class="result-header">
-          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Personalised Website Audit</span></div>
-          <div class="result-actions">
-            <button class="result-btn" id="audit-copy-btn" onclick="copyResult('audit-output','audit-copy-btn')">📋 Copy Report</button>
+      <div id="audit-result" style="display:none;margin-top:24px;">
+        <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);">
+            <span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Website Audit</span>
+            <button onclick="copyResult('audit-output','audit-copy-btn')" id="audit-copy-btn" style="padding:7px 14px;border:1.5px solid #e4e3f0;border-radius:7px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#5c5b72;cursor:pointer;">📋 Copy Report</button>
           </div>
-        </div>
-        <div class="result-content" id="audit-output"></div>
-        <div class="share-row" style="padding:0 24px 18px">
-          <input class="share-input" id="audit-share-url" readonly placeholder="Shareable link will appear here...">
-          <button class="share-copy-btn" onclick="copyShare('audit-share-url')">🔗 Copy Link</button>
-        </div>
-        <div class="result-upgrade">
-          <div class="upgrade-text"><strong>Want us to fix these issues for you?</strong> We can build a new page, improve your SEO, set up lead capture — or handle all three under a monthly package.</div>
-          <a href="#contact" class="upgrade-cta">🛠️ Fix It With Us →</a>
+          <div id="audit-output" style="padding:24px;font-size:14px;color:#5c5b72;line-height:1.75;white-space:pre-wrap;max-height:520px;overflow-y:auto;"></div>
+          <div style="background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:13px;color:#5c5b72;" id="audit-upgrade-text"><strong>Want us to fix these for you?</strong> We build pages, improve SEO and set up lead capture.</span>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">🛠️ Fix It With Us →</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════
-       TOOL 3: OPTISCORE SIMULATOR
-  ══════════════════════════════════════ -->
-  <div class="tool-panel" id="panel-optiscore">
-    <div class="tool-form">
-      <span class="free-badge" data-en="✓ 100% Free" data-es="✓ 100% Gratis" data-sq="✓ 100% Falas" data-da="✓ 100% Gratis">✓ 100% Free</span>
-      <h3 data-en="Google Ads Optiscore Simulator" data-es="Simulador de Optiscore Google Ads" data-sq="Simulues Optiscore Google Ads" data-da="Google Ads Optiscore Simulator">Google Ads Optiscore Simulator</h3>
-      <p class="tool-desc" data-en="Answer 8 quick questions about your current Google Ads setup. We will simulate your Optiscore — the metric Google uses to measure campaign health — and tell you exactly what is pulling it down and how to fix it." data-es="Responde 8 preguntas rápidas sobre tu configuración actual de Google Ads. Simularemos tu Optiscore y te diremos exactamente qué lo está bajando y cómo arreglarlo." data-sq="Përgjigju 8 pyetjeve të shpejta rreth konfigurimit tuaj aktual të Google Ads. Do të simulojmë Optiscore-in tuaj dhe do t'ju tregojmë saktësisht çfarë e ul atë." data-da="Besvar 8 hurtige spørgsmål om din nuværende Google Ads-opsætning. Vi simulerer din Optiscore og fortæller dig præcis hvad der trækker den ned og hvordan du fikser det.">Answer 8 quick questions about your current Google Ads setup. We will simulate your Optiscore — the metric Google uses to measure campaign health — and tell you exactly what is pulling it down and how to fix it.</p>
-
-      <div class="form-row">
-        <div class="form-field">
-          <label>1. Do you have conversion tracking set up?</label>
-          <select id="os-1">
+  <!-- PANEL: OPTISCORE -->
+  <div id="panel-optiscore" style="display:none;padding:52px 0 72px;">
+    <div style="max-width:780px;margin:0 auto;padding:0 24px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:18px;" id="opti-free-badge">✓ 100% Free</span>
+      <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:8px;" id="opti-title">Google Ads Optiscore Simulator</h3>
+      <p style="font-size:15px;color:#5c5b72;margin-bottom:28px;line-height:1.65;" id="opti-desc">Answer 8 quick questions about your Google Ads setup. We simulate your Optiscore and tell you exactly what to fix to improve it.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-1">1. Conversion tracking?</label>
+          <select id="os-1" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Yes, fully set up and tracking conversions">Yes, fully set up</option>
-            <option value="Partially — tracking some actions">Partially tracking</option>
-            <option value="No conversion tracking set up">No conversion tracking</option>
+            <option value="Yes, fully set up">Yes, fully set up</option>
+            <option value="Partially tracking">Partially tracking</option>
+            <option value="No conversion tracking">No conversion tracking</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>2. What bidding strategy are you using?</label>
-          <select id="os-2">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-2">2. Bidding strategy?</label>
+          <select id="os-2" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Smart Bidding (Target CPA, Target ROAS, Maximise Conversions)">Smart Bidding (Target CPA/ROAS)</option>
-            <option value="Maximise Clicks (automated)">Maximise Clicks</option>
+            <option value="Smart Bidding (Target CPA/ROAS)">Smart Bidding (Target CPA/ROAS)</option>
+            <option value="Maximise Clicks">Maximise Clicks</option>
             <option value="Manual CPC">Manual CPC</option>
             <option value="Not sure">Not sure</option>
           </select>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>3. How many headlines does your top ad have?</label>
-          <select id="os-3">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-3">3. Number of headlines?</label>
+          <select id="os-3" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="15 headlines (maximum)">15 headlines (maximum)</option>
-            <option value="10–14 headlines">10–14 headlines</option>
-            <option value="fewer than 10 headlines">Fewer than 10</option>
+            <option value="15 headlines (maximum)">15 (maximum)</option>
+            <option value="10-14 headlines">10–14</option>
+            <option value="fewer than 10">Fewer than 10</option>
             <option value="Not sure">Not sure</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>4. Do you use ad extensions / assets?</label>
-          <select id="os-4">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-4">4. Ad extensions / assets?</label>
+          <select id="os-4" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Yes — sitelinks, callouts, structured snippets, calls">Yes — multiple types</option>
-            <option value="Some — 1–2 extension types">Some (1–2 types)</option>
-            <option value="No ad extensions">None</option>
+            <option value="Yes, multiple types">Yes — multiple types</option>
+            <option value="Some (1-2 types)">Some (1–2 types)</option>
+            <option value="No extensions">None</option>
           </select>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>5. Are you using negative keywords?</label>
-          <select id="os-5">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-5">5. Negative keywords?</label>
+          <select id="os-5" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Yes — a strong negative keyword list">Yes, strong list</option>
-            <option value="A few negative keywords">A few</option>
-            <option value="No negative keywords">None</option>
+            <option value="Yes, strong list">Yes, strong list</option>
+            <option value="A few">A few</option>
+            <option value="None">None</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>6. Are there any low-performing ads in your campaign?</label>
-          <select id="os-6">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-6">6. Ad strength?</label>
+          <select id="os-6" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="No — all ads have a Good or Excellent ad strength">No, all Good/Excellent</option>
-            <option value="Some ads marked as Poor or Average">Some Poor/Average</option>
-            <option value="Not sure / haven't checked">Not sure</option>
+            <option value="All Good or Excellent">All Good/Excellent</option>
+            <option value="Some Poor or Average">Some Poor/Average</option>
+            <option value="Not sure">Not sure</option>
           </select>
         </div>
-      </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>7. Have you added audience targeting / remarketing?</label>
-          <select id="os-7">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-7">7. Audience targeting?</label>
+          <select id="os-7" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Yes — audience segments and remarketing lists">Yes — full setup</option>
-            <option value="Observation mode only">Observation mode only</option>
-            <option value="No audience targeting">No targeting</option>
+            <option value="Yes, full setup">Yes — full setup</option>
+            <option value="Observation only">Observation mode only</option>
+            <option value="No targeting">No targeting</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>8. How often do you check and optimise the account?</label>
-          <select id="os-8">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="os-lbl-8">8. How often do you optimise?</label>
+          <select id="os-8" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Weekly or more frequently">Weekly or more</option>
+            <option value="Weekly or more">Weekly or more</option>
             <option value="Monthly">Monthly</option>
             <option value="Rarely or never">Rarely / never</option>
           </select>
         </div>
       </div>
-      <button class="tool-submit" id="optiscore-btn" onclick="runOptiscore()">
+      <button id="optiscore-btn" onclick="runOptiscore()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);">
         <span id="optiscore-btn-text">⚡ Simulate My Optiscore</span>
       </button>
-    </div>
-    <div class="tool-result" id="optiscore-result">
-      <div class="result-box">
-        <div class="result-header">
-          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Simulated Optiscore Report</span></div>
-          <div class="result-actions">
-            <button class="result-btn" id="optiscore-copy-btn" onclick="copyResult('optiscore-output','optiscore-copy-btn')">📋 Copy Report</button>
+      <div id="optiscore-result" style="display:none;margin-top:24px;">
+        <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;">
+          <div style="padding:16px 22px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);">
+            <span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Optiscore Report</span>
           </div>
-        </div>
-        <div class="score-ring-wrap">
-          <div class="score-ring" id="score-ring">
-            <div class="score-ring-inner">
-              <span class="score-num" id="score-num">--</span>
-              <span class="score-lbl">/ 100</span>
+          <div style="text-align:center;padding:28px 0 0;">
+            <div id="score-display" style="display:inline-flex;align-items:center;justify-content:center;flex-direction:column;width:130px;height:130px;border-radius:50%;background:conic-gradient(#5b47e0 0%, #e4e3f0 0%);box-shadow:0 8px 32px rgba(91,71,224,0.2);">
+              <div style="width:100px;height:100px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;position:absolute;">
+                <span id="score-num" style="font-family:'Inter',sans-serif;font-size:34px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;">--</span>
+                <span style="font-size:10px;font-weight:700;color:#9896b0;letter-spacing:1px;">/100</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="result-content" id="optiscore-output"></div>
-        <div class="share-row" style="padding:0 24px 18px">
-          <input class="share-input" id="optiscore-share-url" readonly placeholder="Shareable link will appear here...">
-          <button class="share-copy-btn" onclick="copyShare('optiscore-share-url')">🔗 Copy Link</button>
-        </div>
-        <div class="result-upgrade">
-          <div class="upgrade-text"><strong>Want us to push your Optiscore above 90?</strong> Our Growth package includes full account optimisation — Smart Bidding, extensions, ad strength and more.</div>
-          <a href="#contact" class="upgrade-cta">📈 Improve My Score →</a>
+          <div id="optiscore-output" style="padding:24px;font-size:14px;color:#5c5b72;line-height:1.75;white-space:pre-wrap;max-height:520px;overflow-y:auto;"></div>
+          <div style="background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:13px;color:#5c5b72;" id="opti-upgrade-text"><strong>Want us to push your score above 90?</strong> Our Growth package covers full account optimisation.</span>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">📈 Improve My Score →</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════
-       TOOL 4: AD BUDGET FORECAST
-  ══════════════════════════════════════ -->
-  <div class="tool-panel" id="panel-forecast">
-    <div class="tool-form">
-      <span class="free-badge" data-en="✓ 100% Free" data-es="✓ 100% Gratis" data-sq="✓ 100% Falas" data-da="✓ 100% Gratis">✓ 100% Free</span>
-      <h3 data-en="Google Ads Budget Forecast" data-es="Previsión de Presupuesto Google Ads" data-sq="Parashikim Buxheti Google Ads" data-da="Google Ads Budgetprognose">Google Ads Budget Forecast</h3>
-      <p class="tool-desc" data-en="Tell us your industry, market and budget. We will estimate what your Google Ads spend could realistically return — impressions, clicks, leads, and cost-per-lead — so you can make an informed decision before investing." data-es="Dinos tu industria, mercado y presupuesto. Estimaremos lo que tu inversión en Google Ads podría devolver — impresiones, clics, contactos y coste por contacto." data-sq="Na tregoni industrinë, tregun dhe buxhetin tuaj. Do të vlerësojmë se çfarë mund të kthejë shpenzimi juaj në Google Ads — impresione, klikime, kontakte dhe kosto për kontakt." data-da="Fortæl os din branche, marked og budget. Vi estimerer hvad dit Google Ads-forbrug realistisk kan returnere — visninger, klik, leads og cost-per-lead.">Tell us your industry, market and budget. We will estimate what your Google Ads spend could realistically return — impressions, clicks, leads, and cost-per-lead — so you can make an informed decision before investing.</p>
-      <div class="form-row triple">
-        <div class="form-field">
-          <label>Industry</label>
-          <select id="fc-industry">
-            <option value="">Select industry</option>
-            <option value="Healthcare / Dental / Medical">Healthcare / Dental</option>
+  <!-- PANEL: FORECAST -->
+  <div id="panel-forecast" style="display:none;padding:52px 0 72px;">
+    <div style="max-width:780px;margin:0 auto;padding:0 24px;">
+      <span style="display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:18px;" id="fc-free-badge">✓ 100% Free</span>
+      <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:8px;" id="fc-title">Google Ads Budget Forecast</h3>
+      <p style="font-size:15px;color:#5c5b72;margin-bottom:28px;line-height:1.65;" id="fc-desc">Tell us your industry, market and budget. We estimate impressions, clicks, leads and cost-per-lead so you can invest with confidence.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="fc-lbl-industry">Industry</label>
+          <select id="fc-industry" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
+            <option value="">Select</option>
+            <option value="Healthcare / Dental">Healthcare / Dental</option>
             <option value="Legal / Law firm">Legal / Law firm</option>
-            <option value="Home services (plumbing, HVAC, cleaning)">Home Services</option>
-            <option value="Real estate / Property">Real Estate</option>
+            <option value="Home Services">Home Services</option>
+            <option value="Real Estate">Real Estate</option>
             <option value="E-commerce / Retail">E-commerce / Retail</option>
             <option value="Restaurant / Food">Restaurant / Food</option>
             <option value="Education / Coaching">Education / Coaching</option>
             <option value="Finance / Insurance">Finance / Insurance</option>
             <option value="SaaS / Software">SaaS / Software</option>
-            <option value="Other / General business">Other</option>
+            <option value="Other">Other</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>Target Market</label>
-          <select id="fc-market">
-            <option value="">Select market</option>
-            <option value="Spain (Barcelona / Madrid)">Spain</option>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="fc-lbl-market">Target Market</label>
+          <select id="fc-market" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
+            <option value="">Select</option>
+            <option value="Spain">Spain</option>
             <option value="Denmark">Denmark</option>
-            <option value="UK">United Kingdom</option>
+            <option value="United Kingdom">United Kingdom</option>
             <option value="Germany">Germany</option>
             <option value="Scandinavia">Scandinavia</option>
-            <option value="International / Multiple countries">International</option>
+            <option value="International">International</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>Monthly Budget (€)</label>
-          <select id="fc-budget">
-            <option value="">Select budget</option>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="fc-lbl-budget">Monthly Budget</label>
+          <select id="fc-budget" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
+            <option value="">Select</option>
             <option value="€200">€200</option>
             <option value="€500">€500</option>
             <option value="€1,000">€1,000</option>
@@ -1001,59 +972,49 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
           </select>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label>Campaign Type</label>
-          <select id="fc-type">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="fc-lbl-type">Campaign Type</label>
+          <select id="fc-type" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
             <option value="">Select</option>
-            <option value="Search (text ads on Google)">Search (text ads)</option>
-            <option value="Performance Max (all Google channels)">Performance Max</option>
-            <option value="Display (banner ads)">Display (banners)</option>
-            <option value="Not sure — recommend for me">Not sure — recommend</option>
+            <option value="Search (text ads)">Search (text ads)</option>
+            <option value="Performance Max">Performance Max</option>
+            <option value="Display (banners)">Display (banners)</option>
+            <option value="Not sure — recommend">Not sure — recommend</option>
           </select>
         </div>
-        <div class="form-field">
-          <label>Primary Goal</label>
-          <select id="fc-goal">
-            <option value="">Select goal</option>
-            <option value="phone calls and direct enquiries">Phone calls / Enquiries</option>
-            <option value="online sales">Online sales</option>
-            <option value="form submissions and lead capture">Form leads</option>
-            <option value="physical store visits">Store visits</option>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="fc-lbl-goal">Primary Goal</label>
+          <select id="fc-goal" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#fff;outline:none;cursor:pointer;">
+            <option value="">Select</option>
+            <option value="Phone calls / Enquiries">Phone calls / Enquiries</option>
+            <option value="Online sales">Online sales</option>
+            <option value="Form leads">Form leads</option>
+            <option value="Store visits">Store visits</option>
           </select>
         </div>
       </div>
-      <button class="tool-submit" id="forecast-btn" onclick="runForecast()">
+      <button id="forecast-btn" onclick="runForecast()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);">
         <span id="forecast-btn-text">📊 Generate My Forecast</span>
       </button>
-    </div>
-    <div class="tool-result" id="forecast-result">
-      <div class="result-box">
-        <div class="result-header">
-          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Ad Budget Forecast</span></div>
-          <div class="result-actions">
-            <button class="result-btn" id="forecast-copy-btn" onclick="copyResult('forecast-output','forecast-copy-btn')">📋 Copy Forecast</button>
+      <div id="forecast-result" style="display:none;margin-top:24px;">
+        <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;">
+          <div style="padding:16px 22px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);">
+            <span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Budget Forecast</span>
           </div>
-        </div>
-        <div id="forecast-cards" style="padding:20px 24px 0"></div>
-        <div class="result-content" id="forecast-output"></div>
-        <div class="share-row" style="padding:0 24px 18px">
-          <input class="share-input" id="forecast-share-url" readonly placeholder="Shareable link will appear here...">
-          <button class="share-copy-btn" onclick="copyShare('forecast-share-url')">🔗 Copy Link</button>
-        </div>
-        <div class="result-upgrade">
-          <div class="upgrade-text"><strong>Ready to turn this forecast into real results?</strong> Our team will set up and manage the campaign — and we only consider it a success when you see the leads coming in.</div>
-          <a href="#contact" class="upgrade-cta">🎯 Start My Campaign →</a>
+          <div id="forecast-cards" style="padding:20px 24px 0;"></div>
+          <div id="forecast-output" style="padding:24px;font-size:14px;color:#5c5b72;line-height:1.75;white-space:pre-wrap;max-height:520px;overflow-y:auto;"></div>
+          <div style="background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:13px;color:#5c5b72;" id="fc-upgrade-text"><strong>Ready to turn this forecast into real results?</strong> We set up and manage the campaign for you.</span>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">🎯 Start My Campaign →</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-</div><!-- /tool-panels -->
+</div><!-- /panels -->
 </div><!-- /tools -->
-
-
-
 
 <footer>
   <div class="f-logo">Ura<span>wise</span></div>
@@ -1061,446 +1022,440 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
   <div class="f-langs"><span class="f-chip">🇩🇰 DA</span><span class="f-chip">🇦🇱 SQ</span><span class="f-chip">🇬🇧 EN</span><span class="f-chip">🇪🇸 ES</span><span class="f-chip">🇮🇹 IT</span></div>
 </footer>
 
+<!-- scripts moved -->
 <script>
-// ═══════════════════════════════════════════════════
-// CONFIGURATION
-// ═══════════════════════════════════════════════════
-var CLAUDE_PROXY_URL = 'https://urawise-proxy.urawise.workers.dev';
 
-// ═══════════════════════════════════════════════════
-// LANGUAGE SWITCHING — full page including tools
-// ═══════════════════════════════════════════════════
-var _lang = 'en';
+// ═══════════════════════════════════════════════════════
+// TOOLS LANGUAGE DATA
+// ═══════════════════════════════════════════════════════
+var TOOL_LANG = {
+  en: {
+    'tools-tag': 'Free AI Tools',
+    'tools-h2': 'Four tools. Completely free. Powered by AI.',
+    'tools-p1': 'Try them now — no sign-up, no credit card needed.',
+    'tools-p2': 'Based on what you get, you decide if Urawise is the right partner.',
+    'tab-ads-label': 'Ads Generator',
+    'tab-audit-label': 'Website Audit',
+    'tab-optiscore-label': 'Optiscore Sim',
+    'tab-forecast-label': 'Budget Forecast',
+    'ads-free-badge': '✓ 100% Free',
+    'ads-title': 'Google Ads Starter Kit Generator',
+    'ads-desc': 'Tell us about your business and goal. We generate headlines, descriptions, sitelinks, negative keywords and a bidding strategy — ready to copy into Google Ads.',
+    'ads-lbl-biz': 'Business Type',
+    'ads-lbl-loc': 'Location / Market',
+    'ads-lbl-goal': 'Primary Goal',
+    'ads-lbl-budget': 'Monthly Budget',
+    'ads-lbl-usp': 'What makes you different? (optional)',
+    'ads-btn-text': '✨ Generate My Google Ads Kit',
+    'ads-upgrade-text': '<strong>Want us to build and run this for you?</strong> We handle setup, tracking and optimisation.',
+    'ads-upgrade-btn': '🚀 Get It Running →',
+    'audit-free-badge': '✓ 100% Free',
+    'audit-title': '60-Second Website Audit',
+    'audit-desc': 'Tell us your website and your biggest frustration. Our AI gives you three concrete, actionable recommendations personalised to your business.',
+    'audit-lbl-url': 'Your Website URL',
+    'audit-lbl-biz': 'Business Type',
+    'audit-lbl-frustration': 'What is your biggest frustration right now?',
+    'audit-lbl-goal': 'Main Goal',
+    'audit-lbl-market': 'Market',
+    'audit-btn-text': '🔍 Audit My Website',
+    'audit-upgrade-text': '<strong>Want us to fix these for you?</strong> We build pages, improve SEO and set up lead capture.',
+    'opti-free-badge': '✓ 100% Free',
+    'opti-title': 'Google Ads Optiscore Simulator',
+    'opti-desc': 'Answer 8 quick questions about your Google Ads setup. We simulate your Optiscore and tell you exactly what to fix.',
+    'os-lbl-1': '1. Conversion tracking?', 'os-lbl-2': '2. Bidding strategy?',
+    'os-lbl-3': '3. Number of headlines?', 'os-lbl-4': '4. Ad extensions?',
+    'os-lbl-5': '5. Negative keywords?', 'os-lbl-6': '6. Ad strength?',
+    'os-lbl-7': '7. Audience targeting?', 'os-lbl-8': '8. How often do you optimise?',
+    'optiscore-btn-text': '⚡ Simulate My Optiscore',
+    'opti-upgrade-text': '<strong>Want us to push your score above 90?</strong> Our Growth package covers full account optimisation.',
+    'fc-free-badge': '✓ 100% Free',
+    'fc-title': 'Google Ads Budget Forecast',
+    'fc-desc': 'Tell us your industry, market and budget. We estimate impressions, clicks, leads and cost-per-lead so you can invest with confidence.',
+    'fc-lbl-industry': 'Industry', 'fc-lbl-market': 'Target Market',
+    'fc-lbl-budget': 'Monthly Budget', 'fc-lbl-type': 'Campaign Type', 'fc-lbl-goal': 'Primary Goal',
+    'forecast-btn-text': '📊 Generate My Forecast',
+    'fc-upgrade-text': '<strong>Ready to turn this forecast into real results?</strong> We set up and manage the campaign for you.',
+  },
+  es: {
+    'tools-tag': 'Herramientas Gratuitas',
+    'tools-h2': 'Cuatro herramientas. Completamente gratis. Con IA.',
+    'tools-p1': 'Pruébalas ahora — sin registro, sin tarjeta de crédito.',
+    'tools-p2': 'Según los resultados, decides si Urawise es el socio adecuado.',
+    'tab-ads-label': 'Generador de Anuncios',
+    'tab-audit-label': 'Auditoría Web',
+    'tab-optiscore-label': 'Sim. Optiscore',
+    'tab-forecast-label': 'Previsión Presupuesto',
+    'ads-free-badge': '✓ 100% Gratis',
+    'ads-title': 'Generador de Kit Google Ads',
+    'ads-desc': 'Cuéntanos tu negocio y objetivo. Generamos títulos, descripciones, sitelinks, palabras clave negativas y estrategia de puja — listo para copiar en Google Ads.',
+    'ads-lbl-biz': 'Tipo de Negocio',
+    'ads-lbl-loc': 'Ubicación / Mercado',
+    'ads-lbl-goal': 'Objetivo Principal',
+    'ads-lbl-budget': 'Presupuesto Mensual',
+    'ads-lbl-usp': '¿Qué te diferencia? (opcional)',
+    'ads-btn-text': '✨ Generar Mi Kit Google Ads',
+    'ads-upgrade-text': '<strong>¿Quieres que lo construyamos y gestionemos por ti?</strong> Nos encargamos de todo.',
+    'ads-upgrade-btn': '🚀 Poner en Marcha →',
+    'audit-free-badge': '✓ 100% Gratis',
+    'audit-title': 'Auditoría Web en 60 Segundos',
+    'audit-desc': 'Dinos tu web y tu mayor frustración. Nuestra IA te da tres recomendaciones concretas y personalizadas.',
+    'audit-lbl-url': 'URL de tu Web',
+    'audit-lbl-biz': 'Tipo de Negocio',
+    'audit-lbl-frustration': '¿Cuál es tu mayor frustración ahora mismo?',
+    'audit-lbl-goal': 'Objetivo Principal',
+    'audit-lbl-market': 'Mercado',
+    'audit-btn-text': '🔍 Auditar Mi Web',
+    'audit-upgrade-text': '<strong>¿Quieres que lo arreglemos por ti?</strong> Construimos páginas, mejoramos SEO y capturamos leads.',
+    'opti-free-badge': '✓ 100% Gratis',
+    'opti-title': 'Simulador de Optiscore Google Ads',
+    'opti-desc': 'Responde 8 preguntas rápidas sobre tu Google Ads. Simulamos tu Optiscore y te decimos exactamente qué mejorar.',
+    'os-lbl-1': '1. ¿Seguimiento de conversiones?', 'os-lbl-2': '2. ¿Estrategia de puja?',
+    'os-lbl-3': '3. ¿Número de títulos?', 'os-lbl-4': '4. ¿Extensiones de anuncio?',
+    'os-lbl-5': '5. ¿Palabras clave negativas?', 'os-lbl-6': '6. ¿Calidad del anuncio?',
+    'os-lbl-7': '7. ¿Segmentación de audiencia?', 'os-lbl-8': '8. ¿Con qué frecuencia optimizas?',
+    'optiscore-btn-text': '⚡ Simular Mi Optiscore',
+    'opti-upgrade-text': '<strong>¿Quieres que subamos tu puntuación por encima de 90?</strong> Nuestro paquete Growth incluye optimización completa.',
+    'fc-free-badge': '✓ 100% Gratis',
+    'fc-title': 'Previsión de Presupuesto Google Ads',
+    'fc-desc': 'Dinos tu industria, mercado y presupuesto. Estimamos impresiones, clics, contactos y coste por contacto.',
+    'fc-lbl-industry': 'Industria', 'fc-lbl-market': 'Mercado Objetivo',
+    'fc-lbl-budget': 'Presupuesto Mensual', 'fc-lbl-type': 'Tipo de Campaña', 'fc-lbl-goal': 'Objetivo Principal',
+    'forecast-btn-text': '📊 Generar Mi Previsión',
+    'fc-upgrade-text': '<strong>¿Listo para convertir esta previsión en resultados reales?</strong> Configuramos y gestionamos la campaña por ti.',
+  },
+  sq: {
+    'tools-tag': 'Mjetet Falas',
+    'tools-h2': 'Katër mjete. Plotësisht falas. Fuqizuar nga IA.',
+    'tools-p1': 'Provojini tani — pa regjistrim, pa kartë kredie.',
+    'tools-p2': 'Bazuar në atë që merr, vendos nëse Urawise është partneri i duhur.',
+    'tab-ads-label': 'Gjenerator Reklamash',
+    'tab-audit-label': 'Auditim Faqeje',
+    'tab-optiscore-label': 'Sim. Optiscore',
+    'tab-forecast-label': 'Parashikim Buxheti',
+    'ads-free-badge': '✓ 100% Falas',
+    'ads-title': 'Gjenerator Kiti Google Ads',
+    'ads-desc': 'Na tregoni biznesin dhe qëllimin. Gjenerojmë tituj, përshkrime, sitelinks, fjalëkyçe negative dhe strategji ofertash — gati për kopjim në Google Ads.',
+    'ads-lbl-biz': 'Lloji i Biznesit',
+    'ads-lbl-loc': 'Vendndodhja / Tregu',
+    'ads-lbl-goal': 'Qëllimi Kryesor',
+    'ads-lbl-budget': 'Buxheti Mujor',
+    'ads-lbl-usp': 'Çfarë ju dallon? (opsionale)',
+    'ads-btn-text': '✨ Gjeneroni Kitin Tim Google Ads',
+    'ads-upgrade-text': '<strong>Doni ta ndërtojmë dhe menaxhojmë për ju?</strong> Ne kujdesemi për gjithçka.',
+    'ads-upgrade-btn': '🚀 Niseni →',
+    'audit-free-badge': '✓ 100% Falas',
+    'audit-title': 'Auditim Faqeje në 60 Sekonda',
+    'audit-desc': 'Na tregoni faqen tuaj dhe frustrimin tuaj më të madh. IA jonë ju jep tre rekomandime konkrete dhe të personalizuara.',
+    'audit-lbl-url': 'URL e Faqes Tuaj',
+    'audit-lbl-biz': 'Lloji i Biznesit',
+    'audit-lbl-frustration': 'Cili është frustrimi juaj më i madh tani?',
+    'audit-lbl-goal': 'Qëllimi Kryesor',
+    'audit-lbl-market': 'Tregu',
+    'audit-btn-text': '🔍 Auditoni Faqen Time',
+    'audit-upgrade-text': '<strong>Doni t\'i rregullojmë për ju?</strong> Ndërtojmë faqe, përmirësojmë SEO dhe kapim kontakte.',
+    'opti-free-badge': '✓ 100% Falas',
+    'opti-title': 'Simulues Optiscore Google Ads',
+    'opti-desc': 'Përgjigjuni 8 pyetjeve të shpejta rreth Google Ads. Simulojmë Optiscore-in tuaj dhe tregojmë saktësisht çfarë të rregulloni.',
+    'os-lbl-1': '1. Gjurmim konvertimesh?', 'os-lbl-2': '2. Strategji ofertash?',
+    'os-lbl-3': '3. Numri i titujve?', 'os-lbl-4': '4. Zgjerime reklamash?',
+    'os-lbl-5': '5. Fjalëkyçe negative?', 'os-lbl-6': '6. Cilësia e reklamës?',
+    'os-lbl-7': '7. Targetim audiencash?', 'os-lbl-8': '8. Sa shpesh optimizoni?',
+    'optiscore-btn-text': '⚡ Simuloni Optiscore-in Tim',
+    'opti-upgrade-text': '<strong>Doni ta çojmë rezultatin mbi 90?</strong> Paketa Growth mbulon optimizimin e plotë të llogarisë.',
+    'fc-free-badge': '✓ 100% Falas',
+    'fc-title': 'Parashikim Buxheti Google Ads',
+    'fc-desc': 'Na tregoni industrinë, tregun dhe buxhetin. Vlerësojmë impresionet, klikjet, kontaktet dhe koston për kontakt.',
+    'fc-lbl-industry': 'Industria', 'fc-lbl-market': 'Tregu Targetit',
+    'fc-lbl-budget': 'Buxheti Mujor', 'fc-lbl-type': 'Lloji i Fushatës', 'fc-lbl-goal': 'Qëllimi Kryesor',
+    'forecast-btn-text': '📊 Gjeneroni Parashikimin Tim',
+    'fc-upgrade-text': '<strong>Gati ta ktheni këtë parashikim në rezultate reale?</strong> Ne konfigurojmë dhe menaxhojmë fushatën për ju.',
+  },
+  da: {
+    'tools-tag': 'Gratis AI Værktøjer',
+    'tools-h2': 'Fire værktøjer. Helt gratis. Drevet af AI.',
+    'tools-p1': 'Prøv dem nu — ingen tilmelding, intet kreditkort.',
+    'tools-p2': 'Baseret på hvad du får, bestemmer du om Urawise er den rette partner.',
+    'tab-ads-label': 'Annoncesgenerator',
+    'tab-audit-label': 'Webstedsrevision',
+    'tab-optiscore-label': 'Optiscore Sim',
+    'tab-forecast-label': 'Budgetprognose',
+    'ads-free-badge': '✓ 100% Gratis',
+    'ads-title': 'Google Ads Startpakke Generator',
+    'ads-desc': 'Fortæl os om din virksomhed og dit mål. Vi genererer overskrifter, beskrivelser, sitelinks, negative søgeord og en budstrategi — klar til at kopiere ind i Google Ads.',
+    'ads-lbl-biz': 'Virksomhedstype',
+    'ads-lbl-loc': 'Placering / Marked',
+    'ads-lbl-goal': 'Primært Mål',
+    'ads-lbl-budget': 'Månedligt Budget',
+    'ads-lbl-usp': 'Hvad gør dig anderledes? (valgfrit)',
+    'ads-btn-text': '✨ Generer Min Google Ads Pakke',
+    'ads-upgrade-text': '<strong>Vil du have os til at bygge og køre det for dig?</strong> Vi håndterer opsætning, sporing og optimering.',
+    'ads-upgrade-btn': '🚀 Kom I Gang →',
+    'audit-free-badge': '✓ 100% Gratis',
+    'audit-title': '60-Sekunders Webstedsrevision',
+    'audit-desc': 'Fortæl os om dit websted og din største frustration. Vores AI giver dig tre konkrete, handlingsorienterede anbefalinger.',
+    'audit-lbl-url': 'Din Websteds-URL',
+    'audit-lbl-biz': 'Virksomhedstype',
+    'audit-lbl-frustration': 'Hvad er din største frustration lige nu?',
+    'audit-lbl-goal': 'Primært Mål',
+    'audit-lbl-market': 'Marked',
+    'audit-btn-text': '🔍 Revidér Mit Websted',
+    'audit-upgrade-text': '<strong>Vil du have os til at fikse det for dig?</strong> Vi bygger sider, forbedrer SEO og opsætter leadgenerering.',
+    'opti-free-badge': '✓ 100% Gratis',
+    'opti-title': 'Google Ads Optiscore Simulator',
+    'opti-desc': 'Besvar 8 hurtige spørgsmål om din Google Ads-opsætning. Vi simulerer din Optiscore og fortæller dig præcis hvad du skal fixe.',
+    'os-lbl-1': '1. Konverteringssporing?', 'os-lbl-2': '2. Budstrategi?',
+    'os-lbl-3': '3. Antal overskrifter?', 'os-lbl-4': '4. Annonceudvidelser?',
+    'os-lbl-5': '5. Negative søgeord?', 'os-lbl-6': '6. Annoncekvalitet?',
+    'os-lbl-7': '7. Målgruppetargeting?', 'os-lbl-8': '8. Hvor ofte optimerer du?',
+    'optiscore-btn-text': '⚡ Simulér Min Optiscore',
+    'opti-upgrade-text': '<strong>Vil du have os til at skubbe din score over 90?</strong> Vores Growth-pakke dækker fuld kontoooptimering.',
+    'fc-free-badge': '✓ 100% Gratis',
+    'fc-title': 'Google Ads Budgetprognose',
+    'fc-desc': 'Fortæl os din branche, dit marked og dit budget. Vi estimerer visninger, klik, leads og cost-per-lead.',
+    'fc-lbl-industry': 'Branche', 'fc-lbl-market': 'Målmarked',
+    'fc-lbl-budget': 'Månedligt Budget', 'fc-lbl-type': 'Kampagnetype', 'fc-lbl-goal': 'Primært Mål',
+    'forecast-btn-text': '📊 Generér Min Prognose',
+    'fc-upgrade-text': '<strong>Klar til at omdanne denne prognose til rigtige resultater?</strong> Vi opsætter og administrerer kampagnen for dig.',
+  }
+};
 
+function applyToolLang(lang) {
+  var data = TOOL_LANG[lang] || TOOL_LANG['en'];
+  Object.keys(data).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = data[id];
+  });
+  // Also update placeholders
+  var placeholders = {
+    'ads-business': {en:'e.g. Dental clinic, Plumber, Online shop', es:'ej. Clínica dental, Fontanero, Tienda online', sq:'p.sh. Klinikë dentare, Hidraulik, Dyqan online', da:'f.eks. Tandlæge, VVS, Netbutik'},
+    'ads-location': {en:'e.g. Barcelona, Denmark, UK', es:'ej. Barcelona, Dinamarca, Reino Unido', sq:'p.sh. Barcelona, Danimarkë, MB', da:'f.eks. Barcelona, Danmark, UK'},
+    'ads-usp': {en:'e.g. Same-day service, 20 years experience', es:'ej. Servicio en el día, 20 años de experiencia', sq:'p.sh. Shërbim të njëjtën ditë, 20 vjet përvojë', da:'f.eks. Samme-dags service, 20 års erfaring'},
+    'audit-url': {en:'https://yourwebsite.com', es:'https://tuweb.com', sq:'https://faqjagjuaj.com', da:'https://dinhjemmeside.dk'},
+    'audit-frustration': {en:'e.g. We get traffic but nobody contacts us...', es:'ej. Tenemos tráfico pero nadie nos contacta...', sq:'p.sh. Kemi trafik por askush nuk na kontakton...', da:'f.eks. Vi får trafik men ingen kontakter os...'},
+  };
+  Object.keys(placeholders).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && placeholders[id][lang]) el.placeholder = placeholders[id][lang];
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════
+// SWITCH TOOL — tab visibility
+// ═══════════════════════════════════════════════════════
+function switchTool(id) {
+  var panels = ['ads','audit','optiscore','forecast'];
+  panels.forEach(function(p) {
+    var panel = document.getElementById('panel-' + p);
+    var tab = document.getElementById('tab-' + p);
+    if (p === id) {
+      panel.style.display = 'block';
+      tab.style.background = 'rgba(91,71,224,0.25)';
+      tab.style.color = '#a78bfa';
+      tab.style.borderBottom = '3px solid #7c3aed';
+    } else {
+      panel.style.display = 'none';
+      tab.style.background = 'rgba(255,255,255,0.06)';
+      tab.style.color = 'rgba(255,255,255,0.45)';
+      tab.style.borderBottom = '3px solid transparent';
+    }
+  });
+  var toolsEl = document.getElementById('tools');
+  if (toolsEl) toolsEl.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ═══════════════════════════════════════════════════════
+// LANGUAGE SWITCHING — main page + tools
+// ═══════════════════════════════════════════════════════
 function setLang(lang) {
-  _lang = lang;
-
-  // Highlight active lang button
+  // Update lang buttons
   document.querySelectorAll('.lang-btn').forEach(function(b) {
     b.classList.toggle('active', b.getAttribute('data-lang') === lang);
   });
-
-  // Translate every element with a data-en attribute
+  // Translate data-en elements (main site)
   document.querySelectorAll('[data-en]').forEach(function(el) {
-    // Never overwrite AI-generated result content
-    if (el.id === 'ads-output' || el.id === 'audit-output' ||
-        el.id === 'optiscore-output' || el.id === 'forecast-output') return;
-    if (el.closest && (el.closest('#ads-output') || el.closest('#audit-output') ||
-        el.closest('#optiscore-output') || el.closest('#forecast-output'))) return;
-
+    var skip = ['ads-output','audit-output','optiscore-output','forecast-output','forecast-cards','score-display'];
+    if (skip.indexOf(el.id) !== -1) return;
     var val = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
     if (!val) return;
-
-    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-      el.placeholder = val;
-      return;
-    }
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') { el.placeholder = val; return; }
     el.innerHTML = val;
   });
+  // Translate tools section
+  applyToolLang(lang);
 }
 
-// ═══════════════════════════════════════════════════
-// TAB SWITCHING — scoped to #tool-tabs-bar only
-// ═══════════════════════════════════════════════════
-function switchTool(id) {
-  // Update tab buttons
-  document.querySelectorAll('#tool-tabs-bar .tool-tab').forEach(function(t) {
-    t.classList.toggle('active', t.getAttribute('data-tool') === id);
-  });
-
-  // Show correct panel, hide others
-  document.querySelectorAll('.tool-panel').forEach(function(p) {
-    if (p.id === 'panel-' + id) {
-      p.style.display = 'block';
-      p.classList.add('active');
-    } else {
-      p.style.display = 'none';
-      p.classList.remove('active');
-    }
-  });
-
-  // Scroll to tools section
-  var toolsSection = document.getElementById('tools');
-  if (toolsSection) {
-    toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-}
-
-// Ensure only first panel is visible on load
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.tool-panel').forEach(function(p, i) {
-    if (i === 0) {
-      p.style.display = 'block';
-      p.classList.add('active');
-    } else {
-      p.style.display = 'none';
-      p.classList.remove('active');
-    }
-  });
-});
-
-// ═══════════════════════════════════════════════════
-// SMOOTH SCROLL for anchor links
-// ═══════════════════════════════════════════════════
-document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-  a.addEventListener('click', function(e) {
-    e.preventDefault();
-    var t = document.querySelector(a.getAttribute('href'));
-    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-});
-
-// ═══════════════════════════════════════════════════
-// SCROLL REVEAL
-// ═══════════════════════════════════════════════════
-var obs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.07 });
-document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
-
-// ═══════════════════════════════════════════════════
-// API CALL HELPER
-// ═══════════════════════════════════════════════════
-
-
+// ═══════════════════════════════════════════════════════
+// CLAUDE API CALL
+// ═══════════════════════════════════════════════════════
+var CLAUDE_PROXY_URL = 'https://urawise-proxy.urawise.workers.dev';
 
 async function callClaude(prompt, outputId, onDone) {
-  const el = document.getElementById(outputId);
-  el.innerHTML = '<span class="typing-cursor"></span>';
-  let full = '';
+  var el = document.getElementById(outputId);
+  el.innerHTML = '<span style="display:inline-block;width:2px;height:1em;background:#5b47e0;margin-left:2px;vertical-align:text-bottom;animation:blink2 0.8s infinite;"></span>';
   try {
-    const res = await fetch(CLAUDE_PROXY_URL, {
+    var res = await fetch(CLAUDE_PROXY_URL, {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
         max_tokens: 1000,
-        messages: [{role:'user', content: prompt}]
+        messages: [{role: 'user', content: prompt}]
       })
     });
-    const data = await res.json();
-
-    // Handle rate limit / daily cap errors from the Worker
+    var data = await res.json();
     if (res.status === 429 && data.error) {
-      el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px 20px;color:#dc2626;font-size:14px;line-height:1.65;">'
-        + '⏱️ <strong>' + (data.code === 'DAILY_CAP' ? 'Daily limit reached' : 'Hourly limit reached') + '</strong><br>'
-        + data.error
-        + '<br><br><span style="color:var(--dim);font-size:13px">Meanwhile, <a href='#contact' style='color:var(--p)'>contact us directly</a> and we will run an audit for you personally.</span>'
-        + '</div>';
-      if(onDone) onDone('');
+      el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px;color:#dc2626;font-size:14px;line-height:1.65;">⏱️ <strong>' + (data.code === 'DAILY_CAP' ? 'Daily limit reached' : 'Hourly limit reached') + '</strong><br>' + data.error + '<br><br><span style="color:#5c5b72;font-size:13px;">Meanwhile, <a href="#contact" style="color:#5b47e0">contact us directly</a> and we will audit your business personally.</span></div>';
+      if (onDone) onDone('');
       return;
     }
-
-    const text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Something went wrong. Please try again.';
-    full = text;
+    var text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Something went wrong. Please try again.';
     el.innerHTML = '';
-    let i = 0;
-    const timer = setInterval(()=>{
-      if(i < full.length) {
-        el.innerHTML = full.slice(0,i+1).replace(/\n/g,'<br>') + '<span class="typing-cursor"></span>';
-        i += 3;
+    var i = 0;
+    var timer = setInterval(function() {
+      if (i < text.length) {
+        el.innerHTML = text.slice(0, i+1).replace(/\n/g,'<br>') + '<span style="display:inline-block;width:2px;height:1em;background:#5b47e0;animation:blink2 0.8s infinite;"></span>';
+        i += 4;
       } else {
-        el.innerHTML = full.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+        el.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
         clearInterval(timer);
-        if(onDone) onDone(full);
+        if (onDone) onDone(text);
       }
-    }, 12);
+    }, 10);
   } catch(e) {
-    el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px 20px;color:#dc2626;font-size:14px;">⚠️ Could not connect to the AI service. Please check your connection and try again, or <a href='#contact' style='color:var(--p)'>contact us directly</a>.</div>';
+    el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px;color:#dc2626;font-size:14px;">⚠️ Could not connect. Please check your connection and try again, or <a href="#contact" style="color:#5b47e0">contact us directly</a>.</div>';
   }
 }
 
 function setLoading(btnId, textId, loading, defaultText) {
-  const btn = document.getElementById(btnId);
-  const txt = document.getElementById(textId);
+  var btn = document.getElementById(btnId);
+  var txt = document.getElementById(textId);
   btn.disabled = loading;
-  txt.innerHTML = loading
-    ? '<span class="loading-dots"><span></span><span></span><span></span></span> Generating...'
-    : defaultText;
-}
-
-function showResult(id) {
-  const el = document.getElementById(id);
-  el.classList.add('visible');
-  el.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
-
-function generateShareUrl(toolId, data) {
-  const encoded = btoa(encodeURIComponent(JSON.stringify({t:toolId,d:data}))).slice(0,32);
-  return window.location.origin + window.location.pathname + '?tool=' + toolId + '&ref=' + encoded;
-}
-
-function setShareUrl(inputId, toolId, data) {
-  const el = document.getElementById(inputId);
-  if(el) el.value = generateShareUrl(toolId, data);
+  btn.style.opacity = loading ? '0.7' : '1';
+  txt.innerHTML = loading ? '⏳ Generating...' : defaultText;
 }
 
 function copyResult(outputId, btnId) {
-  const txt = document.getElementById(outputId).innerText;
-  navigator.clipboard.writeText(txt).then(()=>{
-    const btn = document.getElementById(btnId);
+  var txt = document.getElementById(outputId).innerText;
+  navigator.clipboard.writeText(txt).then(function() {
+    var btn = document.getElementById(btnId);
     btn.textContent = '✓ Copied!';
-    btn.classList.add('copied');
-    setTimeout(()=>{ btn.textContent = '📋 Copy All'; btn.classList.remove('copied'); }, 2200);
+    btn.style.color = '#059669';
+    setTimeout(function(){ btn.textContent = '📋 Copy All'; btn.style.color = ''; }, 2200);
   });
 }
 
-function copyShare(inputId) {
-  const inp = document.getElementById(inputId);
-  navigator.clipboard.writeText(inp.value);
-  inp.select();
-}
-
-// ══════════════════════════════════════════════════
-// TOOL 1 — GOOGLE ADS GENERATOR
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// TOOL 1 — ADS GENERATOR
+// ═══════════════════════════════════════════════════════
 async function runAdsGenerator() {
-  const business = document.getElementById('ads-business').value.trim();
-  const location = document.getElementById('ads-location').value.trim();
-  const goal = document.getElementById('ads-goal').value;
-  const budget = document.getElementById('ads-budget').value;
-  const usp = document.getElementById('ads-usp').value.trim();
-  if(!business || !location || !goal || !budget) {
-    alert('Please fill in all required fields.');
-    return;
-  }
+  var business = document.getElementById('ads-business').value.trim();
+  var location = document.getElementById('ads-location').value.trim();
+  var goal = document.getElementById('ads-goal').value;
+  var budget = document.getElementById('ads-budget').value;
+  var usp = document.getElementById('ads-usp').value.trim();
+  if (!business || !location || !goal || !budget) { alert('Please fill in Business Type, Location, Goal and Budget.'); return; }
   setLoading('ads-btn','ads-btn-text',true,'');
-  showResult('ads-result');
-
-  const prompt = `You are a senior Google Ads specialist. Generate a complete Google Ads Starter Kit for the following business:
-
-Business type: ${business}
-Location/Market: ${location}
-Primary goal: ${goal}
-Monthly budget: ${budget}
-Unique selling point: ${usp || 'Not specified'}
-
-Generate the following in a clean, ready-to-use format:
-
-**CAMPAIGN STRATEGY**
-Briefly recommend the best campaign type, match types and bidding strategy for this business and budget. 2-3 sentences.
-
-**15 HEADLINES** (max 30 chars each, numbered)
-Write 15 strong headlines. Include location, service, USP and call-to-action variations.
-
-**4 DESCRIPTIONS** (max 90 chars each, numbered)
-Write 4 compelling descriptions. Include the goal, USP and a clear call to action.
-
-**6 SITELINKS** (title | description format)
-Write 6 relevant sitelink titles with short 2-line descriptions.
-
-**NEGATIVE KEYWORDS** (comma-separated)
-List 15 relevant negative keywords to block irrelevant traffic.
-
-**RECOMMENDED BIDDING STRATEGY**
-One sentence explaining the ideal Smart Bidding strategy and why, for this budget and goal.
-
-Keep everything practical and immediately usable in Google Ads.`;
-
-  await callClaude(prompt, 'ads-output', (text)=>{
-    setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit');
-    setShareUrl('ads-share-url','ads',{business,location,goal});
-  });
+  document.getElementById('ads-result').style.display = 'block';
+  var prompt = 'You are a senior Google Ads specialist. Generate a complete Google Ads Starter Kit.\n\nBusiness: ' + business + '\nLocation: ' + location + '\nGoal: ' + goal + '\nBudget: ' + budget + '\nUSP: ' + (usp||'Not specified') + '\n\nFormat:\n\n**CAMPAIGN STRATEGY**\n2-3 sentences on best campaign type and bidding for this budget.\n\n**15 HEADLINES** (max 30 chars each, numbered 1-15)\n\n**4 DESCRIPTIONS** (max 90 chars each, numbered 1-4)\n\n**6 SITELINKS** (Title | Description)\n\n**15 NEGATIVE KEYWORDS** (comma-separated)\n\n**RECOMMENDED BIDDING STRATEGY**\nOne sentence.';
+  await callClaude(prompt, 'ads-output', function() { setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit'); });
   setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit');
 }
 
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 // TOOL 2 — WEBSITE AUDIT
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
 async function runWebsiteAudit() {
-  const url = document.getElementById('audit-url').value.trim();
-  const business = document.getElementById('audit-business').value.trim();
-  const frustration = document.getElementById('audit-frustration').value.trim();
-  const goal = document.getElementById('audit-goal').value;
-  const market = document.getElementById('audit-market').value;
-  if(!url || !business || !frustration || !goal) {
-    alert('Please fill in the required fields.');
-    return;
-  }
+  var url = document.getElementById('audit-url').value.trim();
+  var business = document.getElementById('audit-business').value.trim();
+  var frustration = document.getElementById('audit-frustration').value.trim();
+  var goal = document.getElementById('audit-goal').value;
+  var market = document.getElementById('audit-market').value;
+  if (!url || !business || !frustration || !goal) { alert('Please fill in URL, Business Type, Frustration and Goal.'); return; }
   setLoading('audit-btn','audit-btn-text',true,'');
-  showResult('audit-result');
-
-  const prompt = `You are a senior digital marketing consultant and UX strategist. Conduct a concise website and digital marketing audit based on this information:
-
-Website: ${url}
-Business type: ${business}
-Main frustration: ${frustration}
-Primary goal: ${goal}
-Target market: ${market || 'Not specified'}
-
-Provide a personalised audit with exactly 3 sections:
-
-**🔴 CRITICAL ISSUE — Fix This First**
-Identify the single most likely reason for their frustration based on what they described. Be specific and direct. Explain the problem and its impact on their business goal. 3-4 sentences.
-
-**🟡 QUICK WIN — Do This This Week**
-Identify one specific, low-effort improvement they can make immediately that would have a noticeable impact on their goal. Be concrete — not generic advice. 3-4 sentences.
-
-**🟢 STRATEGIC OPPORTUNITY — Your Biggest Growth Lever**
-Based on their business type, goal and market, identify one strategic digital marketing opportunity they are likely missing. This could be Google Ads, local SEO, lead capture, conversion optimisation, etc. 3-4 sentences.
-
-**ONE SENTENCE VERDICT**
-End with one bold sentence summarising the single thing that would most transform their online performance.
-
-Be direct, specific and genuinely useful. Avoid generic advice. Write as if you have reviewed their site personally.`;
-
-  await callClaude(prompt, 'audit-output', (text)=>{
-    setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website');
-    setShareUrl('audit-share-url','audit',{url,business,goal});
-  });
+  document.getElementById('audit-result').style.display = 'block';
+  var prompt = 'You are a senior digital marketing consultant. Conduct a website audit.\n\nWebsite: ' + url + '\nBusiness: ' + business + '\nFrustration: ' + frustration + '\nGoal: ' + goal + '\nMarket: ' + (market||'Not specified') + '\n\nProvide exactly 3 sections:\n\n**🔴 CRITICAL ISSUE — Fix This First**\nThe single most likely reason for their frustration. 3-4 sentences. Be specific.\n\n**🟡 QUICK WIN — Do This This Week**\nOne low-effort improvement with noticeable impact. 3-4 sentences.\n\n**🟢 STRATEGIC OPPORTUNITY — Biggest Growth Lever**\nOne strategic digital marketing opportunity they are likely missing. 3-4 sentences.\n\n**ONE SENTENCE VERDICT**\nBold one-sentence summary of what would most transform their performance.\n\nBe direct and specific. No generic advice.';
+  await callClaude(prompt, 'audit-output', function() { setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website'); });
   setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website');
 }
 
-// ══════════════════════════════════════════════════
-// TOOL 3 — OPTISCORE SIMULATOR
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// TOOL 3 — OPTISCORE
+// ═══════════════════════════════════════════════════════
 async function runOptiscore() {
-  const answers = [];
-  for(let i=1;i<=8;i++){
-    const val = document.getElementById('os-'+i).value;
-    if(!val){ alert('Please answer all 8 questions.'); return; }
-    answers.push(val);
+  var answers = [];
+  for (var i = 1; i <= 8; i++) {
+    var v = document.getElementById('os-' + i).value;
+    if (!v) { alert('Please answer all 8 questions.'); return; }
+    answers.push(v);
   }
   setLoading('optiscore-btn','optiscore-btn-text',true,'');
-  showResult('optiscore-result');
-
-  const questions = [
-    'Conversion tracking',
-    'Bidding strategy',
-    'Number of headlines',
-    'Ad extensions / assets',
-    'Negative keywords',
-    'Ad strength / low-performing ads',
-    'Audience targeting',
-    'Optimisation frequency'
-  ];
-
-  const answerText = questions.map((q,i)=>`${q}: ${answers[i]}`).join('\n');
-
-  const prompt = `You are a certified Google Ads specialist. Based on these 8 answers about a Google Ads account, simulate an Optiscore and provide a detailed breakdown.
-
-Account setup answers:
-${answerText}
-
-First, output this exact line at the top (nothing before it):
-SCORE: [number between 0 and 100]
-
-Then provide the full report:
-
-**OPTISCORE BREAKDOWN**
-Explain what the score means for this account in 2 sentences.
-
-**WHAT'S PULLING YOUR SCORE DOWN** (list the 2-3 biggest issues based on answers)
-For each issue: name it, explain why it hurts the Optiscore, and what the fix is. Be specific.
-
-**WHAT'S WORKING** (based on strong answers)
-List 1-2 things they are doing right.
-
-**TOP 3 ACTIONS TO RAISE YOUR SCORE**
-Number these. Make them specific, actionable and ordered by impact. If they fix these, estimate the score improvement for each.
-
-**ESTIMATED SCORE AFTER FIXES**
-Give a realistic score range if they implement all recommendations.
-
-Calculate the score honestly based on the answers — poor setups should score low (30-50), average setups 55-72, strong setups 75-90, excellent 90+.`;
-
-  await callClaude(prompt, 'optiscore-output', (text)=>{
+  document.getElementById('optiscore-result').style.display = 'block';
+  var ansText = ['Conversion tracking','Bidding strategy','Headlines count','Ad extensions','Negative keywords','Ad strength','Audience targeting','Optimisation frequency'].map(function(q,i){ return q+': '+answers[i]; }).join('\n');
+  var prompt = 'You are a certified Google Ads specialist. Simulate an Optiscore based on these answers:\n\n' + ansText + '\n\nIMPORTANT: Output the VERY FIRST line as exactly: SCORE: [number]\n\nThen provide:\n\n**OPTISCORE BREAKDOWN**\nWhat the score means. 2 sentences.\n\n**WHAT IS PULLING YOUR SCORE DOWN**\nTop 2-3 issues with specific fixes.\n\n**WHAT IS WORKING**\n1-2 strengths.\n\n**TOP 3 ACTIONS TO RAISE YOUR SCORE**\nNumbered, specific, ordered by impact.\n\n**ESTIMATED SCORE AFTER FIXES**\nRealistic range.\n\nScore guide: poor setup=30-50, average=55-72, good=75-88, excellent=89+';
+  await callClaude(prompt, 'optiscore-output', function(text) {
     setLoading('optiscore-btn','optiscore-btn-text',false,'⚡ Simulate My Optiscore');
-    // Extract and display score
-    const match = text.match(/SCORE:\s*(\d+)/);
-    if(match) {
-      const score = parseInt(match[1]);
+    var match = text.match(/SCORE:\s*(\d+)/);
+    if (match) {
+      var score = parseInt(match[1]);
       document.getElementById('score-num').textContent = score;
-      const pct = score + '%';
-      const color = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
-      document.getElementById('score-ring').style.background =
-        `conic-gradient(${color} ${pct}, #e4e3f0 ${pct})`;
-      // Clean score line from output
-      const outEl = document.getElementById('optiscore-output');
-      outEl.innerHTML = outEl.innerHTML.replace(/SCORE:\s*\d+<br>/,'');
+      var color = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+      document.getElementById('score-display').style.background = 'conic-gradient(' + color + ' ' + score + '%, #e4e3f0 ' + score + '%)';
+      var out = document.getElementById('optiscore-output');
+      out.innerHTML = out.innerHTML.replace(/SCORE:\s*\d+(<br>)?/,'');
     }
-    setShareUrl('optiscore-share-url','optiscore',{score: document.getElementById('score-num').textContent});
   });
   setLoading('optiscore-btn','optiscore-btn-text',false,'⚡ Simulate My Optiscore');
 }
 
-// ══════════════════════════════════════════════════
-// TOOL 4 — BUDGET FORECAST
-// ══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+// TOOL 4 — FORECAST
+// ═══════════════════════════════════════════════════════
 async function runForecast() {
-  const industry = document.getElementById('fc-industry').value;
-  const market = document.getElementById('fc-market').value;
-  const budget = document.getElementById('fc-budget').value;
-  const type = document.getElementById('fc-type').value;
-  const goal = document.getElementById('fc-goal').value;
-  if(!industry || !market || !budget || !type || !goal) {
-    alert('Please fill in all fields.');
-    return;
-  }
+  var industry = document.getElementById('fc-industry').value;
+  var market = document.getElementById('fc-market').value;
+  var budget = document.getElementById('fc-budget').value;
+  var type = document.getElementById('fc-type').value;
+  var goal = document.getElementById('fc-goal').value;
+  if (!industry || !market || !budget || !type || !goal) { alert('Please fill in all fields.'); return; }
   setLoading('forecast-btn','forecast-btn-text',true,'');
-  showResult('forecast-result');
-
-  const prompt = `You are a senior Google Ads strategist with deep knowledge of industry benchmarks across European markets. Generate a realistic ad budget forecast.
-
-Industry: ${industry}
-Target market: ${market}
-Monthly budget: ${budget}
-Campaign type: ${type}
-Primary goal: ${goal}
-
-First output these exact lines (nothing before them):
-IMPRESSIONS: [realistic monthly estimate as number with comma separator, e.g. 45,000]
-CLICKS: [realistic monthly estimate]
-LEADS: [realistic monthly estimate]
-CPL: [estimated cost per lead in €, e.g. €28]
-
-Then provide the full forecast report:
-
-**YOUR MONTHLY FORECAST BREAKDOWN**
-Explain what the numbers mean in plain language — how many people will see the ads, click, and convert. 2-3 sentences.
-
-**KEY ASSUMPTIONS**
-Explain the CTR, conversion rate and CPC benchmarks you used for this industry and market. Be transparent. 3-4 bullet points.
-
-**HOW TO MAXIMISE THIS BUDGET**
-Give 3 specific, practical recommendations to get the most from this budget for this industry and goal.
-
-**SCALING POTENTIAL**
-What would happen if they doubled the budget? Give a brief 2-sentence projection.
-
-**RECOMMENDED NEXT STEP**
-One clear, actionable sentence on what they should do first.
-
-Base estimates on real industry CPC benchmarks for European markets. Be realistic — not over-optimistic. Healthcare and legal CPCs are high, retail and food are lower.`;
-
-  await callClaude(prompt, 'forecast-output', (text)=>{
+  document.getElementById('forecast-result').style.display = 'block';
+  var prompt = 'You are a Google Ads strategist. Generate a realistic budget forecast.\n\nIndustry: ' + industry + '\nMarket: ' + market + '\nBudget: ' + budget + '\nCampaign: ' + type + '\nGoal: ' + goal + '\n\nIMPORTANT: Output these FIRST (exact format):\nIMPRESSIONS: [number with commas]\nCLICKS: [number]\nLEADS: [number]\nCPL: €[number]\n\nThen provide:\n\n**MONTHLY FORECAST BREAKDOWN**\nExplain the numbers in plain language. 2-3 sentences.\n\n**KEY ASSUMPTIONS**\nCTR, conversion rate and CPC benchmarks used. 3-4 bullet points.\n\n**HOW TO MAXIMISE THIS BUDGET**\n3 specific practical recommendations.\n\n**SCALING POTENTIAL**\nWhat happens if they double the budget. 2 sentences.\n\n**RECOMMENDED NEXT STEP**\nOne clear sentence.\n\nBe realistic. Base on real European market benchmarks.';
+  await callClaude(prompt, 'forecast-output', function(text) {
     setLoading('forecast-btn','forecast-btn-text',false,'📊 Generate My Forecast');
-
-    // Extract metrics and build cards
-    const imp = text.match(/IMPRESSIONS:\s*([\d,]+)/);
-    const clk = text.match(/CLICKS:\s*([\d,]+)/);
-    const lds = text.match(/LEADS:\s*([\d,]+)/);
-    const cpl = text.match(/CPL:\s*(€[\d.]+)/);
-
-    if(imp || clk || lds || cpl) {
-      const cards = document.getElementById('forecast-cards');
-      cards.innerHTML = `<div class="forecast-grid">
-        <div class="forecast-card"><div class="forecast-val">${imp?imp[1]:'—'}</div><div class="forecast-key">Monthly Impressions</div></div>
-        <div class="forecast-card"><div class="forecast-val">${clk?clk[1]:'—'}</div><div class="forecast-key">Monthly Clicks</div></div>
-        <div class="forecast-card"><div class="forecast-val">${lds?lds[1]:'—'}</div><div class="forecast-key">Est. Leads/Month</div></div>
-      </div><div style="text-align:center;margin-bottom:8px;font-size:13px;color:var(--muted)">Estimated cost-per-lead: <strong style="color:var(--ink)">${cpl?cpl[1]:'—'}</strong></div>`;
-      // Clean metric lines from text output
-      const outEl = document.getElementById('forecast-output');
-      outEl.innerHTML = outEl.innerHTML
-        .replace(/IMPRESSIONS:.*?<br>/,'')
-        .replace(/CLICKS:.*?<br>/,'')
-        .replace(/LEADS:.*?<br>/,'')
-        .replace(/CPL:.*?<br>/,'');
+    var imp = text.match(/IMPRESSIONS:\s*([\d,]+)/);
+    var clk = text.match(/CLICKS:\s*([\d,]+)/);
+    var lds = text.match(/LEADS:\s*([\d,]+)/);
+    var cpl = text.match(/CPL:\s*(€[\d,.]+)/);
+    if (imp || clk || lds) {
+      document.getElementById('forecast-cards').innerHTML =
+        '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">' +
+        '<div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;padding:18px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + (imp?imp[1]:'—') + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;">Monthly Impressions</div></div>' +
+        '<div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;padding:18px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + (clk?clk[1]:'—') + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;">Monthly Clicks</div></div>' +
+        '<div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;padding:18px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + (lds?lds[1]:'—') + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;">Est. Leads/Month</div></div>' +
+        '</div>' + (cpl ? '<p style="text-align:center;font-size:13px;color:#9896b0;margin-bottom:8px;">Estimated cost-per-lead: <strong style="color:#12111e">' + cpl[1] + '</strong></p>' : '');
+      var out = document.getElementById('forecast-output');
+      out.innerHTML = out.innerHTML.replace(/IMPRESSIONS:.*?<br>/,'').replace(/CLICKS:.*?<br>/,'').replace(/LEADS:.*?<br>/,'').replace(/CPL:.*?<br>/,'');
     }
-    setShareUrl('forecast-share-url','forecast',{industry,market,budget});
   });
   setLoading('forecast-btn','forecast-btn-text',false,'📊 Generate My Forecast');
 }
+
+// ═══════════════════════════════════════════════════════
+// SMOOTH SCROLL + REVEAL
+// ═══════════════════════════════════════════════════════
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    var t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold: 0.07});
+document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
 </script>
 </body>
 </html>
