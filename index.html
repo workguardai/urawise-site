@@ -3,158 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Urawise — AI-Powered Digital Presence</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+<title>Urawise — Google Ads & Digital Growth</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 :root{
-  --p:#7c3aed;--i:#4f46e5;--dark:#08080f;--surf:#0f0f1a;--surf2:#161625;
-  --green:#10b981;--text:#f8f7ff;--dim:#9794b8;--muted:#4a4768;
-  --brd:rgba(124,58,237,0.18);--g:linear-gradient(135deg,#7c3aed,#4f46e5);
+  --p:#5b47e0;--p2:#4338ca;--acc:#7c3aed;
+  --dark:#0d0d14;--surf:#f8f8fc;--surf2:#f0f0f8;
+  --white:#ffffff;--ink:#12111e;--dim:#5c5b72;--muted:#9896b0;
+  --brd:#e4e3f0;--brd2:rgba(91,71,224,0.14);
+  --g:linear-gradient(135deg,#5b47e0,#4338ca);
+  --gs:linear-gradient(135deg,#7c3aed,#5b47e0,#4338ca);
 }
-body{font-family:'Poppins',sans-serif;background:var(--dark);color:var(--text);font-weight:300;overflow-x:hidden;line-height:1.6}
+body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--ink);font-weight:400;overflow-x:hidden;line-height:1.6}
 
 /* LANG TOGGLE */
-.lang-toggle{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;background:rgba(15,15,26,0.92);backdrop-filter:blur(16px);border:1px solid var(--brd);border-radius:40px;padding:4px;box-shadow:0 4px 24px rgba(0,0,0,0.3)}
-.lang-btn{padding:5px 16px;border-radius:30px;border:none;font-family:'Poppins',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.25s;background:transparent;color:var(--muted);letter-spacing:0.5px}
-.lang-btn.active{background:var(--g);color:#fff;box-shadow:0 2px 12px rgba(124,58,237,0.4)}
+.lang-toggle{position:fixed;bottom:28px;right:24px;z-index:999;display:flex;background:rgba(255,255,255,0.97);backdrop-filter:blur(16px);border:1px solid var(--brd);border-radius:40px;padding:4px;box-shadow:0 4px 24px rgba(0,0,0,0.1)}
+.lang-btn{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:30px;border:none;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.22s;background:transparent;color:var(--muted);letter-spacing:0.3px}
+.lang-btn.active{background:var(--g);color:#fff;box-shadow:0 2px 10px rgba(91,71,224,0.35)}
+.lang-flag{font-size:14px;line-height:1}
 
 /* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 56px;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(8,8,15,0.88);backdrop-filter:blur(20px);border-bottom:1px solid rgba(124,58,237,0.08)}
-.nav-logo{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-0.5px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 64px;height:70px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.95);backdrop-filter:blur(24px);border-bottom:1px solid var(--brd)}
+.nav-logo{font-family:'Inter',sans-serif;font-size:21px;font-weight:900;color:var(--ink);letter-spacing:-0.8px}
 .nav-logo span{background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav-links{display:flex;align-items:center;gap:32px;list-style:none}
-.nav-links a{color:var(--dim);text-decoration:none;font-size:13.5px;font-weight:400;transition:color 0.2s}
-.nav-links a:hover{color:var(--text)}
-.nav-cta{background:var(--g)!important;color:#fff!important;padding:8px 20px!important;border-radius:8px!important;font-weight:600!important;font-size:13px!important;box-shadow:0 4px 20px rgba(124,58,237,0.35)!important}
+.nav-links{display:flex;align-items:center;gap:34px;list-style:none}
+.nav-links a{color:var(--dim);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-cta{background:var(--g)!important;color:#fff!important;padding:9px 20px!important;border-radius:8px!important;font-weight:600!important;font-size:13px!important;box-shadow:0 3px 14px rgba(91,71,224,0.28)!important}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;align-items:center;padding:120px 56px 100px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 60% at 75% 35%,rgba(124,58,237,0.14) 0%,transparent 65%),radial-gradient(ellipse 45% 50% at 15% 75%,rgba(79,70,229,0.1) 0%,transparent 60%)}
-.hero-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(124,58,237,0.1) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(ellipse 90% 80% at 60% 40%,black 0%,transparent 100%)}
-.hero-content{position:relative;max-width:680px;z-index:2}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.22);border-radius:40px;padding:6px 16px;font-size:11px;font-weight:600;color:#a78bfa;letter-spacing:1px;text-transform:uppercase;margin-bottom:28px;animation:fadeUp 0.7s ease both}
-.badge-dot{width:7px;height:7px;background:#a78bfa;border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(167,139,250,0.4)}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(167,139,250,0)}}
-.hero h1{font-weight:800;font-size:clamp(42px,5.5vw,74px);line-height:1.06;letter-spacing:-2.5px;margin-bottom:24px;animation:fadeUp 0.7s ease 0.1s both}
-.hero h1 .grad{background:linear-gradient(135deg,#a78bfa,#818cf8,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-desc{font-size:17px;color:var(--dim);line-height:1.75;max-width:520px;margin-bottom:8px;font-weight:300;animation:fadeUp 0.7s ease 0.2s both}
-.hero-desc2{font-size:15px;color:var(--muted);line-height:1.65;max-width:500px;font-weight:300;font-style:italic;margin-bottom:44px;animation:fadeUp 0.7s ease 0.3s both}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp 0.7s ease 0.4s both}
-.btn-grad{display:inline-flex;align-items:center;gap:8px;background:var(--g);color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;font-size:14px;font-weight:600;transition:all 0.25s;box-shadow:0 4px 24px rgba(124,58,237,0.35)}
-.btn-grad:hover{transform:translateY(-2px);box-shadow:0 8px 36px rgba(124,58,237,0.5)}
-.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--dim);text-decoration:none;padding:14px 26px;border-radius:10px;font-size:14px;font-weight:400;transition:all 0.25s;border:1px solid var(--brd)}
-.btn-outline:hover{color:var(--text);border-color:rgba(124,58,237,0.5)}
-.hero-float{position:absolute;right:56px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:2;animation:fadeUp 0.7s ease 0.5s both}
-.float-card{background:var(--surf);border:1px solid var(--brd);border-radius:14px;padding:18px 22px;min-width:190px;transition:all 0.3s;position:relative;overflow:hidden}
-.float-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--g);opacity:0.6}
-.float-card:hover{transform:translateX(-5px);border-color:rgba(124,58,237,0.4)}
-.float-num{font-weight:800;font-size:34px;letter-spacing:-1px;line-height:1;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px}
-.float-label{font-size:11.5px;color:var(--muted);font-weight:400}
-@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.hero{min-height:100vh;display:flex;align-items:center;padding:130px 64px 100px;position:relative;overflow:hidden;background:var(--white)}
+.hero-bg-shape{position:absolute;top:-80px;right:-120px;width:680px;height:680px;background:radial-gradient(ellipse,rgba(91,71,224,0.07) 0%,transparent 68%);pointer-events:none}
+.hero-bg-dots{position:absolute;inset:0;background-image:radial-gradient(rgba(91,71,224,0.06) 1px,transparent 1px);background-size:36px 36px;mask-image:radial-gradient(ellipse 65% 75% at 85% 35%,black 0%,transparent 100%)}
+.hero-content{position:relative;max-width:640px;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(91,71,224,0.07);border:1px solid rgba(91,71,224,0.18);border-radius:40px;padding:6px 16px;font-size:11.5px;font-weight:600;color:var(--p);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:28px;animation:fadeUp 0.6s ease both}
+.badge-dot{width:7px;height:7px;background:var(--p);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(91,71,224,0.35)}50%{opacity:0.7;box-shadow:0 0 0 6px rgba(91,71,224,0)}}
+.hero h1{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(40px,5vw,68px);line-height:1.05;letter-spacing:-2.5px;margin-bottom:22px;color:var(--ink);animation:fadeUp 0.6s ease 0.1s both}
+.hero h1 .grad{background:var(--gs);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:17px;color:var(--dim);line-height:1.75;max-width:520px;margin-bottom:7px;font-weight:400;animation:fadeUp 0.6s ease 0.2s both}
+.hero-desc2{font-size:14.5px;color:var(--muted);line-height:1.65;max-width:500px;font-weight:400;margin-bottom:44px;animation:fadeUp 0.6s ease 0.25s both}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;animation:fadeUp 0.6s ease 0.3s both}
+.btn-grad{display:inline-flex;align-items:center;gap:8px;background:var(--g);color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;font-size:14.5px;font-weight:600;transition:all 0.22s;box-shadow:0 4px 20px rgba(91,71,224,0.28)}
+.btn-grad:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(91,71,224,0.4)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--dim);text-decoration:none;padding:14px 26px;border-radius:10px;font-size:14.5px;font-weight:500;transition:all 0.22s;border:1.5px solid var(--brd)}
+.btn-outline:hover{color:var(--ink);border-color:rgba(91,71,224,0.35)}
+.hero-float{position:absolute;right:64px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:14px;z-index:2;animation:fadeUp 0.6s ease 0.4s both}
+.float-card{background:var(--white);border:1.5px solid var(--brd);border-radius:14px;padding:20px 24px;min-width:196px;transition:all 0.25s;box-shadow:0 4px 20px rgba(0,0,0,0.06);position:relative;overflow:hidden}
+.float-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--g)}
+.float-card:hover{transform:translateX(-5px);border-color:rgba(91,71,224,0.3);box-shadow:0 8px 32px rgba(91,71,224,0.1)}
+.float-num{font-family:'Inter',sans-serif;font-weight:900;font-size:32px;letter-spacing:-1px;line-height:1;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.float-label{font-size:11.5px;color:var(--muted);font-weight:500}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* TICKER */
-.ticker{background:var(--surf);border-top:1px solid var(--brd);border-bottom:1px solid var(--brd);padding:16px 0;overflow:hidden}
-.ticker-track{display:flex;animation:ticker 25s linear infinite;width:max-content}
-.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 44px;font-size:12px;font-weight:500;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
-.tdot{width:5px;height:5px;background:var(--p);border-radius:50%;opacity:0.6}
+.ticker{background:var(--surf);border-top:1.5px solid var(--brd);border-bottom:1.5px solid var(--brd);padding:15px 0;overflow:hidden}
+.ticker-track{display:flex;animation:ticker 28s linear infinite;width:max-content}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 40px;font-size:11.5px;font-weight:600;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
+.tdot{width:5px;height:5px;background:var(--p);border-radius:50%;opacity:0.5}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* LAYOUT */
-.container{max-width:1140px;margin:0 auto;padding:0 56px}
-.section{padding:100px 0}
-.surf{background:var(--surf);border-top:1px solid rgba(124,58,237,0.08);border-bottom:1px solid rgba(124,58,237,0.08)}
+.container{max-width:1140px;margin:0 auto;padding:0 64px}
+.section{padding:96px 0}
+.bg-surf{background:var(--surf);border-top:1.5px solid var(--brd);border-bottom:1.5px solid var(--brd)}
 
 /* SECTION LABELS */
-.stag{display:inline-flex;align-items:center;gap:8px;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:16px}
-.stag::before{content:'';width:22px;height:2px;background:var(--g);border-radius:2px}
-h2{font-weight:800;font-size:clamp(32px,4vw,52px);letter-spacing:-2px;line-height:1.08;margin-bottom:16px}
-.sdesc{font-size:16px;color:var(--dim);line-height:1.75;max-width:520px;font-weight:300;margin-bottom:8px}
-.sdesc2{font-size:14px;color:var(--muted);font-style:italic;max-width:500px;margin-bottom:56px;font-weight:300}
+.stag{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--p);margin-bottom:14px}
+.stag::before{content:'';width:20px;height:2px;background:var(--g);border-radius:2px}
+h2{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(30px,3.8vw,48px);letter-spacing:-2px;line-height:1.06;margin-bottom:14px;color:var(--ink)}
+.sdesc{font-size:16px;color:var(--dim);line-height:1.75;max-width:540px;font-weight:400;margin-bottom:6px}
+.sdesc2{font-size:14px;color:var(--muted);max-width:500px;margin-bottom:52px;font-weight:400;font-style:italic}
 
 /* SERVICES */
 .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:52px}
-.svc-card{background:var(--surf);border:1px solid rgba(124,58,237,0.1);border-radius:16px;padding:32px 28px;transition:all 0.3s;position:relative;overflow:hidden}
-.svc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--g);opacity:0;transition:opacity 0.3s}
-.svc-card:hover{border-color:rgba(124,58,237,0.35);transform:translateY(-6px);box-shadow:0 20px 60px rgba(124,58,237,0.12)}
-.svc-card:hover::before{opacity:1}
-.svc-icon{width:50px;height:50px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.18);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
-.svc-card h3{font-size:17px;font-weight:700;letter-spacing:-0.3px;margin-bottom:4px}
-.svc-sub{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:12px}
-.svc-card p{font-size:13.5px;color:var(--dim);line-height:1.7;font-weight:300}
-.svc-pill{display:inline-block;background:rgba(124,58,237,0.1);color:#a78bfa;font-size:10px;font-weight:600;padding:3px 10px;border-radius:20px;margin-top:14px;letter-spacing:0.5px}
+.svc-card{background:var(--white);border:1.5px solid var(--brd);border-radius:16px;padding:30px 26px;transition:all 0.25s;position:relative;overflow:hidden}
+.svc-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--g);opacity:0;transition:opacity 0.25s}
+.svc-card:hover{border-color:rgba(91,71,224,0.3);transform:translateY(-5px);box-shadow:0 16px 48px rgba(91,71,224,0.1)}
+.svc-card:hover::after{opacity:1}
+.svc-icon{width:48px;height:48px;background:rgba(91,71,224,0.07);border:1.5px solid rgba(91,71,224,0.14);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.svc-card h3{font-family:'Inter',sans-serif;font-size:16px;font-weight:800;letter-spacing:-0.3px;margin-bottom:3px;color:var(--ink)}
+.svc-sub{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:11px}
+.svc-card p{font-size:13.5px;color:var(--dim);line-height:1.7;font-weight:400}
+.svc-pill{display:inline-block;background:rgba(91,71,224,0.08);color:var(--p);font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-top:14px;letter-spacing:0.5px}
+
+/* GOOGLE ADS DEEP SECTION */
+.ads-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start}
+.ads-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.ads-tag{background:var(--white);border:1.5px solid var(--brd);border-radius:8px;padding:8px 14px;font-size:12.5px;font-weight:600;color:var(--dim);transition:all 0.2s;cursor:default}
+.ads-tag:hover{border-color:var(--p);color:var(--p);background:rgba(91,71,224,0.04)}
+.ads-tag.key{background:rgba(91,71,224,0.07);border-color:rgba(91,71,224,0.2);color:var(--p)}
+.ads-features{display:flex;flex-direction:column;gap:16px;margin-top:8px}
+.ads-feat{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;background:var(--white);border:1.5px solid var(--brd);border-radius:12px;transition:all 0.22s}
+.ads-feat:hover{border-color:rgba(91,71,224,0.3);box-shadow:0 4px 20px rgba(91,71,224,0.08)}
+.ads-feat-icon{width:40px;height:40px;background:rgba(91,71,224,0.07);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ads-feat h4{font-size:14px;font-weight:700;margin-bottom:3px;color:var(--ink)}
+.ads-feat p{font-size:12.5px;color:var(--dim);line-height:1.6}
+
+/* PACKAGES / TIERS */
+.pkg-intro{text-align:center;max-width:580px;margin:0 auto 56px}
+.pkg-intro .sdesc{margin:0 auto}
+.pkg-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pkg-card{background:var(--white);border:1.5px solid var(--brd);border-radius:18px;padding:32px 28px;display:flex;flex-direction:column;transition:all 0.25s;position:relative;overflow:hidden}
+.pkg-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--brd)}
+.pkg-card.featured{border-color:rgba(91,71,224,0.35);box-shadow:0 8px 40px rgba(91,71,224,0.12)}
+.pkg-card.featured::before{background:var(--g)}
+.pkg-badge{display:inline-block;background:var(--g);color:#fff;font-size:9.5px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;align-self:flex-start}
+.pkg-card h3{font-family:'Inter',sans-serif;font-size:20px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px;color:var(--ink)}
+.pkg-card .pkg-sub{font-size:13px;color:var(--muted);margin-bottom:22px;min-height:40px;line-height:1.55}
+.pkg-divider{height:1px;background:var(--brd);margin-bottom:20px}
+.pkg-includes{font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.pkg-list{list-style:none;display:flex;flex-direction:column;gap:9px;flex:1;margin-bottom:24px}
+.pkg-list li{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;color:var(--dim);line-height:1.5}
+.pkg-list li::before{content:'✓';font-size:11px;font-weight:800;color:var(--p);background:rgba(91,71,224,0.08);width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.pkg-list li.dim-item{color:var(--muted)}
+.pkg-list li.dim-item::before{color:var(--muted);background:rgba(0,0,0,0.04)}
+.pkg-cta{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--surf);border:1.5px solid var(--brd);color:var(--dim);text-decoration:none;padding:13px;border-radius:10px;font-size:13.5px;font-weight:600;transition:all 0.22s;margin-top:auto}
+.pkg-cta:hover{border-color:var(--p);color:var(--p);background:rgba(91,71,224,0.04)}
+.pkg-card.featured .pkg-cta{background:var(--g);border-color:transparent;color:#fff;box-shadow:0 4px 16px rgba(91,71,224,0.25)}
+.pkg-card.featured .pkg-cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,71,224,0.38)}
+.pkg-note{text-align:center;margin-top:28px;font-size:13px;color:var(--muted)}
+.pkg-note a{color:var(--p);text-decoration:none;font-weight:600}
 
 /* PROCESS */
-.tl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:52px;position:relative}
-.tl-grid::before{content:'';position:absolute;top:20px;left:12.5%;right:12.5%;height:2px;background:linear-gradient(90deg,var(--p),rgba(124,58,237,0.15));border-radius:2px}
-.tl-step{text-align:center;padding:0 8px}
-.tl-c{width:40px;height:40px;background:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;margin:0 auto 10px;position:relative;z-index:1;box-shadow:0 4px 16px rgba(124,58,237,0.3)}
-.tl-day{font-size:9px;font-weight:700;color:#a78bfa;letter-spacing:0.5px;margin-bottom:4px;text-transform:uppercase}
-.tl-t{font-size:13px;font-weight:700;margin-bottom:4px}
-.tl-d{font-size:11.5px;color:var(--muted);font-weight:300;line-height:1.45}
+.proc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:52px;position:relative}
+.proc-grid::before{content:'';position:absolute;top:22px;left:12.5%;right:12.5%;height:1.5px;background:linear-gradient(90deg,var(--p),rgba(91,71,224,0.1));z-index:0}
+.proc-step{text-align:center;padding:0 8px;position:relative;z-index:1}
+.proc-c{width:44px;height:44px;background:var(--g);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-size:15px;font-weight:900;color:#fff;margin:0 auto 12px;box-shadow:0 4px 16px rgba(91,71,224,0.28);border:3px solid var(--white)}
+.proc-tag{font-size:9.5px;font-weight:700;color:var(--p);letter-spacing:0.5px;margin-bottom:5px;text-transform:uppercase}
+.proc-t{font-size:13.5px;font-weight:700;margin-bottom:5px;color:var(--ink)}
+.proc-d{font-size:12px;color:var(--muted);font-weight:400;line-height:1.5}
 
 /* WHY */
 .why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:52px}
-.why-card{background:var(--surf);border:1px solid rgba(124,58,237,0.1);border-radius:14px;padding:26px 20px;transition:all 0.3s}
-.why-card:hover{border-color:rgba(124,58,237,0.3);background:var(--surf2);transform:translateY(-4px)}
-.why-num{font-size:48px;font-weight:800;letter-spacing:-2px;background:linear-gradient(135deg,rgba(124,58,237,0.18),rgba(79,70,229,0.08));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:12px}
-.why-card h4{font-size:14px;font-weight:700;margin-bottom:8px}
-.why-card p{font-size:12.5px;color:var(--dim);line-height:1.65;font-weight:300}
-
-/* AI FEATURES */
-.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
-.ai-list{display:flex;flex-direction:column;gap:24px;margin-top:36px}
-.ai-item{display:flex;gap:16px}
-.ai-icon{width:44px;height:44px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.ai-item h4{font-size:15px;font-weight:600;margin-bottom:4px}
-.ai-item p{font-size:13px;color:var(--dim);line-height:1.65;font-weight:300}
-.mockup{background:var(--surf2);border:1px solid var(--brd);border-radius:18px;padding:26px;position:relative}
-.mockup-glow{position:absolute;inset:-20px;background:radial-gradient(ellipse at center,rgba(124,58,237,0.12) 0%,transparent 70%);pointer-events:none}
-.mock-dots{display:flex;gap:7px;margin-bottom:22px}
-.mock-dot{width:11px;height:11px;border-radius:50%}
-.mock-dot:nth-child(1){background:#ff5f57}.mock-dot:nth-child(2){background:#febc2e}.mock-dot:nth-child(3){background:#28c840}
-.mock-url{background:var(--surf);border-radius:6px;padding:7px 12px;font-size:11px;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:6px}
-.mock-bar{height:8px;border-radius:4px;background:var(--surf);margin-bottom:9px}
-.mock-bar.p{background:rgba(124,58,237,0.28)}
-.mock-bar.w80{width:80%}.mock-bar.w60{width:60%}.mock-bar.w70{width:70%}.mock-bar.w45{width:45%}
-.mock-chat{background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.14);border-radius:11px;padding:14px 16px;margin-top:16px}
-.mock-chat-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;color:#a78bfa;text-transform:uppercase;margin-bottom:7px}
-.mock-chat-msg{font-size:12px;color:var(--dim);line-height:1.55;font-weight:300}
-.cursor{display:inline-block;width:8px;height:13px;background:#a78bfa;margin-left:2px;vertical-align:middle;animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.why-card{background:var(--white);border:1.5px solid var(--brd);border-radius:14px;padding:26px 20px;transition:all 0.25s}
+.why-card:hover{border-color:rgba(91,71,224,0.28);transform:translateY(-4px);box-shadow:0 12px 36px rgba(91,71,224,0.08)}
+.why-num{font-family:'Inter',sans-serif;font-size:46px;font-weight:900;letter-spacing:-2px;background:linear-gradient(135deg,rgba(91,71,224,0.14),rgba(67,56,202,0.06));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:12px}
+.why-card h4{font-size:14.5px;font-weight:700;margin-bottom:7px;color:var(--ink)}
+.why-card p{font-size:13px;color:var(--dim);line-height:1.65;font-weight:400}
 
 /* CONTACT */
 .contact-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:72px;align-items:center}
-.contact-box{background:var(--surf);border:1px solid var(--brd);border-radius:18px;padding:36px;display:flex;flex-direction:column;gap:20px}
+.contact-box{background:var(--white);border:1.5px solid var(--brd);border-radius:18px;padding:36px;display:flex;flex-direction:column;gap:20px;box-shadow:0 4px 32px rgba(0,0,0,0.06)}
 .c-row{display:flex;gap:16px;align-items:center}
-.c-icon{width:46px;height:46px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.c-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:2px}
-.c-val{font-size:14px;font-weight:600;color:var(--text)}
+.c-icon{width:46px;height:46px;background:rgba(91,71,224,0.07);border:1.5px solid rgba(91,71,224,0.14);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.c-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--p);margin-bottom:2px}
+.c-val{font-size:14.5px;font-weight:700;color:var(--ink)}
 .c-hint{font-size:11.5px;color:var(--muted);font-style:italic;margin-top:1px}
-.c-div{height:1px;background:var(--brd)}
-.wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;text-decoration:none;padding:16px;border-radius:12px;font-size:15px;font-weight:600;transition:all 0.25s;box-shadow:0 4px 20px rgba(37,211,102,0.22)}
-.wa-btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(37,211,102,0.38)}
+.c-div{height:1.5px;background:var(--brd)}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;text-decoration:none;padding:16px;border-radius:12px;font-size:15px;font-weight:700;transition:all 0.22s;box-shadow:0 4px 18px rgba(37,211,102,0.2)}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(37,211,102,0.35)}
 
 /* FOOTER */
-footer{padding:32px 56px;border-top:1px solid rgba(124,58,237,0.08);display:flex;align-items:center;justify-content:space-between}
-.f-logo{font-weight:800;font-size:18px;letter-spacing:-0.3px}
+footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-items:center;justify-content:space-between;background:var(--white)}
+.f-logo{font-family:'Inter',sans-serif;font-weight:900;font-size:18px;letter-spacing:-0.5px;color:var(--ink)}
 .f-logo span{background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.f-copy{font-size:12px;color:var(--muted);font-weight:300}
+.f-copy{font-size:12.5px;color:var(--muted);font-weight:400}
 .f-langs{display:flex;gap:6px}
-.f-chip{background:var(--surf);border:1px solid rgba(124,58,237,0.1);color:var(--dim);font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+.f-chip{background:var(--surf);border:1.5px solid var(--brd);color:var(--dim);font-size:10.5px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:0.3px}
 
 /* REVEAL */
-.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.55s ease,transform 0.55s ease}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity 0.5s ease,transform 0.5s ease}
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 @media(max-width:900px){
   nav{padding:0 24px}.nav-links{display:none}
   .hero{padding:100px 24px 80px}.hero-float{display:none}
   .container{padding:0 24px}.section{padding:72px 0}
-  .svc-grid,.why-grid{grid-template-columns:1fr}
-  .ai-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
-  .tl-grid{grid-template-columns:1fr 1fr;gap:24px}.tl-grid::before{display:none}
+  .svc-grid,.why-grid,.pkg-grid{grid-template-columns:1fr}
+  .ads-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .proc-grid{grid-template-columns:1fr 1fr;gap:24px}.proc-grid::before{display:none}
   footer{padding:24px;flex-direction:column;gap:14px;text-align:center}
 }
 </style>
@@ -162,169 +182,300 @@ footer{padding:32px 56px;border-top:1px solid rgba(124,58,237,0.08);display:flex
 <body>
 
 <div class="lang-toggle">
-  <button class="lang-btn active" onclick="setLang('en')">EN</button>
-  <button class="lang-btn" onclick="setLang('es')">ES</button>
+  <button class="lang-btn active" onclick="setLang('en')" data-lang="en"><span class="lang-flag">🇬🇧</span> EN</button>
+  <button class="lang-btn" onclick="setLang('es')" data-lang="es"><span class="lang-flag">🇪🇸</span> ES</button>
+  <button class="lang-btn" onclick="setLang('sq')" data-lang="sq"><span class="lang-flag">🇦🇱</span> SQ</button>
+  <button class="lang-btn" onclick="setLang('da')" data-lang="da"><span class="lang-flag">🇩🇰</span> DA</button>
 </div>
 
 <nav>
   <div class="nav-logo">Ura<span>wise</span></div>
   <ul class="nav-links">
-    <li><a href="#services" data-en="Services" data-es="Servicios">Services</a></li>
-    <li><a href="#ai" data-en="AI Features" data-es="IA">AI Features</a></li>
-    <li><a href="#why" data-en="Why Us" data-es="Por qué">Why Us</a></li>
-    <li><a href="#contact" class="nav-cta" data-en="Book Free Audit" data-es="Auditoría Gratis">Book Free Audit</a></li>
+    <li><a href="#services" data-en="Services" data-es="Servicios" data-sq="Shërbime" data-da="Tjenester">Services</a></li>
+    <li><a href="#ads" data-en="Google Ads" data-es="Google Ads" data-sq="Google Ads" data-da="Google Ads">Google Ads</a></li>
+    <li><a href="#packages" data-en="Packages" data-es="Paquetes" data-sq="Paketat" data-da="Pakker">Packages</a></li>
+    <li><a href="#tools" data-en="Free Tools" data-es="Herramientas" data-sq="Mjetet" data-da="Gratis Værktøjer">Free Tools</a></li>
+    <li><a href="#contact" class="nav-cta" data-en="Book Free Audit" data-es="Auditoría Gratis" data-sq="Auditim Falas" data-da="Gratis Analyse">Book Free Audit</a></li>
   </ul>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-dots"></div>
+  <div class="hero-bg-shape"></div>
+  <div class="hero-bg-dots"></div>
   <div class="hero-content">
-    <div class="hero-badge"><div class="badge-dot"></div><span data-en="AI-Powered Digital Presence for Local Business" data-es="Presencia Digital con IA para Negocios Locales">AI-Powered Digital Presence for Local Business</span></div>
-    <h1><span data-en="Why not be" data-es="¿Por qué no ser">Why not be</span><br><span class="grad" data-en="first on Google?" data-es="el primero en Google?">first on Google?</span></h1>
-    <p class="hero-desc" data-en="We build fast AI-enhanced websites and manage Google Ads campaigns that bring real customers to your business — not just clicks." data-es="Creamos webs rápidas con IA y gestionamos campañas de Google Ads que traen clientes reales a tu negocio — no solo visitas.">We build fast AI-enhanced websites and manage Google Ads campaigns that bring real customers to your business — not just clicks.</p>
-    <p class="hero-desc2" data-en="Professional websites · Local SEO · WhatsApp integration · AI Chat 24/7 · Based in Madrid." data-es="Webs profesionales · SEO local · WhatsApp · Chat IA 24/7 · Con base en Madrid.">Professional websites · Local SEO · WhatsApp integration · AI Chat 24/7 · Based in Madrid.</p>
+    <div class="hero-badge"><div class="badge-dot"></div><span data-en="Google Ads · Digital Growth · Barcelona" data-es="Google Ads · Crecimiento Digital · Barcelona" data-sq="Google Ads · Rritje Dixhitale · Barcelona" data-da="Google Ads · Digital Vækst · Barcelona">Google Ads · Digital Growth · Barcelona</span></div>
+    <h1><span data-en="Turn ad spend into" data-es="Convierte tu inversión en" data-sq="Ktheje buxhetin e reklamave në" data-da="Gør annoncekroner til">Turn ad spend into</span><br><span class="grad" data-en="real customers." data-es="clientes reales." data-sq="klientë realë." data-da="rigtige kunder.">real customers.</span></h1>
+    <p class="hero-desc" data-en="We manage Google Ads campaigns and build digital presence that drives qualified leads — not just clicks. Based in Barcelona, serving clients across Europe and worldwide." data-es="Gestionamos campañas de Google Ads y construimos presencia digital que genera contactos cualificados. Basados en Barcelona, servimos a clientes en toda Europa y el mundo." data-sq="Ne menaxhojmë fushatat Google Ads dhe ndërtojmë prezencë dixhitale që gjeneron kontakte të kualifikuara. Bazuar në Barcelona, shërbejmë klientë në të gjithë Europën dhe botën." data-da="Vi administrerer Google Ads-kampagner og bygger digital tilstedeværelse der genererer kvalificerede leads. Baseret i Barcelona, betjener kunder over hele Europa og verden.">We manage Google Ads campaigns and build digital presence that drives qualified leads — not just clicks. Based in Barcelona, serving clients across Europe and worldwide.</p>
+    <p class="hero-desc2" data-en="Danish · Albanian · English · Spanish · Italian — no language barriers, anywhere." data-es="Danés · Albanés · Inglés · Español · Italiano — sin barreras idiomáticas, en cualquier lugar." data-sq="Danisht · Shqip · Anglisht · Spanjisht · Italisht — pa barriera gjuhësore, kudo." data-da="Dansk · Albansk · Engelsk · Spansk · Italiensk — ingen sprogbarrierer, overalt.">Danish · Albanian · English · Spanish · Italian — no language barriers, anywhere.</p>
     <div class="hero-btns">
-      <a href="#contact" class="btn-grad" data-en="📋 Book a Free Audit" data-es="📋 Auditoría Gratuita">📋 Book a Free Audit</a>
-      <a href="#services" class="btn-outline" data-en="Explore Services →" data-es="Ver Servicios →">Explore Services →</a>
+      <a href="#contact" class="btn-grad" data-en="📋 Book a Free Audit" data-es="📋 Auditoría Gratuita" data-sq="📋 Auditim Falas" data-da="📋 Gratis Analyse">📋 Book a Free Audit</a>
+      <a href="#packages" class="btn-outline" data-en="See Packages →" data-es="Ver Paquetes →" data-sq="Shiko Paketat →" data-da="Se Pakker →">See Packages →</a>
     </div>
   </div>
   <div class="hero-float">
-    <div class="float-card"><div class="float-num">48h</div><div class="float-label" data-en="Website live in 48 hours" data-es="Web online en 48 horas">Website live in 48 hours</div></div>
-    <div class="float-card"><div class="float-num">AI</div><div class="float-label" data-en="Powered chat and content" data-es="Chat e IA integrada">Powered chat and content</div></div>
-    <div class="float-card"><div class="float-num">€0</div><div class="float-label" data-en="Free no-obligation audit" data-es="Auditoría sin compromiso">Free no-obligation audit</div></div>
+    <div class="float-card"><div class="float-num">5+</div><div class="float-label" data-en="Languages spoken" data-es="Idiomas hablados" data-sq="Gjuhë të folura" data-da="Talte sprog">Languages spoken</div></div>
+    <div class="float-card"><div class="float-num">🌍</div><div class="float-label" data-en="Global client base" data-es="Clientes globales" data-sq="Klientë globalë" data-da="Global kundebase">Global client base</div></div>
+    <div class="float-card"><div class="float-num">€0</div><div class="float-label" data-en="Free no-obligation audit" data-es="Auditoría sin compromiso" data-sq="Auditim falas pa angazhim" data-da="Gratis analyse uden forpligtelse">Free no-obligation audit</div></div>
   </div>
 </div>
 
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-track">
+    <div class="ticker-item"><div class="tdot"></div>Google Ads</div>
+    <div class="ticker-item"><div class="tdot"></div>Conversion Tracking</div>
+    <div class="ticker-item"><div class="tdot"></div>PMAX Campaigns</div>
+    <div class="ticker-item"><div class="tdot"></div>Smart Bidding</div>
+    <div class="ticker-item"><div class="tdot"></div>AI Max</div>
+    <div class="ticker-item"><div class="tdot"></div>Optiscore</div>
+    <div class="ticker-item"><div class="tdot"></div>Sitelinks</div>
+    <div class="ticker-item"><div class="tdot"></div>Headlines</div>
+    <div class="ticker-item"><div class="tdot"></div>Local SEO</div>
     <div class="ticker-item"><div class="tdot"></div>Website Design</div>
     <div class="ticker-item"><div class="tdot"></div>AI Chat 24/7</div>
-    <div class="ticker-item"><div class="tdot"></div>Local SEO</div>
+    <div class="ticker-item"><div class="tdot"></div>Barcelona Based</div>
     <div class="ticker-item"><div class="tdot"></div>Google Ads</div>
-    <div class="ticker-item"><div class="tdot"></div>WhatsApp Integration</div>
-    <div class="ticker-item"><div class="tdot"></div>Google Business Profile</div>
-    <div class="ticker-item"><div class="tdot"></div>AI Content</div>
-    <div class="ticker-item"><div class="tdot"></div>Mobile First</div>
-    <div class="ticker-item"><div class="tdot"></div>Voice Search</div>
-    <div class="ticker-item"><div class="tdot"></div>48h Delivery</div>
+    <div class="ticker-item"><div class="tdot"></div>Conversion Tracking</div>
+    <div class="ticker-item"><div class="tdot"></div>PMAX Campaigns</div>
+    <div class="ticker-item"><div class="tdot"></div>Smart Bidding</div>
+    <div class="ticker-item"><div class="tdot"></div>AI Max</div>
+    <div class="ticker-item"><div class="tdot"></div>Optiscore</div>
+    <div class="ticker-item"><div class="tdot"></div>Sitelinks</div>
+    <div class="ticker-item"><div class="tdot"></div>Headlines</div>
+    <div class="ticker-item"><div class="tdot"></div>Local SEO</div>
     <div class="ticker-item"><div class="tdot"></div>Website Design</div>
     <div class="ticker-item"><div class="tdot"></div>AI Chat 24/7</div>
-    <div class="ticker-item"><div class="tdot"></div>Local SEO</div>
-    <div class="ticker-item"><div class="tdot"></div>Google Ads</div>
-    <div class="ticker-item"><div class="tdot"></div>WhatsApp Integration</div>
-    <div class="ticker-item"><div class="tdot"></div>Google Business Profile</div>
-    <div class="ticker-item"><div class="tdot"></div>AI Content</div>
-    <div class="ticker-item"><div class="tdot"></div>Mobile First</div>
-    <div class="ticker-item"><div class="tdot"></div>Voice Search</div>
-    <div class="ticker-item"><div class="tdot"></div>48h Delivery</div>
+    <div class="ticker-item"><div class="tdot"></div>Barcelona Based</div>
   </div>
 </div>
 
 <!-- SERVICES -->
 <div class="container">
 <section class="section" id="services">
-  <div class="stag reveal" data-en="What We Do" data-es="Lo Que Hacemos">What We Do</div>
-  <h2 class="reveal" data-en="Everything your business needs online" data-es="Todo lo que tu negocio necesita online">Everything your business needs online</h2>
-  <p class="sdesc reveal" data-en="We handle your complete digital presence — from a beautiful fast website to Google visibility and AI-powered customer engagement." data-es="Gestionamos toda tu presencia digital — desde una web atractiva hasta visibilidad en Google y atención al cliente con IA.">We handle your complete digital presence — from a beautiful fast website to Google visibility and AI-powered customer engagement.</p>
-  <p class="sdesc2 reveal" data-en="Every service is tailored to your business. Contact us for a free audit and we will tell you exactly what you need." data-es="Cada servicio está adaptado a tu negocio. Contáctanos para una auditoría gratuita y te diremos exactamente qué necesitas.">Every service is tailored to your business. Contact us for a free audit and we will tell you exactly what you need.</p>
+  <div class="stag reveal" data-en="What We Do" data-es="Lo Que Hacemos" data-sq="Çfarë Bëjmë" data-da="Hvad Vi Gør">What We Do</div>
+  <h2 class="reveal" data-en="Everything your business needs online" data-es="Todo lo que tu negocio necesita online" data-sq="Gjithçka që biznesi yt ka nevojë online" data-da="Alt din virksomhed har brug for online">Everything your business needs online</h2>
+  <p class="sdesc reveal" data-en="From high-performing Google Ads to professional websites and local SEO — we handle your complete digital presence from Barcelona and serve clients worldwide." data-es="Desde Google Ads de alto rendimiento hasta webs profesionales y SEO local — gestionamos tu presencia digital completa desde Barcelona para clientes en todo el mundo." data-sq="Nga Google Ads me performancë të lartë deri te faqe interneti profesionale dhe SEO lokal — menaxhojmë prezencën tënde të plotë dixhitale nga Barcelona për klientë globalisht." data-da="Fra højtydende Google Ads til professionelle hjemmesider og lokal SEO — vi håndterer din komplette digitale tilstedeværelse fra Barcelona og betjener kunder verden over.">From high-performing Google Ads to professional websites and local SEO — we handle your complete digital presence from Barcelona and serve clients worldwide.</p>
+  <p class="sdesc2 reveal" data-en="We speak Danish, Albanian, English, Spanish and Italian — so your business is never lost in translation." data-es="Hablamos danés, albanés, inglés, español e italiano — tu negocio nunca se pierde en la traducción." data-sq="Flasim danisht, shqip, anglisht, spanjisht dhe italisht — biznesi yt nuk humbet kurrë në përkthim." data-da="Vi taler dansk, albansk, engelsk, spansk og italiensk — din virksomhed er aldrig fortabt i oversættelsen.">We speak Danish, Albanian, English, Spanish and Italian — so your business is never lost in translation.</p>
   <div class="svc-grid">
     <div class="svc-card reveal">
+      <div class="svc-icon">📈</div>
+      <h3 data-en="Google Ads Management" data-es="Gestión de Google Ads" data-sq="Menaxhim Google Ads" data-da="Google Ads Forvaltning">Google Ads Management</h3>
+      <div class="svc-sub" data-en="Search · PMAX · Smart Bidding" data-es="Búsqueda · PMAX · Smart Bidding" data-sq="Kërkim · PMAX · Smart Bidding" data-da="Søgning · PMAX · Smart Budgivning">Search · PMAX · Smart Bidding</div>
+      <p data-en="Full campaign setup, optimisation and reporting. Conversion tracking, AI Max, Performance Max and smart bidding strategies that lower cost-per-lead and maximise ROI." data-es="Configuración completa, optimización e informes. Seguimiento de conversiones, AI Max, Performance Max y estrategias de puja inteligente que reducen el coste por lead." data-sq="Konfigurimi i plotë, optimizimi dhe raportimi. Gjurmimi i konvertimeve, AI Max, Performance Max dhe strategji Smart Bidding që ulin koston për lead." data-da="Fuldstændig opsætning, optimering og rapportering. Konverteringssporing, AI Max, Performance Max og smarte budstrategier der sænker cost-per-lead.">Full campaign setup, optimisation and reporting. Conversion tracking, AI Max, Performance Max and smart bidding strategies that lower cost-per-lead and maximise ROI.</p>
+      <span class="svc-pill">Google Ads</span>
+    </div>
+    <div class="svc-card reveal">
       <div class="svc-icon">🌐</div>
-      <h3 data-en="Website Design" data-es="Diseño Web">Website Design</h3>
-      <div class="svc-sub" data-en="Diseño Web Profesional" data-es="Professional Website Design">Diseño Web Profesional</div>
-      <p data-en="Fast mobile-first websites that load in under 2 seconds. Clean design that converts visitors into customers — delivered in 48 hours." data-es="Webs rápidas adaptadas a móvil que cargan en menos de 2 segundos. Diseño limpio que convierte visitas en clientes — entregadas en 48 horas.">Fast mobile-first websites that load in under 2 seconds. Clean design that converts visitors into customers — delivered in 48 hours.</p>
+      <h3 data-en="Website Design" data-es="Diseño Web" data-sq="Dizajn Faqeje" data-da="Hjemmesidedesign">Website Design</h3>
+      <div class="svc-sub" data-en="Fast · Mobile-First · Conversion-Focused" data-es="Rápida · Mobile-First · Orientada a conversión" data-sq="E shpejtë · Mobile-First · E fokusuar në konversion" data-da="Hurtig · Mobile-First · Konverteringsfokuseret">Fast · Mobile-First · Conversion-Focused</div>
+      <p data-en="Clean, fast websites that load in under 2 seconds and turn visitors into customers. Delivered in 48 hours with WhatsApp integration and AI chat built in." data-es="Webs limpias y rápidas que cargan en menos de 2 segundos y convierten visitas en clientes. Entregadas en 48 horas con integración WhatsApp y chat IA." data-sq="Faqe të pastra dhe të shpejta që ngarkohen nën 2 sekonda dhe kthejnë vizitorët në klientë. Dorëzuar brenda 48 orëve me WhatsApp dhe chat IA." data-da="Rene hurtige hjemmesider der indlæser på under 2 sekunder og konverterer besøgende til kunder. Leveret inden 48 timer med WhatsApp og AI chat.">Clean, fast websites that load in under 2 seconds and turn visitors into customers. Delivered in 48 hours with WhatsApp integration and AI chat built in.</p>
       <span class="svc-pill">48h Delivery</span>
     </div>
     <div class="svc-card reveal">
-      <div class="svc-icon">🤖</div>
-      <h3 data-en="AI Chat Integration" data-es="Chat con IA">AI Chat Integration</h3>
-      <div class="svc-sub" data-en="Chat con Inteligencia Artificial" data-es="AI Chat">Chat con Inteligencia Artificial</div>
-      <p data-en="Your website answers customer questions 24/7 automatically. Never miss a lead — even while you sleep." data-es="Tu web responde preguntas de clientes las 24 horas automáticamente. No pierdas ningún cliente potencial — ni siquiera mientras duermes.">Your website answers customer questions 24/7 automatically. Never miss a lead — even while you sleep.</p>
-      <span class="svc-pill">24/7 Automated</span>
-    </div>
-    <div class="svc-card reveal">
       <div class="svc-icon">📍</div>
-      <h3 data-en="Local SEO" data-es="SEO Local">Local SEO</h3>
-      <div class="svc-sub" data-en="SEO Local en Google" data-es="Local SEO on Google">SEO Local en Google</div>
-      <p data-en="Appear when customers search nearby. Google Business Profile setup, local keywords, and review strategy included." data-es="Aparece cuando los clientes buscan cerca. Google Business Profile, palabras clave locales y estrategia de reseñas incluidas.">Appear when customers search nearby. Google Business Profile setup, local keywords, and review strategy included.</p>
+      <h3 data-en="Local SEO" data-es="SEO Local" data-sq="SEO Lokal" data-da="Lokal SEO">Local SEO</h3>
+      <div class="svc-sub" data-en="Google Business · Rankings · Reviews" data-es="Google Business · Posicionamiento · Reseñas" data-sq="Google Business · Renditje · Recensione" data-da="Google Business · Placeringer · Anmeldelser">Google Business · Rankings · Reviews</div>
+      <p data-en="Appear when customers search nearby. Google Business Profile setup, local keyword strategy and review management to dominate your local market." data-es="Aparece cuando los clientes buscan cerca. Configuración de Google Business Profile, estrategia de palabras clave locales y gestión de reseñas." data-sq="Shfaqet kur klientët kërkojnë afër. Konfigurimi i Google Business Profile, strategji fjalëkyçesh lokale dhe menaxhim recensionesh." data-da="Vis dig når kunder søger i nærheden. Google Business Profile opsætning, lokal søgeordsstrategi og anmeldelsesstyring.">Appear when customers search nearby. Google Business Profile setup, local keyword strategy and review management to dominate your local market.</p>
       <span class="svc-pill">Google Ranking</span>
     </div>
     <div class="svc-card reveal">
-      <div class="svc-icon">📈</div>
-      <h3 data-en="Google Ads" data-es="Google Ads">Google Ads</h3>
-      <div class="svc-sub" data-en="Publicidad en Google" data-es="Google Advertising">Publicidad en Google</div>
-      <p data-en="Targeted campaigns that bring customers who are actively searching for your service directly to your business." data-es="Campañas orientadas que traen clientes que ya buscan tu servicio directamente a tu negocio.">Targeted campaigns that bring customers who are actively searching for your service directly to your business.</p>
-      <span class="svc-pill">Paid Traffic</span>
-    </div>
-    <div class="svc-card reveal">
-      <div class="svc-icon">💬</div>
-      <h3 data-en="WhatsApp Integration" data-es="Integración WhatsApp">WhatsApp Integration</h3>
-      <div class="svc-sub" data-en="Botón de WhatsApp" data-es="WhatsApp Button">Botón de WhatsApp</div>
-      <p data-en="Every Spanish customer prefers WhatsApp. We add an instant contact button so customers reach you in one tap — no forms needed." data-es="Todos los clientes españoles prefieren WhatsApp. Añadimos un botón de contacto instantáneo para que te alcancen en un toque.">Every Spanish customer prefers WhatsApp. We add an instant contact button so customers reach you in one tap — no forms needed.</p>
-      <span class="svc-pill">Spanish Market</span>
+      <div class="svc-icon">🤖</div>
+      <h3 data-en="AI Chat Integration" data-es="Chat con IA" data-sq="Integrimi i Chat IA" data-da="AI Chat Integration">AI Chat Integration</h3>
+      <div class="svc-sub" data-en="Leads · Bookings · 24/7 Answers" data-es="Contactos · Reservas · Respuestas 24/7" data-sq="Kontakte · Rezervime · Përgjigje 24/7" data-da="Leads · Bookinger · 24/7 Svar">Leads · Bookings · 24/7 Answers</div>
+      <p data-en="Your website answers customer questions automatically around the clock. Capture leads and book appointments while you focus on your business." data-es="Tu web responde preguntas automáticamente a cualquier hora. Capta contactos y agenda citas mientras te concentras en tu negocio." data-sq="Faqja jote u përgjigjet pyetjeve automatikisht 24 orë. Kap kontakte dhe rezervo takime ndërsa ti fokusohesh te biznesi yt." data-da="Din hjemmeside besvarer automatisk spørgsmål døgnet rundt. Fang leads og book aftaler mens du fokuserer på din virksomhed.">Your website answers customer questions automatically around the clock. Capture leads and book appointments while you focus on your business.</p>
+      <span class="svc-pill">24/7 Automated</span>
     </div>
     <div class="svc-card reveal">
       <div class="svc-icon">✍️</div>
-      <h3 data-en="AI Content" data-es="Contenido con IA">AI Content</h3>
-      <div class="svc-sub" data-en="Contenido Generado con IA" data-es="AI Generated Content">Contenido Generado con IA</div>
-      <p data-en="Keep your website and social media fresh with AI-generated content that sounds human and ranks well on Google." data-es="Mantén tu web y redes actualizadas con contenido generado por IA que suena humano y posiciona bien en Google.">Keep your website and social media fresh with AI-generated content that sounds human and ranks well on Google.</p>
+      <h3 data-en="AI Content" data-es="Contenido con IA" data-sq="Përmbajtje me IA" data-da="AI Indhold">AI Content</h3>
+      <div class="svc-sub" data-en="Copy · Blog · Social Media" data-es="Textos · Blog · Redes Sociales" data-sq="Tekste · Blog · Rrjete Sociale" data-da="Kopi · Blog · Sociale Medier">Copy · Blog · Social Media</div>
+      <p data-en="Fresh website copy, blog articles and social content generated regularly — written to rank on Google and resonate with real customers." data-es="Textos web, artículos de blog y contenido social generados regularmente — escritos para posicionar en Google y conectar con clientes reales." data-sq="Tekste faqe, artikuj blogu dhe përmbajtje sociale të gjeneruara rregullisht — të shkruara për të renditur në Google." data-da="Frisk hjemmesidekopi, blogartikler og socialt indhold genereret regelmæssigt — skrevet til at rangere på Google.">Fresh website copy, blog articles and social content generated regularly — written to rank on Google and resonate with real customers.</p>
       <span class="svc-pill">Always Fresh</span>
+    </div>
+    <div class="svc-card reveal">
+      <div class="svc-icon">💬</div>
+      <h3 data-en="WhatsApp Integration" data-es="Integración WhatsApp" data-sq="Integrimi WhatsApp" data-da="WhatsApp Integration">WhatsApp Integration</h3>
+      <div class="svc-sub" data-en="Instant Contact · One Tap · No Forms" data-es="Contacto Instantáneo · Un toque · Sin formularios" data-sq="Kontakt i Menjëhershëm · Një trokitje · Pa formularë" data-da="Øjeblikkelig kontakt · Ét tryk · Ingen formularer">Instant Contact · One Tap · No Forms</div>
+      <p data-en="Customers reach you instantly on WhatsApp with a single tap — no forms, no friction. Essential for Spanish-speaking and European markets." data-es="Los clientes te contactan al instante en WhatsApp con un solo toque — sin formularios, sin fricción. Esencial para el mercado español y europeo." data-sq="Klientët të kontaktojnë menjëherë në WhatsApp me një trokitje — pa formularë, pa pengesë. Thelbësor për tregjet spanjolle dhe europiane." data-da="Kunder kontakter dig øjeblikkeligt på WhatsApp med ét tryk — ingen formularer, ingen friktion. Afgørende for spanske og europæiske markeder.">Customers reach you instantly on WhatsApp with a single tap — no forms, no friction. Essential for Spanish-speaking and European markets.</p>
+      <span class="svc-pill">European Markets</span>
     </div>
   </div>
 </section>
 </div>
 
-<!-- AI SECTION -->
-<div class="surf">
+<!-- GOOGLE ADS DEEP DIVE -->
+<div class="bg-surf">
 <div class="container">
-<section class="section" id="ai">
-  <div class="ai-grid">
+<section class="section" id="ads">
+  <div class="stag reveal" data-en="Google Ads Expertise" data-es="Expertise en Google Ads" data-sq="Ekspertizë Google Ads" data-da="Google Ads Ekspertise">Google Ads Expertise</div>
+  <h2 class="reveal" data-en="We speak Google's language fluently" data-es="Hablamos Google con fluidez" data-sq="Flasim gjuhën e Google-it rrjedhshëm" data-da="Vi taler Googles sprog flydende">We speak Google's language fluently</h2>
+  <p class="sdesc reveal" data-en="Every lever inside Google Ads — we know it, we test it, and we use it to grow your results." data-es="Cada palanca dentro de Google Ads — la conocemos, la probamos y la usamos para hacer crecer tus resultados." data-sq="Çdo levë brenda Google Ads — e njohim, e testojmë dhe e përdorim për të rritur rezultatet tuaja." data-da="Enhver løftestang inde i Google Ads — vi kender den, tester den og bruger den til at vækste dine resultater.">Every lever inside Google Ads — we know it, we test it, and we use it to grow your results.</p>
+  <div style="margin-bottom:52px"></div>
+  <div class="ads-grid">
     <div>
-      <div class="stag reveal" data-en="AI Features" data-es="Funciones IA">AI Features</div>
-      <h2 class="reveal" data-en="Your website works while you sleep" data-es="Tu web trabaja mientras duermes">Your website works while you sleep</h2>
-      <p class="sdesc reveal" data-en="We integrate the latest AI tools into your website — making it smarter and more effective than your competitors." data-es="Integramos las últimas herramientas de IA en tu web — haciéndola más inteligente y efectiva que la competencia.">We integrate the latest AI tools into your website — making it smarter and more effective than your competitors.</p>
-      <div class="ai-list">
-        <div class="ai-item reveal">
-          <div class="ai-icon">🤖</div>
-          <div>
-            <h4 data-en="AI Customer Chat" data-es="Chat IA para Clientes">AI Customer Chat</h4>
-            <p data-en="Answers questions, collects leads and books appointments automatically — 24 hours a day, 7 days a week." data-es="Responde preguntas, capta contactos y agenda citas automáticamente — las 24 horas, los 7 días de la semana.">Answers questions, collects leads and books appointments automatically — 24 hours a day, 7 days a week.</p>
-          </div>
+      <div class="stag reveal" data-en="What we work with" data-es="Con qué trabajamos" data-sq="Me çfarë punojmë" data-da="Hvad vi arbejder med">What we work with</div>
+      <div class="ads-tags reveal">
+        <span class="ads-tag key">Conversion Tracking</span>
+        <span class="ads-tag key">AI Max</span>
+        <span class="ads-tag key">PMAX</span>
+        <span class="ads-tag key">Smart Bidding</span>
+        <span class="ads-tag key">Optiscore</span>
+        <span class="ads-tag">Headlines</span>
+        <span class="ads-tag">Sitelinks</span>
+        <span class="ads-tag">Callouts</span>
+        <span class="ads-tag">Structured Snippets</span>
+        <span class="ads-tag">Responsive Search Ads</span>
+        <span class="ads-tag">Audience Targeting</span>
+        <span class="ads-tag">Keyword Match Types</span>
+        <span class="ads-tag">Negative Keywords</span>
+        <span class="ads-tag">Quality Score</span>
+        <span class="ads-tag">Ad Scheduling</span>
+        <span class="ads-tag">Budget Optimisation</span>
+        <span class="ads-tag">Remarketing</span>
+        <span class="ads-tag">GA4 Integration</span>
+      </div>
+    </div>
+    <div class="ads-features reveal">
+      <div class="ads-feat">
+        <div class="ads-feat-icon">🎯</div>
+        <div>
+          <h4 data-en="Conversion Tracking & GA4" data-es="Conversiones y GA4" data-sq="Gjurmimi i Konvertimeve & GA4" data-da="Konverteringssporing & GA4">Conversion Tracking & GA4</h4>
+          <p data-en="We set up proper conversion tracking so every euro you spend is measured. Know exactly which ads bring customers, not just impressions." data-es="Configuramos el seguimiento de conversiones para que cada euro se mida. Saber qué anuncios traen clientes, no solo impresiones." data-sq="Konfigurojmë gjurmimin e konvertimeve në mënyrë korrekte. Dij saktësisht cilat reklama sjellin klientë." data-da="Vi opsætter ordentlig konverteringssporing så hver euro du bruger måles. Kend præcis hvilke annoncer der bringer kunder.">We set up proper conversion tracking so every euro you spend is measured. Know exactly which ads bring customers, not just impressions.</p>
         </div>
-        <div class="ai-item reveal">
-          <div class="ai-icon">📝</div>
-          <div>
-            <h4 data-en="AI Content Writing" data-es="Redacción con IA">AI Content Writing</h4>
-            <p data-en="Fresh website copy, blog articles and social media content generated regularly to keep you relevant on Google." data-es="Textos web, artículos y contenido para redes generado regularmente para mantenerte relevante en Google.">Fresh website copy, blog articles and social media content generated regularly to keep you relevant on Google.</p>
-          </div>
+      </div>
+      <div class="ads-feat">
+        <div class="ads-feat-icon">🤖</div>
+        <div>
+          <h4 data-en="AI Max & Performance Max" data-es="AI Max & Performance Max" data-sq="AI Max & Performance Max" data-da="AI Max & Performance Max">AI Max & Performance Max</h4>
+          <p data-en="We harness Google's AI-powered campaign types to reach your audience across Search, Display, YouTube and Shopping simultaneously with smart asset optimisation." data-es="Aprovechamos los tipos de campaña con IA de Google para llegar a tu audiencia en Búsqueda, Display, YouTube y Shopping con optimización inteligente." data-sq="Shfrytëzojmë llojet e fushatave me IA të Google për të arritur audiencën tënde nëpër Kërkim, Display, YouTube dhe Shopping." data-da="Vi udnytter Googles AI-drevne kampagnetyper til at nå din målgruppe på tværs af Søgning, Display, YouTube og Shopping.">We harness Google's AI-powered campaign types to reach your audience across Search, Display, YouTube and Shopping simultaneously with smart asset optimisation.</p>
         </div>
-        <div class="ai-item reveal">
-          <div class="ai-icon">🔍</div>
-          <div>
-            <h4 data-en="Voice Search Ready" data-es="Optimizado para Voz">Voice Search Ready</h4>
-            <p data-en="Optimised for customers searching by voice — increasingly common on mobile devices across Spain." data-es="Optimizado para búsquedas por voz — cada vez más frecuentes en dispositivos móviles en España.">Optimised for customers searching by voice — increasingly common on mobile devices across Spain.</p>
-          </div>
+      </div>
+      <div class="ads-feat">
+        <div class="ads-feat-icon">⚡</div>
+        <div>
+          <h4 data-en="Smart Bidding & Optiscore" data-es="Smart Bidding & Optiscore" data-sq="Smart Bidding & Optiscore" data-da="Smart Bidding & Optiscore">Smart Bidding & Optiscore</h4>
+          <p data-en="Target CPA, Target ROAS, Maximise Conversions — we pick and tune the right bidding strategy for your goals while keeping your Optimisation Score high." data-es="Target CPA, Target ROAS, Maximizar Conversiones — seleccionamos la estrategia correcta y mantenemos tu Puntuación de Optimización alta." data-sq="Target CPA, Target ROAS, Maksimizo Konvertimet — zgjedhim strategjinë e duhur dhe mbajmë Optiscore-in tënd të lartë." data-da="Target CPA, Target ROAS, Maksimer konverteringer — vi vælger og justerer den rigtige budstrategi mens vi holder din Optimeringscore høj.">Target CPA, Target ROAS, Maximise Conversions — we pick and tune the right bidding strategy for your goals while keeping your Optimisation Score high.</p>
+        </div>
+      </div>
+      <div class="ads-feat">
+        <div class="ads-feat-icon">📝</div>
+        <div>
+          <h4 data-en="Ad Copy: Headlines & Sitelinks" data-es="Textos: Titulares y Sitelinks" data-sq="Tekste Reklamash: Headlines & Sitelinks" data-da="Annoncetekster: Overskrifter & Sitelinks">Ad Copy: Headlines & Sitelinks</h4>
+          <p data-en="Strong headlines, compelling descriptions, sitelinks, callouts and structured snippets that improve click-through rate and Quality Score together." data-es="Titulares potentes, descripciones convincentes, sitelinks, callouts y fragmentos que mejoran el CTR y el Quality Score." data-sq="Tituj të fortë, përshkrime bindëse, sitelinks, callouts dhe fragmente të strukturuara që rrisin CTR dhe Quality Score." data-da="Stærke overskrifter, overbevisende beskrivelser, sitelinks, callouts og strukturerede uddrag der forbedrer CTR og Quality Score.">Strong headlines, compelling descriptions, sitelinks, callouts and structured snippets that improve click-through rate and Quality Score together.</p>
         </div>
       </div>
     </div>
-    <div class="reveal">
-      <div class="mockup">
-        <div class="mockup-glow"></div>
-        <div class="mock-dots"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
-        <div class="mock-url">🔒 your-business.es</div>
-        <div class="mock-bar p w80"></div>
-        <div class="mock-bar w60"></div>
-        <div class="mock-bar w70"></div>
-        <div class="mock-bar w45"></div>
-        <div class="mock-bar p w65"></div>
-        <div class="mock-chat">
-          <div class="mock-chat-lbl">AI Assistant</div>
-          <div class="mock-chat-msg">¡Hola! ¿En qué puedo ayudarte? / Hi! How can I help you today?<span class="cursor"></span></div>
-        </div>
-      </div>
+  </div>
+</section>
+</div>
+</div>
+
+<!-- PACKAGES -->
+<div class="container">
+<section class="section" id="packages">
+  <div class="stag reveal" data-en="Monthly Service Packages" data-es="Paquetes de Servicio Mensual" data-sq="Paketat Mujore të Shërbimit" data-da="Månedlige Servicepakker">Monthly Service Packages</div>
+  <div class="pkg-intro">
+    <h2 class="reveal" data-en="Pick the right level of support" data-es="Elige el nivel de apoyo adecuado" data-sq="Zgjidhni nivelin e duhur të mbështetjes" data-da="Vælg det rigtige støtteniveau">Pick the right level of support</h2>
+    <p class="sdesc reveal" style="margin:0 auto 8px" data-en="Based on our experience managing Google Ads and digital presence across multiple markets, we have structured three service tiers that give you exactly what you need — no more, no less." data-es="Basándonos en nuestra experiencia gestionando Google Ads y presencia digital en múltiples mercados, hemos estructurado tres niveles de servicio que te dan exactamente lo que necesitas." data-sq="Bazuar në përvojën tonë në menaxhimin e Google Ads dhe prezencës dixhitale në tregje të shumta, kemi strukturuar tre nivele shërbimi." data-da="Baseret på vores erfaring med at administrere Google Ads og digital tilstedeværelse på tværs af markeder, har vi struktureret tre serviceniveauer.">Based on our experience managing Google Ads and digital presence across multiple markets, we have structured three service tiers that give you exactly what you need — no more, no less.</p>
+    <p class="sdesc2 reveal" style="margin:0 auto 0" data-en="All packages are monthly. No long-term contracts — only 30 days notice to cancel." data-es="Todos los paquetes son mensuales. Sin contratos a largo plazo — solo 30 días de preaviso para cancelar." data-sq="Të gjitha paketat janë mujore. Pa kontrata afatgjata — vetëm 30 ditë njoftim për anulim." data-da="Alle pakker er månedlige. Ingen langfristede kontrakter — kun 30 dages varsel for at annullere.">All packages are monthly. No long-term contracts — only 30 days notice to cancel.</p>
+  </div>
+  <div class="pkg-grid">
+
+    <!-- STARTER -->
+    <div class="pkg-card reveal">
+      <h3 data-en="Starter" data-es="Starter" data-sq="Starter" data-da="Starter">Starter</h3>
+      <p class="pkg-sub" data-en="For businesses launching or testing Google Ads for the first time. Solid foundations and monthly oversight." data-es="Para negocios que lanzan o prueban Google Ads por primera vez. Bases sólidas y supervisión mensual." data-sq="Për bizneset që nisin ose testojnë Google Ads për herë të parë. Bazamente solide dhe mbikëqyrje mujore." data-da="Til virksomheder der lancerer eller tester Google Ads for første gang. Solide fundamenter og månedlig overvågning.">For businesses launching or testing Google Ads for the first time. Solid foundations and monthly oversight.</p>
+      <div class="pkg-divider"></div>
+      <div class="pkg-includes" data-en="What's included" data-es="Qué incluye" data-sq="Çfarë përfshihet" data-da="Hvad er inkluderet">What's included</div>
+      <ul class="pkg-list">
+        <li data-en="Google Ads account setup" data-es="Configuración de cuenta Google Ads" data-sq="Konfigurimi i llogarisë Google Ads" data-da="Opsætning af Google Ads konto">Google Ads account setup</li>
+        <li data-en="1 Search campaign" data-es="1 Campaña de búsqueda" data-sq="1 Fushatë Kërkimi" data-da="1 Søgekampagne">1 Search campaign</li>
+        <li data-en="Keyword research & match types" data-es="Investigación de palabras clave" data-sq="Hulumtim fjalëkyçesh" data-da="Søgeordsforskning og matchtyper">Keyword research &amp; match types</li>
+        <li data-en="Headlines, descriptions & sitelinks" data-es="Títulos, descripciones y sitelinks" data-sq="Headlines, përshkrime dhe sitelinks" data-da="Overskrifter, beskrivelser og sitelinks">Headlines, descriptions &amp; sitelinks</li>
+        <li data-en="Basic conversion tracking" data-es="Seguimiento básico de conversiones" data-sq="Gjurmim bazë konvertimesh" data-da="Grundlæggende konverteringssporing">Basic conversion tracking</li>
+        <li data-en="Monthly performance report" data-es="Informe mensual de rendimiento" data-sq="Raport mujor i performancës" data-da="Månedlig præstationsrapport">Monthly performance report</li>
+        <li class="dim-item" data-en="PMAX / AI Max — not included" data-es="PMAX / AI Max — no incluido" data-sq="PMAX / AI Max — nuk përfshihet" data-da="PMAX / AI Max — ikke inkluderet">PMAX / AI Max — not included</li>
+        <li class="dim-item" data-en="Smart Bidding — not included" data-es="Smart Bidding — no incluido" data-sq="Smart Bidding — nuk përfshihet" data-da="Smart Bidding — ikke inkluderet">Smart Bidding — not included</li>
+      </ul>
+      <a href="#contact" class="pkg-cta" data-en="Get in touch →" data-es="Contáctanos →" data-sq="Na kontakto →" data-da="Kontakt os →">Get in touch →</a>
+    </div>
+
+    <!-- GROWTH (FEATURED) -->
+    <div class="pkg-card featured reveal">
+      <span class="pkg-badge" data-en="Most Popular" data-es="Más Popular" data-sq="Më Popullori" data-da="Mest Populær">Most Popular</span>
+      <h3 data-en="Growth" data-es="Growth" data-sq="Growth" data-da="Growth">Growth</h3>
+      <p class="pkg-sub" data-en="For businesses ready to scale. Full Google Ads management with AI-powered campaigns, smart bidding and monthly strategy sessions." data-es="Para negocios listos para escalar. Gestión completa con campañas con IA, puja inteligente y sesiones de estrategia mensuales." data-sq="Për bizneset gati të shkallëzojnë. Menaxhim i plotë me fushata me IA, Smart Bidding dhe sesione strategjie mujore." data-da="Til virksomheder klar til at skalere. Fuld Google Ads-forvaltning med AI-kampagner, smart budgivning og månedlige strategisessioner.">For businesses ready to scale. Full Google Ads management with AI-powered campaigns, smart bidding and monthly strategy sessions.</p>
+      <div class="pkg-divider"></div>
+      <div class="pkg-includes" data-en="What's included" data-es="Qué incluye" data-sq="Çfarë përfshihet" data-da="Hvad er inkluderet">What's included</div>
+      <ul class="pkg-list">
+        <li data-en="Everything in Starter" data-es="Todo lo de Starter" data-sq="Gjithçka nga Starter" data-da="Alt fra Starter">Everything in Starter</li>
+        <li data-en="PMAX & Performance Max campaigns" data-es="Campañas PMAX y Performance Max" data-sq="Fushata PMAX dhe Performance Max" data-da="PMAX og Performance Max kampagner">PMAX &amp; Performance Max campaigns</li>
+        <li data-en="AI Max implementation" data-es="Implementación AI Max" data-sq="Implementimi i AI Max" data-da="AI Max implementering">AI Max implementation</li>
+        <li data-en="Smart Bidding strategy (Target CPA / ROAS)" data-es="Estrategia Smart Bidding (Target CPA / ROAS)" data-sq="Strategji Smart Bidding (Target CPA / ROAS)" data-da="Smart Bidding strategi (Target CPA / ROAS)">Smart Bidding strategy (Target CPA / ROAS)</li>
+        <li data-en="Full conversion tracking + GA4 setup" data-es="Seguimiento completo + configuración GA4" data-sq="Gjurmim i plotë i konvertimeve + GA4" data-da="Fuld konverteringssporing + GA4 opsætning">Full conversion tracking + GA4 setup</li>
+        <li data-en="Optiscore monitoring & recommendations" data-es="Monitoreo Optiscore y recomendaciones" data-sq="Monitorim Optiscore dhe rekomandime" data-da="Optiscore overvågning og anbefalinger">Optiscore monitoring &amp; recommendations</li>
+        <li data-en="Audience targeting & remarketing" data-es="Segmentación de audiencia y remarketing" data-sq="Targetim i audiencës dhe remarketing" data-da="Målgruppetargeting og remarketing">Audience targeting &amp; remarketing</li>
+        <li data-en="Monthly strategy call" data-es="Llamada de estrategia mensual" data-sq="Thirrje strategjike mujore" data-da="Månedligt strategiopkald">Monthly strategy call</li>
+      </ul>
+      <a href="#contact" class="pkg-cta" data-en="Get in touch →" data-es="Contáctanos →" data-sq="Na kontakto →" data-da="Kontakt os →">Get in touch →</a>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="pkg-card reveal">
+      <h3 data-en="Premium" data-es="Premium" data-sq="Premium" data-da="Premium">Premium</h3>
+      <p class="pkg-sub" data-en="Full-service digital growth — Google Ads, website, SEO, content and AI integration managed under one roof for maximum results." data-es="Crecimiento digital completo — Google Ads, web, SEO, contenido e IA gestionados bajo un mismo techo para máximos resultados." data-sq="Rritje dixhitale e plotë — Google Ads, faqe interneti, SEO, përmbajtje dhe IA të menaxhuara nën një çati." data-da="Fuld-service digital vækst — Google Ads, hjemmeside, SEO, indhold og AI-integration forvaltet under ét tag for maksimale resultater.">Full-service digital growth — Google Ads, website, SEO, content and AI integration managed under one roof for maximum results.</p>
+      <div class="pkg-divider"></div>
+      <div class="pkg-includes" data-en="What's included" data-es="Qué incluye" data-sq="Çfarë përfshihet" data-da="Hvad er inkluderet">What's included</div>
+      <ul class="pkg-list">
+        <li data-en="Everything in Growth" data-es="Todo lo de Growth" data-sq="Gjithçka nga Growth" data-da="Alt fra Growth">Everything in Growth</li>
+        <li data-en="Professional website (built & maintained)" data-es="Web profesional (construida y mantenida)" data-sq="Faqe interneti profesionale (ndërtuar dhe mirëmbajtur)" data-da="Professionel hjemmeside (bygget og vedligeholdt)">Professional website (built &amp; maintained)</li>
+        <li data-en="Local SEO + Google Business Profile" data-es="SEO Local + Google Business Profile" data-sq="SEO Lokal + Google Business Profile" data-da="Lokal SEO + Google Business Profile">Local SEO + Google Business Profile</li>
+        <li data-en="AI Chat 24/7 integration" data-es="Integración Chat IA 24/7" data-sq="Integrimi Chat IA 24/7" data-da="AI Chat 24/7 integration">AI Chat 24/7 integration</li>
+        <li data-en="Monthly AI content creation" data-es="Creación mensual de contenido con IA" data-sq="Krijim mujor i përmbajtjes me IA" data-da="Månedlig AI-indholdsskabelse">Monthly AI content creation</li>
+        <li data-en="WhatsApp integration" data-es="Integración WhatsApp" data-sq="Integrimi WhatsApp" data-da="WhatsApp integration">WhatsApp integration</li>
+        <li data-en="Bi-weekly strategy calls" data-es="Llamadas de estrategia quincenales" data-sq="Thirrje strategjike dy-javore" data-da="Strategiopkald hver anden uge">Bi-weekly strategy calls</li>
+        <li data-en="Priority support across all languages" data-es="Soporte prioritario en todos los idiomas" data-sq="Mbështetje prioritare në të gjitha gjuhët" data-da="Prioritetssupport på alle sprog">Priority support across all languages</li>
+      </ul>
+      <a href="#contact" class="pkg-cta" data-en="Get in touch →" data-es="Contáctanos →" data-sq="Na kontakto →" data-da="Kontakt os →">Get in touch →</a>
+    </div>
+
+  </div>
+  <p class="pkg-note reveal" data-en="Not sure which package fits your business? <a href='#contact'>Contact us</a> for a free consultation — we will recommend the right starting point." data-es="¿No sabes qué paquete se adapta a tu negocio? <a href='#contact'>Contáctanos</a> para una consulta gratuita." data-sq="Nuk jeni të sigurt cila paketë i përshtatet biznesit tuaj? <a href='#contact'>Na kontaktoni</a> për konsultim falas." data-da="Er du ikke sikker på hvilken pakke der passer til din virksomhed? <a href='#contact'>Kontakt os</a> for en gratis konsultation.">Not sure which package fits your business? <a href="#contact">Contact us</a> for a free consultation — we will recommend the right starting point.</p>
+</section>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="bg-surf">
+<div class="container">
+<section class="section">
+  <div class="stag reveal" data-en="How We Work" data-es="Cómo Trabajamos" data-sq="Si Punojmë" data-da="Sådan Arbejder Vi">How We Work</div>
+  <h2 class="reveal" data-en="From first call to live results" data-es="De la primera llamada a resultados reales" data-sq="Nga thirrja e parë te rezultate reale" data-da="Fra første opkald til levende resultater">From first call to live results</h2>
+  <p class="sdesc reveal" style="margin-bottom:52px" data-en="A clear process with no unnecessary back-and-forth. You get direction, results and a partner who communicates in your language." data-es="Un proceso claro sin idas y vueltas innecesarias. Obtienes dirección, resultados y un socio que se comunica en tu idioma." data-sq="Një proces i qartë pa shkëmbime të panevojshme. Keni drejtim, rezultate dhe një partner që komunikon në gjuhën tuaj." data-da="En klar proces uden unødvendigt frem og tilbage. Du får retning, resultater og en partner der kommunikerer på dit sprog.">A clear process with no unnecessary back-and-forth. You get direction, results and a partner who communicates in your language.</p>
+  <div class="proc-grid">
+    <div class="proc-step reveal">
+      <div class="proc-c">1</div>
+      <div class="proc-tag" data-en="Day 1" data-es="Día 1" data-sq="Dita 1" data-da="Dag 1">Day 1</div>
+      <div class="proc-t" data-en="Free Audit" data-es="Auditoría Gratis" data-sq="Auditim Falas" data-da="Gratis Analyse">Free Audit</div>
+      <div class="proc-d" data-en="We analyse your current ads and online presence. No cost, no commitment — just clarity on what is possible." data-es="Analizamos tus anuncios y presencia online. Sin coste, sin compromiso — solo claridad sobre lo que es posible." data-sq="Analizojmë reklamat dhe prezencën tënde online. Pa kosto, pa angazhim — vetëm qartësi mbi çfarë është e mundur." data-da="Vi analyserer dine annoncer og online tilstedeværelse. Ingen omkostninger, ingen forpligtelse — bare klarhed om hvad der er muligt.">We analyse your current ads and online presence. No cost, no commitment — just clarity on what is possible.</div>
+    </div>
+    <div class="proc-step reveal">
+      <div class="proc-c">2</div>
+      <div class="proc-tag" data-en="Week 1" data-es="Semana 1" data-sq="Java 1" data-da="Uge 1">Week 1</div>
+      <div class="proc-t" data-en="Strategy & Setup" data-es="Estrategia y Configuración" data-sq="Strategji & Konfigurim" data-da="Strategi & Opsætning">Strategy &amp; Setup</div>
+      <div class="proc-d" data-en="We define the campaign strategy, set up tracking, build ad assets and configure your account for optimal performance." data-es="Definimos la estrategia, configuramos el seguimiento, creamos los activos publicitarios y optimizamos tu cuenta." data-sq="Definojmë strategjinë, konfigurojmë gjurmimin, ndërtojmë asetet reklamuese dhe optimizojmë llogarinë tënde." data-da="Vi definerer kampagnestrategien, opsætter sporing, bygger annonceindhold og konfigurerer din konto for optimal performance.">We define the campaign strategy, set up tracking, build ad assets and configure your account for optimal performance.</div>
+    </div>
+    <div class="proc-step reveal">
+      <div class="proc-c">3</div>
+      <div class="proc-tag" data-en="Ongoing" data-es="Continuo" data-sq="Vazhdimisht" data-da="Løbende">Ongoing</div>
+      <div class="proc-t" data-en="Optimise & Scale" data-es="Optimizar y Escalar" data-sq="Optimizo & Shkallëzo" data-da="Optimer & Skaler">Optimise &amp; Scale</div>
+      <div class="proc-d" data-en="Weekly bid adjustments, A/B testing of headlines, keyword expansion and Optiscore improvements to keep results moving upward." data-es="Ajustes de puja semanales, pruebas A/B de titulares, expansión de palabras clave y mejoras de Optiscore." data-sq="Rregullime javore të ofertave, teste A/B të headlines, zgjerim fjalëkyçesh dhe përmirësime Optiscore." data-da="Ugentlige budjusteringer, A/B-testning af overskrifter, søgeordsudvidelse og Optiscore-forbedringer.">Weekly bid adjustments, A/B testing of headlines, keyword expansion and Optiscore improvements to keep results moving upward.</div>
+    </div>
+    <div class="proc-step reveal">
+      <div class="proc-c">4</div>
+      <div class="proc-tag" data-en="Monthly" data-es="Mensual" data-sq="Mujore" data-da="Månedlig">Monthly</div>
+      <div class="proc-t" data-en="Report & Review" data-es="Informe y Revisión" data-sq="Raport & Rishikim" data-da="Rapport & Gennemgang">Report &amp; Review</div>
+      <div class="proc-d" data-en="Clear monthly report on spend, leads, cost-per-conversion and next month's priorities — in your language." data-es="Informe mensual claro sobre gasto, contactos, coste por conversión y prioridades del mes siguiente — en tu idioma." data-sq="Raport mujor i qartë mbi shpenzimet, kontaktet, koston për konversion dhe prioritetet e muajit të ardhshëm." data-da="Klar månedlig rapport om forbrug, leads, cost-per-konvertering og næste måneds prioriteter — på dit sprog.">Clear monthly report on spend, leads, cost-per-conversion and next month's priorities — in your language.</div>
     </div>
   </div>
 </section>
@@ -334,127 +485,1001 @@ footer{padding:32px 56px;border-top:1px solid rgba(124,58,237,0.08);display:flex
 <!-- WHY US -->
 <div class="container">
 <section class="section" id="why">
-  <div class="stag reveal" data-en="Why Urawise" data-es="Por qué Urawise">Why Urawise</div>
-  <h2 class="reveal" data-en="Built different. Built for results." data-es="Diferente. Orientado a resultados.">Built different. Built for results.</h2>
+  <div class="stag reveal" data-en="Why Urawise" data-es="Por qué Urawise" data-sq="Pse Urawise" data-da="Hvorfor Urawise">Why Urawise</div>
+  <h2 class="reveal" data-en="Built different. Built for results." data-es="Diferente. Orientado a resultados." data-sq="Ndërtuar ndryshe. Ndërtuar për rezultate." data-da="Bygget anderledes. Bygget for resultater.">Built different. Built for results.</h2>
   <div class="why-grid">
     <div class="why-card reveal">
       <div class="why-num">01</div>
-      <h4 data-en="AI-First Approach" data-es="Enfoque IA Primero">AI-First Approach</h4>
-      <p data-en="We use the latest AI tools to automate customer engagement and content — giving you an edge over competitors who are still doing things manually." data-es="Usamos las últimas herramientas de IA para automatizar la atención al cliente y el contenido — dándote ventaja sobre competidores.">We use the latest AI tools to automate customer engagement and content — giving you an edge over competitors who are still doing things manually.</p>
+      <h4 data-en="Barcelona Based, Globally Serving" data-es="Basados en Barcelona, Clientes Globales" data-sq="Bazuar në Barcelona, Shërbejmë Globalisht" data-da="Barcelona-baseret, Globalt Servicerende">Barcelona Based, Globally Serving</h4>
+      <p data-en="We are based in Barcelona and work with clients worldwide. Distance is never a barrier — we run campaigns across Europe and beyond from our base in Spain." data-es="Estamos en Barcelona y trabajamos con clientes en todo el mundo. La distancia nunca es una barrera — gestionamos campañas en toda Europa y más allá." data-sq="Jemi bazuar në Barcelona dhe punojmë me klientë në mbarë botën. Distanca nuk është kurrë pengesë." data-da="Vi er baseret i Barcelona og arbejder med kunder verden over. Afstand er aldrig en barriere — vi kører kampagner i hele Europa og videre.">We are based in Barcelona and work with clients worldwide. Distance is never a barrier — we run campaigns across Europe and beyond from our base in Spain.</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">02</div>
-      <h4 data-en="Multilingual Team" data-es="Equipo Multilingüe">Multilingual Team</h4>
-      <p data-en="We work in Spanish, English, Italian and Danish — serving both local businesses and international clients across Madrid with no language barriers." data-es="Trabajamos en español, inglés, italiano y danés — para negocios locales e internacionales en Madrid sin barreras idiomáticas.">We work in Spanish, English, Italian and Danish — serving both local businesses and international clients across Madrid with no language barriers.</p>
+      <h4 data-en="5 Languages, Zero Barriers" data-es="5 Idiomas, Cero Barreras" data-sq="5 Gjuhë, Zero Barriera" data-da="5 Sprog, Nul Barrierer">5 Languages, Zero Barriers</h4>
+      <p data-en="We work fluently in Danish, Albanian, English, Spanish and Italian. You communicate in your language — no middlemen, no lost nuance, no translation issues." data-es="Trabajamos con fluidez en danés, albanés, inglés, español e italiano. Comunícate en tu idioma — sin intermediarios ni problemas de traducción." data-sq="Punojmë rrjedhshëm në danisht, shqip, anglisht, spanjisht dhe italisht. Komunikoni në gjuhën tuaj — pa ndërmjetës." data-da="Vi arbejder flydende på dansk, albansk, engelsk, spansk og italiensk. Kommuniker på dit eget sprog — ingen mellemmænd, ingen tabte nuancer.">We work fluently in Danish, Albanian, English, Spanish and Italian. You communicate in your language — no middlemen, no lost nuance, no translation issues.</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">03</div>
-      <h4 data-en="48h Delivery" data-es="Entrega en 48h">48h Delivery</h4>
-      <p data-en="Your website live in 48 hours. Every day without a website is a day without customers — we move at startup speed." data-es="Tu web en línea en 48 horas. Cada día sin web es un día sin clientes — actuamos a velocidad de startup.">Your website live in 48 hours. Every day without a website is a day without customers — we move at startup speed.</p>
+      <h4 data-en="Google Ads Specialists" data-es="Especialistas en Google Ads" data-sq="Specialistë të Google Ads" data-da="Google Ads Specialister">Google Ads Specialists</h4>
+      <p data-en="We are not a generalist agency. Google Ads is our core focus — Conversion Tracking, PMAX, AI Max, Smart Bidding — we know every tool and use it to grow your results." data-es="No somos una agencia generalista. Google Ads es nuestro foco principal — conocemos cada herramienta y la usamos para hacer crecer tus resultados." data-sq="Nuk jemi një agenci generaliste. Google Ads është fokusi ynë kryesor — njohim çdo mjet dhe e përdorim për të rritur rezultatet tuaja." data-da="Vi er ikke et generalistbureau. Google Ads er vores kerneområde — vi kender hvert eneste værktøj og bruger det til at vokse dine resultater.">We are not a generalist agency. Google Ads is our core focus — Conversion Tracking, PMAX, AI Max, Smart Bidding — we know every tool and use it to grow your results.</p>
     </div>
     <div class="why-card reveal">
       <div class="why-num">04</div>
-      <h4 data-en="Madrid Based" data-es="Con base en Madrid">Madrid Based</h4>
-      <p data-en="We are based in Madrid and come to you. We understand the local market and how Spanish customers search and buy online." data-es="Estamos en Madrid y nos desplazamos a ti. Entendemos el mercado local y cómo buscan y compran los clientes españoles online.">We are based in Madrid and come to you. We understand the local market and how Spanish customers search and buy online.</p>
+      <h4 data-en="No Long Contracts" data-es="Sin Contratos Largos" data-sq="Pa Kontrata Afatgjata" data-da="Ingen Lange Kontrakter">No Long Contracts</h4>
+      <p data-en="Monthly rolling service with 30 days notice. We earn your business every month through results — not by locking you in. Transparency and performance are our contract." data-es="Servicio mensual con 30 días de preaviso. Nos ganamos tu negocio cada mes con resultados — no con bloqueos. La transparencia y el rendimiento son nuestro contrato." data-sq="Shërbim mujor me 30 ditë njoftim. Ne fitojmë biznesin tuaj çdo muaj me rezultate — jo duke ju bllokuar." data-da="Månedlig løbende service med 30 dages varsel. Vi fortjener din forretning hver måned gennem resultater — ikke ved at låse dig fast.">Monthly rolling service with 30 days notice. We earn your business every month through results — not by locking you in. Transparency and performance are our contract.</p>
     </div>
   </div>
 </section>
-</div>
-
-<!-- HOW IT WORKS -->
-<div class="surf">
-<div class="container">
-<section class="section">
-  <div class="stag reveal" data-en="How It Works" data-es="Cómo Funciona">How It Works</div>
-  <h2 class="reveal" data-en="Your website live in 48 hours" data-es="Tu web online en 48 horas">Your website live in 48 hours</h2>
-  <div class="tl-grid">
-    <div class="tl-step reveal">
-      <div class="tl-c">1</div>
-      <div class="tl-day" data-en="Today" data-es="Hoy">Today</div>
-      <div class="tl-t" data-en="Free Audit" data-es="Auditoría Gratis">Free Audit</div>
-      <div class="tl-d" data-en="We analyse your current online presence and show you exactly what is possible — no cost, no commitment" data-es="Analizamos tu presencia online actual y te mostramos lo que es posible — gratis y sin compromiso">We analyse your current online presence and show you exactly what is possible — no cost, no commitment</div>
-    </div>
-    <div class="tl-step reveal">
-      <div class="tl-c">2</div>
-      <div class="tl-day" data-en="Day 1" data-es="Día 1">Day 1</div>
-      <div class="tl-t" data-en="We Build" data-es="Diseñamos">We Build</div>
-      <div class="tl-d" data-en="Custom website built with your brand, content and services — tailored to your business" data-es="Web personalizada con tu marca, contenido y servicios — adaptada a tu negocio">Custom website built with your brand, content and services — tailored to your business</div>
-    </div>
-    <div class="tl-step reveal">
-      <div class="tl-c">3</div>
-      <div class="tl-day" data-en="Day 2" data-es="Día 2">Day 2</div>
-      <div class="tl-t" data-en="You Approve" data-es="Apruebas">You Approve</div>
-      <div class="tl-d" data-en="Review your website and request any adjustments — we fix them fast" data-es="Revisas tu web y solicitas ajustes — los hacemos rápido">Review your website and request any adjustments — we fix them fast</div>
-    </div>
-    <div class="tl-step reveal">
-      <div class="tl-c">4</div>
-      <div class="tl-day" data-en="48h" data-es="48h">48h</div>
-      <div class="tl-t" data-en="You're Live!" data-es="¡Online!">You're Live!</div>
-      <div class="tl-d" data-en="Website published, indexed on Google and visible on Google Maps immediately" data-es="Web publicada, indexada en Google y visible en Google Maps de inmediato">Website published, indexed on Google and visible on Google Maps immediately</div>
-    </div>
-  </div>
-</section>
-</div>
 </div>
 
 <!-- CONTACT -->
+<div class="bg-surf">
 <div class="container">
 <section class="section" id="contact">
   <div class="contact-grid">
     <div>
-      <div class="stag reveal" data-en="Book Your Free Audit" data-es="Reserva tu Auditoría Gratis">Book Your Free Audit</div>
-      <h2 class="reveal" data-en="Ready to be found online?" data-es="¿Listo para ser encontrado online?">Ready to be found online?</h2>
-      <p class="sdesc reveal" data-en="Book a free digital audit today. We will analyse your current online presence and show you exactly what is possible — no commitment, no pressure, no cost." data-es="Reserva una auditoría digital gratuita hoy. Analizamos tu presencia online actual y te mostramos exactamente lo que es posible — sin compromiso, sin presión, sin coste.">Book a free digital audit today. We will analyse your current online presence and show you exactly what is possible — no commitment, no pressure, no cost.</p>
-      <p class="sdesc2 reveal" data-en="We speak English, Spanish, Italian and Danish. We come to you anywhere in Madrid." data-es="Hablamos español, inglés, italiano y danés. Nos desplazamos a cualquier punto de Madrid.">We speak English, Spanish, Italian and Danish. We come to you anywhere in Madrid.</p>
+      <div class="stag reveal" data-en="Book Your Free Audit" data-es="Reserva tu Auditoría Gratis" data-sq="Rezervo Auditimin Falas" data-da="Bestil Gratis Analyse">Book Your Free Audit</div>
+      <h2 class="reveal" data-en="Ready to grow your results?" data-es="¿Listo para hacer crecer tus resultados?" data-sq="Gati të rritësh rezultatet e tua?" data-da="Klar til at vækste dine resultater?">Ready to grow your results?</h2>
+      <p class="sdesc reveal" data-en="Book a free digital audit today. We will review your Google Ads account, website and local visibility — then show you exactly what is possible. No commitment, no pressure, no cost." data-es="Reserva una auditoría digital gratuita. Revisaremos tu cuenta de Google Ads, web y visibilidad local — y te mostraremos exactamente lo que es posible. Sin compromiso, sin presión." data-sq="Rezervo një auditim dixhital falas sot. Do të rishikojmë llogarinë tënde Google Ads, faqen dhe dukshmërinë lokale — dhe do të tregojmë saktësisht çfarë është e mundur." data-da="Book en gratis digital analyse i dag. Vi gennemgår din Google Ads-konto, hjemmeside og lokale synlighed — og viser dig præcis hvad der er muligt. Ingen forpligtelse.">Book a free digital audit today. We will review your Google Ads account, website and local visibility — then show you exactly what is possible. No commitment, no pressure, no cost.</p>
+      <p class="sdesc2 reveal" data-en="We speak Danish, Albanian, English, Spanish and Italian. Based in Barcelona — serving clients anywhere in the world." data-es="Hablamos danés, albanés, inglés, español e italiano. Basados en Barcelona — atendemos a clientes en cualquier parte del mundo." data-sq="Flasim danisht, shqip, anglisht, spanjisht dhe italisht. Bazuar në Barcelona — shërbejmë klientë kudo në botë." data-da="Vi taler dansk, albansk, engelsk, spansk og italiensk. Baseret i Barcelona — betjener kunder overalt i verden.">We speak Danish, Albanian, English, Spanish and Italian. Based in Barcelona — serving clients anywhere in the world.</p>
     </div>
     <div class="contact-box reveal">
       <div class="c-row">
         <div class="c-icon">📱</div>
-        <div><div class="c-label">WhatsApp</div><div class="c-val">+351 924 673 825</div><div class="c-hint" data-en="Message anytime — fast response" data-es="Escríbenos cuando quieras — respuesta rápida">Message anytime — fast response</div></div>
+        <div><div class="c-label">WhatsApp</div><div class="c-val">+351 924 673 825</div><div class="c-hint" data-en="Message anytime — fast response" data-es="Escríbenos cuando quieras — respuesta rápida" data-sq="Shkruaj kurdo — përgjigje e shpejtë" data-da="Skriv når som helst — hurtig svar">Message anytime — fast response</div></div>
       </div>
       <div class="c-div"></div>
       <div class="c-row">
         <div class="c-icon">📧</div>
-        <div><div class="c-label">Email</div><div class="c-val">org@greenhelsinki.com</div><div class="c-hint" data-en="Subject: Urawise — Free Audit" data-es="Asunto: Urawise — Auditoría Gratis">Subject: Urawise — Free Audit</div></div>
+        <div><div class="c-label">Email</div><div class="c-val">org@greenhelsinki.com</div><div class="c-hint" data-en="Subject: Urawise — Free Audit" data-es="Asunto: Urawise — Auditoría Gratis" data-sq="Subjekt: Urawise — Auditim Falas" data-da="Emne: Urawise — Gratis Analyse">Subject: Urawise — Free Audit</div></div>
       </div>
       <div class="c-div"></div>
       <div class="c-row">
         <div class="c-icon">📍</div>
-        <div><div class="c-label" data-en="Location" data-es="Ubicación">Location</div><div class="c-val">Madrid, Spain</div><div class="c-hint" data-en="We come to you anywhere in Madrid" data-es="Nos desplazamos a cualquier punto de Madrid">We come to you anywhere in Madrid</div></div>
+        <div><div class="c-label" data-en="Based In" data-es="Ubicación" data-sq="Vendndodhja" data-da="Baseret i">Based In</div><div class="c-val">Barcelona, Spain</div><div class="c-hint" data-en="Serving clients globally — no location barrier" data-es="Atendemos clientes globalmente — sin barreras de ubicación" data-sq="Shërbejmë klientë globalisht — pa barrierë vendndodhjeje" data-da="Betjener kunder globalt — ingen placeringsbarriere">Serving clients globally — no location barrier</div></div>
       </div>
       <a href="https://wa.me/351924673825?text=Hi%2C%20I%27d%20like%20to%20book%20a%20free%20Urawise%20digital%20audit" class="wa-btn" target="_blank">
-        💬 <span data-en="Book a Free Audit on WhatsApp" data-es="Reservar Auditoría Gratis por WhatsApp">Book a Free Audit on WhatsApp</span>
+        💬 <span data-en="Book a Free Audit on WhatsApp" data-es="Reservar Auditoría Gratis por WhatsApp" data-sq="Rezervo Auditim Falas në WhatsApp" data-da="Bestil Gratis Analyse på WhatsApp">Book a Free Audit on WhatsApp</span>
       </a>
     </div>
   </div>
 </section>
 </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     URAWISE FREE TOOLS SECTION
+     4 AI-powered tools, all inline on the page
+═══════════════════════════════════════════════════ -->
+
+<style>
+/* ── TOOLS SECTION ── */
+.tools-hero{background:linear-gradient(135deg,#0d0d14 0%,#1a1030 50%,#0d0d14 100%);padding:96px 0 0;position:relative;overflow:hidden}
+.tools-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(91,71,224,0.08) 1px,transparent 1px);background-size:36px 36px}
+.tools-hero-inner{position:relative;z-index:1;text-align:center;padding-bottom:72px}
+.tools-hero-inner .stag{color:#a78bfa;justify-content:center}
+.tools-hero-inner .stag::before{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+.tools-hero-inner h2{color:#fff;margin-bottom:14px}
+.tools-hero-inner .sdesc{color:rgba(255,255,255,0.6);margin:0 auto 6px;text-align:center}
+.tools-hero-inner .sdesc2{color:rgba(255,255,255,0.35);margin:0 auto 52px;text-align:center}
+
+/* TOOL TABS */
+.tool-tabs{display:flex;gap:0;justify-content:center;margin-bottom:0;flex-wrap:wrap;padding:0 24px}
+.tool-tab{display:flex;align-items:center;gap:9px;padding:14px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all 0.22s;border-bottom:2px solid transparent;white-space:nowrap}
+.tool-tab:first-child{border-radius:10px 0 0 0}
+.tool-tab:last-child{border-radius:0 10px 0 0}
+.tool-tab:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.1)}
+.tool-tab.active{background:rgba(91,71,224,0.18);color:#a78bfa;border-bottom:2px solid #7c3aed}
+.tool-tab-icon{font-size:18px}
+
+/* TOOL PANELS */
+.tool-panels{background:var(--surf);border-top:1.5px solid var(--brd)}
+.tool-panel{display:none;padding:52px 0 72px}
+.tool-panel.active{display:block}
+
+/* SHARED FORM STYLES */
+.tool-form{max-width:780px;margin:0 auto;padding:0 24px}
+.tool-form h3{font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:var(--ink);margin-bottom:8px}
+.tool-form .tool-desc{font-size:15px;color:var(--dim);margin-bottom:32px;line-height:1.65}
+.tool-form .free-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:22px}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row.single{grid-template-columns:1fr}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field label{font-size:12px;font-weight:700;color:var(--dim);letter-spacing:0.5px;text-transform:uppercase}
+.form-field input,.form-field select,.form-field textarea{padding:11px 14px;border:1.5px solid var(--brd);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--white);transition:border-color 0.2s;outline:none}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(91,71,224,0.08)}
+.form-field textarea{resize:vertical;min-height:90px;line-height:1.6}
+.form-field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239896b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
+
+.tool-submit{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.22s;box-shadow:0 4px 18px rgba(91,71,224,0.28);margin-top:20px;width:100%}
+.tool-submit:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,71,224,0.4)}
+.tool-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+.tool-submit .spin{animation:spin 1s linear infinite;display:inline-block}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* RESULT AREA */
+.tool-result{max-width:780px;margin:28px auto 0;padding:0 24px;display:none}
+.tool-result.visible{display:block}
+.result-box{background:var(--white);border:1.5px solid var(--brd);border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.result-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1.5px solid var(--brd);background:rgba(91,71,224,0.04)}
+.result-header-left{display:flex;align-items:center;gap:10px}
+.result-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:pulse 2s infinite}
+.result-title{font-size:13px;font-weight:700;color:var(--p);letter-spacing:0.3px}
+.result-actions{display:flex;gap:8px}
+.result-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--brd);border-radius:7px;background:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--dim);cursor:pointer;transition:all 0.2s}
+.result-btn:hover{border-color:var(--p);color:var(--p);background:rgba(91,71,224,0.04)}
+.result-btn.copied{border-color:#10b981;color:#059669;background:rgba(16,185,129,0.06)}
+.result-content{padding:24px;font-size:14px;color:var(--dim);line-height:1.75;white-space:pre-wrap;font-family:'DM Sans',sans-serif;max-height:520px;overflow-y:auto}
+.result-content strong{color:var(--ink);font-weight:700}
+.result-content .section-label{display:block;font-size:10.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--p);margin:18px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
+.result-content .result-chip{display:inline-block;background:rgba(91,71,224,0.07);border:1px solid rgba(91,71,224,0.16);color:var(--p);font-size:12px;font-weight:600;padding:4px 11px;border-radius:6px;margin:3px 4px 3px 0}
+.result-upgrade{background:linear-gradient(135deg,rgba(91,71,224,0.07),rgba(67,56,202,0.04));border-top:1.5px solid rgba(91,71,224,0.1);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.upgrade-text{font-size:13px;color:var(--dim)}
+.upgrade-text strong{color:var(--ink)}
+.upgrade-cta{display:flex;align-items:center;gap:7px;background:var(--g);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;white-space:nowrap;transition:all 0.2s;box-shadow:0 3px 12px rgba(91,71,224,0.25)}
+.upgrade-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,71,224,0.38)}
+
+/* OPTISCORE SPECIFIC */
+.score-ring-wrap{text-align:center;margin:28px 0}
+.score-ring{display:inline-flex;align-items:center;justify-content:center;flex-direction:column;width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--p) 0%,var(--brd) 0%);border:none;position:relative;box-shadow:0 8px 32px rgba(91,71,224,0.2);transition:background 1s ease}
+.score-ring-inner{width:108px;height:108px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;position:absolute}
+.score-num{font-family:'Inter',sans-serif;font-size:38px;font-weight:900;letter-spacing:-2px;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.score-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+
+/* FORECAST SPECIFIC */
+.forecast-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+.forecast-card{background:var(--white);border:1.5px solid var(--brd);border-radius:12px;padding:20px 16px;text-align:center;transition:all 0.2s}
+.forecast-card:hover{border-color:rgba(91,71,224,0.3);box-shadow:0 4px 16px rgba(91,71,224,0.08)}
+.forecast-val{font-family:'Inter',sans-serif;font-size:28px;font-weight:900;letter-spacing:-1px;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:5px}
+.forecast-key{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px}
+
+/* LOADING DOTS */
+.loading-dots{display:inline-flex;gap:5px;align-items:center}
+.loading-dots span{width:7px;height:7px;background:rgba(255,255,255,0.7);border-radius:50%;animation:dotpulse 1.2s infinite}
+.loading-dots span:nth-child(2){animation-delay:0.2s}
+.loading-dots span:nth-child(3){animation-delay:0.4s}
+@keyframes dotpulse{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+.typing-cursor{display:inline-block;width:2px;height:1em;background:var(--p);margin-left:2px;vertical-align:text-bottom;animation:blink2 0.8s infinite}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:0}}
+
+/* SHARE LINK */
+.share-row{display:flex;gap:8px;margin-top:14px;align-items:center}
+.share-input{flex:1;padding:9px 13px;border:1.5px solid var(--brd);border-radius:8px;font-size:12.5px;color:var(--muted);background:var(--surf);font-family:monospace;outline:none}
+.share-copy-btn{padding:9px 16px;background:var(--surf);border:1.5px solid var(--brd);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--dim);cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.share-copy-btn:hover{border-color:var(--p);color:var(--p)}
+
+@media(max-width:700px){
+  .form-row,.form-row.triple{grid-template-columns:1fr}
+  .forecast-grid{grid-template-columns:1fr}
+  .tool-tab{padding:11px 14px;font-size:12px}
+  .tool-tab-icon{display:none}
+  .result-upgrade{flex-direction:column}
+}
+</style>
+
+<!-- TOOLS SECTION STARTS -->
+<div id="tools">
+<div class="tools-hero">
+  <div class="container tools-hero-inner">
+    <div class="stag reveal" data-en="Free AI Tools" data-es="Herramientas Gratuitas" data-sq="Mjetet Falas" data-da="Gratis AI Værktøjer">Free AI Tools</div>
+    <h2 class="reveal" style="color:#fff" data-en="Four tools. Completely free. Powered by AI." data-es="Cuatro herramientas. Completamente gratis. Con IA." data-sq="Katër mjete. Plotësisht falas. Fuqizuar nga IA." data-da="Fire værktøjer. Helt gratis. Drevet af AI.">Four tools. Completely free. Powered by AI.</h2>
+    <p class="sdesc reveal" data-en="Try them now — no sign-up, no credit card. Generate real Google Ads assets, get a live website audit, simulate your Optiscore, and forecast your ad budget return." data-es="Pruébalas ahora — sin registro, sin tarjeta. Genera activos reales de Google Ads, obtén una auditoría de tu web, simula tu Optiscore y prevé el rendimiento de tu presupuesto." data-sq="Provojini tani — pa regjistrim, pa kartë kredie. Gjenero asete reale Google Ads, merr auditim live të faqes, simuloje Optiscore-in dhe parashiko kthimin e buxhetit." data-da="Prøv dem nu — ingen tilmelding, intet kreditkort. Generer rigtige Google Ads-aktiver, få en live webstedsrevision, simuler din Optiscore og forudsig dit annoncebudgets afkast.">Try them now — no sign-up, no credit card. Generate real Google Ads assets, get a live website audit, simulate your Optiscore, and forecast your ad budget return.</p>
+    <p class="sdesc2 reveal" data-en="Based on what you get, you decide if Urawise is the right partner to take it further." data-es="Según los resultados, decides si Urawise es el socio adecuado para ir más lejos." data-sq="Bazuar në atë që merr, vendos nëse Urawise është partneri i duhur për të shkuar më tej." data-da="Baseret på hvad du får, bestemmer du om Urawise er den rette partner til at tage det videre.">Based on what you get, you decide if Urawise is the right partner to take it further.</p>
+  </div>
+  <div class="tool-tabs container" id="tool-tabs-bar">
+    <button class="tool-tab active" data-tool="ads" onclick="switchTool('ads')"><span class="tool-tab-icon">📈</span> <span data-en="Ads Generator" data-es="Generador de Anuncios" data-sq="Gjenerator Reklamash" data-da="Annoncesgenerator">Ads Generator</span></button>
+    <button class="tool-tab" data-tool="audit" onclick="switchTool('audit')"><span class="tool-tab-icon">🔍</span> <span data-en="Website Audit" data-es="Auditoría Web" data-sq="Auditim Faqeje" data-da="Webstedrevision">Website Audit</span></button>
+    <button class="tool-tab" data-tool="optiscore" onclick="switchTool('optiscore')"><span class="tool-tab-icon">⚡</span> <span data-en="Optiscore Sim" data-es="Sim. Optiscore" data-sq="Sim. Optiscore" data-da="Optiscore Sim">Optiscore Sim</span></button>
+    <button class="tool-tab" data-tool="forecast" onclick="switchTool('forecast')"><span class="tool-tab-icon">📊</span> <span data-en="Budget Forecast" data-es="Previsión Presupuesto" data-sq="Parashikim Buxheti" data-da="Budgetprognose">Budget Forecast</span></button>
+  </div>
+</div>
+
+<div class="tool-panels">
+
+  <!-- ══════════════════════════════════════
+       TOOL 1: GOOGLE ADS GENERATOR
+  ══════════════════════════════════════ -->
+  <div class="tool-panel active" id="panel-ads">
+    <div class="tool-form">
+      <span class="free-badge">✓ 100% Free</span>
+      <h3>Google Ads Starter Kit Generator</h3>
+      <p class="tool-desc">Tell us about your business and goal. We will generate a full campaign starter pack — headlines, descriptions, sitelinks, negative keywords and a bidding strategy — ready to copy straight into Google Ads.</p>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Business Type</label>
+          <input type="text" id="ads-business" placeholder="e.g. Dental clinic, Plumber, E-commerce store">
+        </div>
+        <div class="form-field">
+          <label>Location / Market</label>
+          <input type="text" id="ads-location" placeholder="e.g. Barcelona, Denmark, UK">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Primary Goal</label>
+          <select id="ads-goal">
+            <option value="">Select your goal</option>
+            <option value="phone calls">Phone calls / Direct enquiries</option>
+            <option value="form leads">Lead form submissions</option>
+            <option value="website sales">Online sales / E-commerce</option>
+            <option value="store visits">In-store / physical visits</option>
+            <option value="brand awareness">Brand awareness</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Monthly Budget (€)</label>
+          <select id="ads-budget">
+            <option value="">Select budget range</option>
+            <option value="under €300">Under €300/month</option>
+            <option value="€300–€700">€300–€700/month</option>
+            <option value="€700–€1,500">€700–€1,500/month</option>
+            <option value="€1,500–€3,000">€1,500–€3,000/month</option>
+            <option value="over €3,000">Over €3,000/month</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-field">
+          <label>What makes you different from competitors? (optional)</label>
+          <input type="text" id="ads-usp" placeholder="e.g. Same-day service, 20 years experience, free consultation...">
+        </div>
+      </div>
+      <button class="tool-submit" id="ads-btn" onclick="runAdsGenerator()">
+        <span id="ads-btn-text">✨ Generate My Google Ads Kit</span>
+      </button>
+    </div>
+    <div class="tool-result" id="ads-result">
+      <div class="result-box">
+        <div class="result-header">
+          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Google Ads Starter Kit — ready to copy</span></div>
+          <div class="result-actions">
+            <button class="result-btn" id="ads-copy-btn" onclick="copyResult('ads-output','ads-copy-btn')">📋 Copy All</button>
+          </div>
+        </div>
+        <div class="result-content" id="ads-output"></div>
+        <div class="share-row" style="padding:0 24px 18px">
+          <input class="share-input" id="ads-share-url" readonly placeholder="Shareable link will appear here...">
+          <button class="share-copy-btn" onclick="copyShare('ads-share-url')">🔗 Copy Link</button>
+        </div>
+        <div class="result-upgrade">
+          <div class="upgrade-text"><strong>Want us to build and run this campaign for you?</strong> We handle the setup, tracking, bidding and optimisation — you focus on your business.</div>
+          <a href="#contact" class="upgrade-cta">🚀 Get It Running →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TOOL 2: WEBSITE AUDIT
+  ══════════════════════════════════════ -->
+  <div class="tool-panel" id="panel-audit">
+    <div class="tool-form">
+      <span class="free-badge">✓ 100% Free</span>
+      <h3>60-Second Website Audit</h3>
+      <p class="tool-desc">Tell us your website and what is frustrating you most. Our AI will analyse your digital setup and give you three concrete, actionable recommendations — personalised to your business.</p>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Your Website URL</label>
+          <input type="text" id="audit-url" placeholder="https://yourwebsite.com">
+        </div>
+        <div class="form-field">
+          <label>Business Type</label>
+          <input type="text" id="audit-business" placeholder="e.g. Restaurant, Law firm, Online shop">
+        </div>
+      </div>
+      <div class="form-row single">
+        <div class="form-field">
+          <label>What is your biggest frustration or challenge right now?</label>
+          <textarea id="audit-frustration" placeholder="e.g. We get traffic but nobody contacts us. Our booking page has a high dropout rate. We barely show up on Google..."></textarea>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Your Main Goal</label>
+          <select id="audit-goal">
+            <option value="">Select goal</option>
+            <option value="more leads">More leads / enquiries</option>
+            <option value="better Google ranking">Better Google ranking</option>
+            <option value="more sales">More online sales</option>
+            <option value="faster website">Faster website performance</option>
+            <option value="better user experience">Better user experience</option>
+            <option value="stronger brand">Stronger brand presence</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Market / Language</label>
+          <select id="audit-market">
+            <option value="">Select market</option>
+            <option value="Spain / Spanish">Spain / Spanish</option>
+            <option value="Denmark / Danish">Denmark / Danish</option>
+            <option value="UK / English">UK / English</option>
+            <option value="Albania / Albanian">Albania / Albanian</option>
+            <option value="International / English">International / English</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <button class="tool-submit" id="audit-btn" onclick="runWebsiteAudit()">
+        <span id="audit-btn-text">🔍 Audit My Website</span>
+      </button>
+    </div>
+    <div class="tool-result" id="audit-result">
+      <div class="result-box">
+        <div class="result-header">
+          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Personalised Website Audit</span></div>
+          <div class="result-actions">
+            <button class="result-btn" id="audit-copy-btn" onclick="copyResult('audit-output','audit-copy-btn')">📋 Copy Report</button>
+          </div>
+        </div>
+        <div class="result-content" id="audit-output"></div>
+        <div class="share-row" style="padding:0 24px 18px">
+          <input class="share-input" id="audit-share-url" readonly placeholder="Shareable link will appear here...">
+          <button class="share-copy-btn" onclick="copyShare('audit-share-url')">🔗 Copy Link</button>
+        </div>
+        <div class="result-upgrade">
+          <div class="upgrade-text"><strong>Want us to fix these issues for you?</strong> We can build a new page, improve your SEO, set up lead capture — or handle all three under a monthly package.</div>
+          <a href="#contact" class="upgrade-cta">🛠️ Fix It With Us →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TOOL 3: OPTISCORE SIMULATOR
+  ══════════════════════════════════════ -->
+  <div class="tool-panel" id="panel-optiscore">
+    <div class="tool-form">
+      <span class="free-badge">✓ 100% Free</span>
+      <h3>Google Ads Optiscore Simulator</h3>
+      <p class="tool-desc">Answer 8 quick questions about your current Google Ads setup. We will simulate your Optiscore — the metric Google uses to measure campaign health — and tell you exactly what is pulling it down and how to fix it.</p>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>1. Do you have conversion tracking set up?</label>
+          <select id="os-1">
+            <option value="">Select</option>
+            <option value="Yes, fully set up and tracking conversions">Yes, fully set up</option>
+            <option value="Partially — tracking some actions">Partially tracking</option>
+            <option value="No conversion tracking set up">No conversion tracking</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>2. What bidding strategy are you using?</label>
+          <select id="os-2">
+            <option value="">Select</option>
+            <option value="Smart Bidding (Target CPA, Target ROAS, Maximise Conversions)">Smart Bidding (Target CPA/ROAS)</option>
+            <option value="Maximise Clicks (automated)">Maximise Clicks</option>
+            <option value="Manual CPC">Manual CPC</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>3. How many headlines does your top ad have?</label>
+          <select id="os-3">
+            <option value="">Select</option>
+            <option value="15 headlines (maximum)">15 headlines (maximum)</option>
+            <option value="10–14 headlines">10–14 headlines</option>
+            <option value="fewer than 10 headlines">Fewer than 10</option>
+            <option value="Not sure">Not sure</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>4. Do you use ad extensions / assets?</label>
+          <select id="os-4">
+            <option value="">Select</option>
+            <option value="Yes — sitelinks, callouts, structured snippets, calls">Yes — multiple types</option>
+            <option value="Some — 1–2 extension types">Some (1–2 types)</option>
+            <option value="No ad extensions">None</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>5. Are you using negative keywords?</label>
+          <select id="os-5">
+            <option value="">Select</option>
+            <option value="Yes — a strong negative keyword list">Yes, strong list</option>
+            <option value="A few negative keywords">A few</option>
+            <option value="No negative keywords">None</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>6. Are there any low-performing ads in your campaign?</label>
+          <select id="os-6">
+            <option value="">Select</option>
+            <option value="No — all ads have a Good or Excellent ad strength">No, all Good/Excellent</option>
+            <option value="Some ads marked as Poor or Average">Some Poor/Average</option>
+            <option value="Not sure / haven't checked">Not sure</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>7. Have you added audience targeting / remarketing?</label>
+          <select id="os-7">
+            <option value="">Select</option>
+            <option value="Yes — audience segments and remarketing lists">Yes — full setup</option>
+            <option value="Observation mode only">Observation mode only</option>
+            <option value="No audience targeting">No targeting</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>8. How often do you check and optimise the account?</label>
+          <select id="os-8">
+            <option value="">Select</option>
+            <option value="Weekly or more frequently">Weekly or more</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Rarely or never">Rarely / never</option>
+          </select>
+        </div>
+      </div>
+      <button class="tool-submit" id="optiscore-btn" onclick="runOptiscore()">
+        <span id="optiscore-btn-text">⚡ Simulate My Optiscore</span>
+      </button>
+    </div>
+    <div class="tool-result" id="optiscore-result">
+      <div class="result-box">
+        <div class="result-header">
+          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Simulated Optiscore Report</span></div>
+          <div class="result-actions">
+            <button class="result-btn" id="optiscore-copy-btn" onclick="copyResult('optiscore-output','optiscore-copy-btn')">📋 Copy Report</button>
+          </div>
+        </div>
+        <div class="score-ring-wrap">
+          <div class="score-ring" id="score-ring">
+            <div class="score-ring-inner">
+              <span class="score-num" id="score-num">--</span>
+              <span class="score-lbl">/ 100</span>
+            </div>
+          </div>
+        </div>
+        <div class="result-content" id="optiscore-output"></div>
+        <div class="share-row" style="padding:0 24px 18px">
+          <input class="share-input" id="optiscore-share-url" readonly placeholder="Shareable link will appear here...">
+          <button class="share-copy-btn" onclick="copyShare('optiscore-share-url')">🔗 Copy Link</button>
+        </div>
+        <div class="result-upgrade">
+          <div class="upgrade-text"><strong>Want us to push your Optiscore above 90?</strong> Our Growth package includes full account optimisation — Smart Bidding, extensions, ad strength and more.</div>
+          <a href="#contact" class="upgrade-cta">📈 Improve My Score →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       TOOL 4: AD BUDGET FORECAST
+  ══════════════════════════════════════ -->
+  <div class="tool-panel" id="panel-forecast">
+    <div class="tool-form">
+      <span class="free-badge">✓ 100% Free</span>
+      <h3>Google Ads Budget Forecast</h3>
+      <p class="tool-desc">Tell us your industry, market and budget. We will estimate what your Google Ads spend could realistically return — impressions, clicks, leads, and cost-per-lead — so you can make an informed decision before investing.</p>
+      <div class="form-row triple">
+        <div class="form-field">
+          <label>Industry</label>
+          <select id="fc-industry">
+            <option value="">Select industry</option>
+            <option value="Healthcare / Dental / Medical">Healthcare / Dental</option>
+            <option value="Legal / Law firm">Legal / Law firm</option>
+            <option value="Home services (plumbing, HVAC, cleaning)">Home Services</option>
+            <option value="Real estate / Property">Real Estate</option>
+            <option value="E-commerce / Retail">E-commerce / Retail</option>
+            <option value="Restaurant / Food">Restaurant / Food</option>
+            <option value="Education / Coaching">Education / Coaching</option>
+            <option value="Finance / Insurance">Finance / Insurance</option>
+            <option value="SaaS / Software">SaaS / Software</option>
+            <option value="Other / General business">Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Target Market</label>
+          <select id="fc-market">
+            <option value="">Select market</option>
+            <option value="Spain (Barcelona / Madrid)">Spain</option>
+            <option value="Denmark">Denmark</option>
+            <option value="UK">United Kingdom</option>
+            <option value="Germany">Germany</option>
+            <option value="Scandinavia">Scandinavia</option>
+            <option value="International / Multiple countries">International</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Monthly Budget (€)</label>
+          <select id="fc-budget">
+            <option value="">Select budget</option>
+            <option value="€200">€200</option>
+            <option value="€500">€500</option>
+            <option value="€1,000">€1,000</option>
+            <option value="€2,000">€2,000</option>
+            <option value="€5,000">€5,000</option>
+            <option value="€10,000+">€10,000+</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label>Campaign Type</label>
+          <select id="fc-type">
+            <option value="">Select</option>
+            <option value="Search (text ads on Google)">Search (text ads)</option>
+            <option value="Performance Max (all Google channels)">Performance Max</option>
+            <option value="Display (banner ads)">Display (banners)</option>
+            <option value="Not sure — recommend for me">Not sure — recommend</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Primary Goal</label>
+          <select id="fc-goal">
+            <option value="">Select goal</option>
+            <option value="phone calls and direct enquiries">Phone calls / Enquiries</option>
+            <option value="online sales">Online sales</option>
+            <option value="form submissions and lead capture">Form leads</option>
+            <option value="physical store visits">Store visits</option>
+          </select>
+        </div>
+      </div>
+      <button class="tool-submit" id="forecast-btn" onclick="runForecast()">
+        <span id="forecast-btn-text">📊 Generate My Forecast</span>
+      </button>
+    </div>
+    <div class="tool-result" id="forecast-result">
+      <div class="result-box">
+        <div class="result-header">
+          <div class="result-header-left"><div class="result-dot"></div><span class="result-title">Your Ad Budget Forecast</span></div>
+          <div class="result-actions">
+            <button class="result-btn" id="forecast-copy-btn" onclick="copyResult('forecast-output','forecast-copy-btn')">📋 Copy Forecast</button>
+          </div>
+        </div>
+        <div id="forecast-cards" style="padding:20px 24px 0"></div>
+        <div class="result-content" id="forecast-output"></div>
+        <div class="share-row" style="padding:0 24px 18px">
+          <input class="share-input" id="forecast-share-url" readonly placeholder="Shareable link will appear here...">
+          <button class="share-copy-btn" onclick="copyShare('forecast-share-url')">🔗 Copy Link</button>
+        </div>
+        <div class="result-upgrade">
+          <div class="upgrade-text"><strong>Ready to turn this forecast into real results?</strong> Our team will set up and manage the campaign — and we only consider it a success when you see the leads coming in.</div>
+          <a href="#contact" class="upgrade-cta">🎯 Start My Campaign →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tool-panels -->
+</div><!-- /tools -->
+
+<script>
+// ══════════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════════
+// switchTool defined in main script block below
+
+// ══════════════════════════════════════════════════
+// API CALL HELPER — streams Claude response
+// ══════════════════════════════════════════════════
+// ─────────────────────────────────────────────────────────────────
+// CONFIGURATION: Replace this URL with your Cloudflare Worker proxy URL
+// See README.md for full setup instructions.
+// Example: 'https://urawise-proxy.yourname.workers.dev'
+// ─────────────────────────────────────────────────────────────────
+var CLAUDE_PROXY_URL = 'https://api.anthropic.com/v1/messages';
+
+async function callClaude(prompt, outputId, onDone) {
+  const el = document.getElementById(outputId);
+  el.innerHTML = '<span class="typing-cursor"></span>';
+  let full = '';
+  try {
+    const res = await fetch(CLAUDE_PROXY_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        messages: [{role:'user', content: prompt}]
+      })
+    });
+    const data = await res.json();
+
+    // Handle rate limit / daily cap errors from the Worker
+    if (res.status === 429 && data.error) {
+      el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px 20px;color:#dc2626;font-size:14px;line-height:1.65;">'
+        + '⏱️ <strong>' + (data.code === 'DAILY_CAP' ? 'Daily limit reached' : 'Hourly limit reached') + '</strong><br>'
+        + data.error
+        + '<br><br><span style="color:var(--dim);font-size:13px">Meanwhile, <a href='#contact' style='color:var(--p)'>contact us directly</a> and we will run an audit for you personally.</span>'
+        + '</div>';
+      if(onDone) onDone('');
+      return;
+    }
+
+    const text = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : 'Something went wrong. Please try again.';
+    full = text;
+    el.innerHTML = '';
+    let i = 0;
+    const timer = setInterval(()=>{
+      if(i < full.length) {
+        el.innerHTML = full.slice(0,i+1).replace(/\n/g,'<br>') + '<span class="typing-cursor"></span>';
+        i += 3;
+      } else {
+        el.innerHTML = full.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+        clearInterval(timer);
+        if(onDone) onDone(full);
+      }
+    }, 12);
+  } catch(e) {
+    el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px 20px;color:#dc2626;font-size:14px;">⚠️ Could not connect to the AI service. Please check your connection and try again, or <a href='#contact' style='color:var(--p)'>contact us directly</a>.</div>';
+  }
+}
+
+function setLoading(btnId, textId, loading, defaultText) {
+  const btn = document.getElementById(btnId);
+  const txt = document.getElementById(textId);
+  btn.disabled = loading;
+  txt.innerHTML = loading
+    ? '<span class="loading-dots"><span></span><span></span><span></span></span> Generating...'
+    : defaultText;
+}
+
+function showResult(id) {
+  const el = document.getElementById(id);
+  el.classList.add('visible');
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function generateShareUrl(toolId, data) {
+  const encoded = btoa(encodeURIComponent(JSON.stringify({t:toolId,d:data}))).slice(0,32);
+  return window.location.origin + window.location.pathname + '?tool=' + toolId + '&ref=' + encoded;
+}
+
+function setShareUrl(inputId, toolId, data) {
+  const el = document.getElementById(inputId);
+  if(el) el.value = generateShareUrl(toolId, data);
+}
+
+function copyResult(outputId, btnId) {
+  const txt = document.getElementById(outputId).innerText;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn = document.getElementById(btnId);
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(()=>{ btn.textContent = '📋 Copy All'; btn.classList.remove('copied'); }, 2200);
+  });
+}
+
+function copyShare(inputId) {
+  const inp = document.getElementById(inputId);
+  navigator.clipboard.writeText(inp.value);
+  inp.select();
+}
+
+// ══════════════════════════════════════════════════
+// TOOL 1 — GOOGLE ADS GENERATOR
+// ══════════════════════════════════════════════════
+async function runAdsGenerator() {
+  const business = document.getElementById('ads-business').value.trim();
+  const location = document.getElementById('ads-location').value.trim();
+  const goal = document.getElementById('ads-goal').value;
+  const budget = document.getElementById('ads-budget').value;
+  const usp = document.getElementById('ads-usp').value.trim();
+  if(!business || !location || !goal || !budget) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+  setLoading('ads-btn','ads-btn-text',true,'');
+  showResult('ads-result');
+
+  const prompt = `You are a senior Google Ads specialist. Generate a complete Google Ads Starter Kit for the following business:
+
+Business type: ${business}
+Location/Market: ${location}
+Primary goal: ${goal}
+Monthly budget: ${budget}
+Unique selling point: ${usp || 'Not specified'}
+
+Generate the following in a clean, ready-to-use format:
+
+**CAMPAIGN STRATEGY**
+Briefly recommend the best campaign type, match types and bidding strategy for this business and budget. 2-3 sentences.
+
+**15 HEADLINES** (max 30 chars each, numbered)
+Write 15 strong headlines. Include location, service, USP and call-to-action variations.
+
+**4 DESCRIPTIONS** (max 90 chars each, numbered)
+Write 4 compelling descriptions. Include the goal, USP and a clear call to action.
+
+**6 SITELINKS** (title | description format)
+Write 6 relevant sitelink titles with short 2-line descriptions.
+
+**NEGATIVE KEYWORDS** (comma-separated)
+List 15 relevant negative keywords to block irrelevant traffic.
+
+**RECOMMENDED BIDDING STRATEGY**
+One sentence explaining the ideal Smart Bidding strategy and why, for this budget and goal.
+
+Keep everything practical and immediately usable in Google Ads.`;
+
+  await callClaude(prompt, 'ads-output', (text)=>{
+    setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit');
+    setShareUrl('ads-share-url','ads',{business,location,goal});
+  });
+  setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit');
+}
+
+// ══════════════════════════════════════════════════
+// TOOL 2 — WEBSITE AUDIT
+// ══════════════════════════════════════════════════
+async function runWebsiteAudit() {
+  const url = document.getElementById('audit-url').value.trim();
+  const business = document.getElementById('audit-business').value.trim();
+  const frustration = document.getElementById('audit-frustration').value.trim();
+  const goal = document.getElementById('audit-goal').value;
+  const market = document.getElementById('audit-market').value;
+  if(!url || !business || !frustration || !goal) {
+    alert('Please fill in the required fields.');
+    return;
+  }
+  setLoading('audit-btn','audit-btn-text',true,'');
+  showResult('audit-result');
+
+  const prompt = `You are a senior digital marketing consultant and UX strategist. Conduct a concise website and digital marketing audit based on this information:
+
+Website: ${url}
+Business type: ${business}
+Main frustration: ${frustration}
+Primary goal: ${goal}
+Target market: ${market || 'Not specified'}
+
+Provide a personalised audit with exactly 3 sections:
+
+**🔴 CRITICAL ISSUE — Fix This First**
+Identify the single most likely reason for their frustration based on what they described. Be specific and direct. Explain the problem and its impact on their business goal. 3-4 sentences.
+
+**🟡 QUICK WIN — Do This This Week**
+Identify one specific, low-effort improvement they can make immediately that would have a noticeable impact on their goal. Be concrete — not generic advice. 3-4 sentences.
+
+**🟢 STRATEGIC OPPORTUNITY — Your Biggest Growth Lever**
+Based on their business type, goal and market, identify one strategic digital marketing opportunity they are likely missing. This could be Google Ads, local SEO, lead capture, conversion optimisation, etc. 3-4 sentences.
+
+**ONE SENTENCE VERDICT**
+End with one bold sentence summarising the single thing that would most transform their online performance.
+
+Be direct, specific and genuinely useful. Avoid generic advice. Write as if you have reviewed their site personally.`;
+
+  await callClaude(prompt, 'audit-output', (text)=>{
+    setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website');
+    setShareUrl('audit-share-url','audit',{url,business,goal});
+  });
+  setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website');
+}
+
+// ══════════════════════════════════════════════════
+// TOOL 3 — OPTISCORE SIMULATOR
+// ══════════════════════════════════════════════════
+async function runOptiscore() {
+  const answers = [];
+  for(let i=1;i<=8;i++){
+    const val = document.getElementById('os-'+i).value;
+    if(!val){ alert('Please answer all 8 questions.'); return; }
+    answers.push(val);
+  }
+  setLoading('optiscore-btn','optiscore-btn-text',true,'');
+  showResult('optiscore-result');
+
+  const questions = [
+    'Conversion tracking',
+    'Bidding strategy',
+    'Number of headlines',
+    'Ad extensions / assets',
+    'Negative keywords',
+    'Ad strength / low-performing ads',
+    'Audience targeting',
+    'Optimisation frequency'
+  ];
+
+  const answerText = questions.map((q,i)=>`${q}: ${answers[i]}`).join('\n');
+
+  const prompt = `You are a certified Google Ads specialist. Based on these 8 answers about a Google Ads account, simulate an Optiscore and provide a detailed breakdown.
+
+Account setup answers:
+${answerText}
+
+First, output this exact line at the top (nothing before it):
+SCORE: [number between 0 and 100]
+
+Then provide the full report:
+
+**OPTISCORE BREAKDOWN**
+Explain what the score means for this account in 2 sentences.
+
+**WHAT'S PULLING YOUR SCORE DOWN** (list the 2-3 biggest issues based on answers)
+For each issue: name it, explain why it hurts the Optiscore, and what the fix is. Be specific.
+
+**WHAT'S WORKING** (based on strong answers)
+List 1-2 things they are doing right.
+
+**TOP 3 ACTIONS TO RAISE YOUR SCORE**
+Number these. Make them specific, actionable and ordered by impact. If they fix these, estimate the score improvement for each.
+
+**ESTIMATED SCORE AFTER FIXES**
+Give a realistic score range if they implement all recommendations.
+
+Calculate the score honestly based on the answers — poor setups should score low (30-50), average setups 55-72, strong setups 75-90, excellent 90+.`;
+
+  await callClaude(prompt, 'optiscore-output', (text)=>{
+    setLoading('optiscore-btn','optiscore-btn-text',false,'⚡ Simulate My Optiscore');
+    // Extract and display score
+    const match = text.match(/SCORE:\s*(\d+)/);
+    if(match) {
+      const score = parseInt(match[1]);
+      document.getElementById('score-num').textContent = score;
+      const pct = score + '%';
+      const color = score >= 75 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+      document.getElementById('score-ring').style.background =
+        `conic-gradient(${color} ${pct}, #e4e3f0 ${pct})`;
+      // Clean score line from output
+      const outEl = document.getElementById('optiscore-output');
+      outEl.innerHTML = outEl.innerHTML.replace(/SCORE:\s*\d+<br>/,'');
+    }
+    setShareUrl('optiscore-share-url','optiscore',{score: document.getElementById('score-num').textContent});
+  });
+  setLoading('optiscore-btn','optiscore-btn-text',false,'⚡ Simulate My Optiscore');
+}
+
+// ══════════════════════════════════════════════════
+// TOOL 4 — BUDGET FORECAST
+// ══════════════════════════════════════════════════
+async function runForecast() {
+  const industry = document.getElementById('fc-industry').value;
+  const market = document.getElementById('fc-market').value;
+  const budget = document.getElementById('fc-budget').value;
+  const type = document.getElementById('fc-type').value;
+  const goal = document.getElementById('fc-goal').value;
+  if(!industry || !market || !budget || !type || !goal) {
+    alert('Please fill in all fields.');
+    return;
+  }
+  setLoading('forecast-btn','forecast-btn-text',true,'');
+  showResult('forecast-result');
+
+  const prompt = `You are a senior Google Ads strategist with deep knowledge of industry benchmarks across European markets. Generate a realistic ad budget forecast.
+
+Industry: ${industry}
+Target market: ${market}
+Monthly budget: ${budget}
+Campaign type: ${type}
+Primary goal: ${goal}
+
+First output these exact lines (nothing before them):
+IMPRESSIONS: [realistic monthly estimate as number with comma separator, e.g. 45,000]
+CLICKS: [realistic monthly estimate]
+LEADS: [realistic monthly estimate]
+CPL: [estimated cost per lead in €, e.g. €28]
+
+Then provide the full forecast report:
+
+**YOUR MONTHLY FORECAST BREAKDOWN**
+Explain what the numbers mean in plain language — how many people will see the ads, click, and convert. 2-3 sentences.
+
+**KEY ASSUMPTIONS**
+Explain the CTR, conversion rate and CPC benchmarks you used for this industry and market. Be transparent. 3-4 bullet points.
+
+**HOW TO MAXIMISE THIS BUDGET**
+Give 3 specific, practical recommendations to get the most from this budget for this industry and goal.
+
+**SCALING POTENTIAL**
+What would happen if they doubled the budget? Give a brief 2-sentence projection.
+
+**RECOMMENDED NEXT STEP**
+One clear, actionable sentence on what they should do first.
+
+Base estimates on real industry CPC benchmarks for European markets. Be realistic — not over-optimistic. Healthcare and legal CPCs are high, retail and food are lower.`;
+
+  await callClaude(prompt, 'forecast-output', (text)=>{
+    setLoading('forecast-btn','forecast-btn-text',false,'📊 Generate My Forecast');
+
+    // Extract metrics and build cards
+    const imp = text.match(/IMPRESSIONS:\s*([\d,]+)/);
+    const clk = text.match(/CLICKS:\s*([\d,]+)/);
+    const lds = text.match(/LEADS:\s*([\d,]+)/);
+    const cpl = text.match(/CPL:\s*(€[\d.]+)/);
+
+    if(imp || clk || lds || cpl) {
+      const cards = document.getElementById('forecast-cards');
+      cards.innerHTML = `<div class="forecast-grid">
+        <div class="forecast-card"><div class="forecast-val">${imp?imp[1]:'—'}</div><div class="forecast-key">Monthly Impressions</div></div>
+        <div class="forecast-card"><div class="forecast-val">${clk?clk[1]:'—'}</div><div class="forecast-key">Monthly Clicks</div></div>
+        <div class="forecast-card"><div class="forecast-val">${lds?lds[1]:'—'}</div><div class="forecast-key">Est. Leads/Month</div></div>
+      </div><div style="text-align:center;margin-bottom:8px;font-size:13px;color:var(--muted)">Estimated cost-per-lead: <strong style="color:var(--ink)">${cpl?cpl[1]:'—'}</strong></div>`;
+      // Clean metric lines from text output
+      const outEl = document.getElementById('forecast-output');
+      outEl.innerHTML = outEl.innerHTML
+        .replace(/IMPRESSIONS:.*?<br>/,'')
+        .replace(/CLICKS:.*?<br>/,'')
+        .replace(/LEADS:.*?<br>/,'')
+        .replace(/CPL:.*?<br>/,'');
+    }
+    setShareUrl('forecast-share-url','forecast',{industry,market,budget});
+  });
+  setLoading('forecast-btn','forecast-btn-text',false,'📊 Generate My Forecast');
+}
+</script>
+
 
 <footer>
   <div class="f-logo">Ura<span>wise</span></div>
-  <div class="f-copy" data-en="© 2026 Urawise — AI-Powered Digital Presence · Madrid, Spain" data-es="© 2026 Urawise — Presencia Digital con IA · Madrid, España">© 2026 Urawise — AI-Powered Digital Presence · Madrid, Spain</div>
-  <div class="f-langs"><span class="f-chip">ES</span><span class="f-chip">EN</span><span class="f-chip">IT</span><span class="f-chip">DA</span></div>
+  <div class="f-copy" data-en="© 2026 Urawise — Google Ads & Digital Growth · Barcelona, Spain" data-es="© 2026 Urawise — Google Ads y Crecimiento Digital · Barcelona, España" data-sq="© 2026 Urawise — Google Ads & Rritje Dixhitale · Barcelona, Spanjë" data-da="© 2026 Urawise — Google Ads & Digital Vækst · Barcelona, Spanien">© 2026 Urawise — Google Ads &amp; Digital Growth · Barcelona, Spain</div>
+  <div class="f-langs"><span class="f-chip">🇩🇰 DA</span><span class="f-chip">🇦🇱 SQ</span><span class="f-chip">🇬🇧 EN</span><span class="f-chip">🇪🇸 ES</span><span class="f-chip">🇮🇹 IT</span></div>
 </footer>
 
 <script>
-function setLang(lang){
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===lang));
-  document.querySelectorAll('[data-en]').forEach(el=>{
-    const val=el.getAttribute('data-'+lang);
-    if(val!==null&&val!=='')el.innerHTML=val;
+// ── Active language state ──
+var _lang = 'en';
+
+// ── SETLANG: translate ALL data-en elements safely ──
+function setLang(lang) {
+  _lang = lang;
+
+  // Highlight active lang button
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+  });
+
+  // Translate every element with a data-en attribute
+  document.querySelectorAll('[data-en]').forEach(el => {
+    // Skip elements inside result boxes (AI-generated content — don't overwrite)
+    if (el.closest('.result-content') || el.closest('.forecast-cards') || el.id === 'ads-output' || el.id === 'audit-output' || el.id === 'optiscore-output' || el.id === 'forecast-output') return;
+
+    const val = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
+    if (!val) return;
+
+    // For inputs/textareas update placeholder only
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = val;
+      return;
+    }
+
+    // For elements that only contain text (no child elements with classes)
+    // safe to set innerHTML
+    el.innerHTML = val;
   });
 }
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
+
+// ── SWITCHTOOL: use data-tool attribute, not index ──
+function switchTool(id) {
+  // Update tabs — select only inside #tool-tabs-bar
+  document.querySelectorAll('#tool-tabs-bar .tool-tab').forEach(t => {
+    t.classList.toggle('active', t.getAttribute('data-tool') === id);
+  });
+
+  // Update panels
+  document.querySelectorAll('.tool-panel').forEach(p => {
+    p.classList.toggle('active', p.id === 'panel-' + id);
+  });
+
+  // Smooth scroll to the panel area
+  const panel = document.getElementById('panel-' + id);
+  if (panel) {
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// ── SMOOTH SCROLL for anchor links ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
     e.preventDefault();
-    const t=document.querySelector(a.getAttribute('href'));
-    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
-const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
-},{threshold:0.08});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── SCROLL REVEAL ──
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
