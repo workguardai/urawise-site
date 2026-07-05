@@ -1057,7 +1057,7 @@ var TL = {
     'ads-sitelinks-desc':'Add up to 4 pages and we will generate the perfect sitelink title and description for each.',
     'ads-btn-text':'✨ Generate My Google Ads Kit',
     'ads-upgrade-text':'<strong>Want us to build and run this campaign?</strong> We handle setup, tracking and optimisation.',
-    'ads-chat-hint':'Ask a follow-up — request changes, add more headlines, adjust tone, ask anything.',
+    'ads-chat-hint':'Ask anything — request changes, search for competitors, ask about Google Ads updates, request specific variations, give feedback on the results.',
     'audit-badge':'✓ 100% Free','audit-title':'60-Second Website Audit',
     'audit-desc':'Tell us your website and biggest frustration. Get three concrete, personalised recommendations.',
     'audit-lbl-url':'Your Website URL','audit-lbl-biz':'Business Type',
@@ -1065,7 +1065,7 @@ var TL = {
     'audit-lbl-goal':'Main Goal','audit-lbl-market':'Market',
     'audit-btn-text':'🔍 Audit My Website',
     'audit-upgrade-text':'<strong>Want us to fix these issues?</strong> We build pages, improve SEO and set up lead capture.',
-    'audit-chat-hint':'Ask a follow-up — request more detail, push back, ask how to fix something specific.',
+    'audit-chat-hint':'Ask anything — how to fix specific issues, search for examples, compare with competitors, request a full action plan.',
     'opti-badge':'✓ 100% Free','opti-title':'Google Ads Optiscore Simulator',
     'opti-desc':'Answer 8 questions about your Google Ads setup. We simulate your Optiscore and tell you exactly what to fix.',
     'os-lbl-1':'1. Conversion tracking?','os-lbl-2':'2. Bidding strategy?',
@@ -1089,7 +1089,7 @@ var TL = {
     'rank-lbl-biz':'Business Type','rank-lbl-market':'Target Market',
     'ranking-btn-text':'⚡ Run Live Technical Audit',
     'rank-upgrade-text':'<strong>Want us to fix these issues?</strong> We handle technical SEO, speed and content improvements.',
-    'rank-chat-hint':'Ask a follow-up — how to fix specific issues, what would improve performance score.',
+    'rank-chat-hint':'Ask anything — search for competitor rankings, ask about specific algorithm updates, request a detailed fix plan.',
     'rank-p2-head':'Part 2 — Real Google Ranking Data','rank-p2-sub':'Connect Search Console to see your actual keyword positions',
     'gsc-title':'See Your Real Google Rankings',
     'gsc-desc':'Connect your Google Search Console to see which keywords you rank for, real positions, clicks and impressions — then Claude explains what to improve.',
@@ -1176,7 +1176,7 @@ var TL = {
     'audit-lbl-frustration':'Cili është frustrimi juaj më i madh tani?',
     'audit-lbl-goal':'Qëllimi Kryesor','audit-lbl-market':'Tregu',
     'audit-btn-text':'🔍 Auditoni Faqen Time',
-    'audit-upgrade-text':'<strong>Doni t\'i rregullojmë këto probleme?</strong> Ndërtojmë faqe, përmirësojmë SEO dhe kapim kontakte.',
+    'audit-upgrade-text':'<strong>Doni ti rregullojmë këto probleme?</strong> Ndërtojmë faqe, përmirësojmë SEO dhe kapim kontakte.',
     'audit-chat-hint':'Bëni një pyetje — kërkoni më shumë detaje, pyesni si të rregulloni diçka specifike.',
     'opti-badge':'✓ 100% Falas','opti-title':'Simulues Optiscore Google Ads',
     'opti-desc':'Përgjigjuni 8 pyetjeve rreth Google Ads. Simulojmë Optiscore-in tuaj dhe tregojmë saktësisht çfarë të rregulloni.',
@@ -1348,8 +1348,15 @@ async function callClaude(toolId, systemPrompt, userPrompt, outputId, onDone) {
       el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px;color:#dc2626;font-size:14px;line-height:1.6;">⏱️ <strong>'+(data.code==='DAILY_CAP'?'Daily limit reached':'Hourly limit reached')+'</strong><br>'+data.error+'</div>';
       if(onDone) onDone(''); return;
     }
-    var text = data.content&&data.content[0]?data.content[0].text:'Something went wrong. Please try again.';
-    CONVOS[toolId].push({role:'assistant', content:text});
+    // Extract text from response — may include web_search tool_use blocks
+    var text = '';
+    if(data.content){
+      data.content.forEach(function(block){
+        if(block.type==='text') text += block.text;
+      });
+    }
+    if(!text) text = 'Something went wrong. Please try again.';
+    CONVOS[toolId].push({role:'assistant', content: data.content || text});
     typeOut(el, text, function(){
       if(onDone) onDone(text);
     });
@@ -1416,7 +1423,10 @@ async function sendChat(toolId) {
     });
     var data = await res.json();
     tb.remove();
-    var reply = data.content&&data.content[0]?data.content[0].text:'Sorry, something went wrong.';
+    // Extract text blocks (web_search responses may have multiple content blocks)
+    var reply = '';
+    if(data.content){ data.content.forEach(function(b){ if(b.type==='text') reply+=b.text; }); }
+    if(!reply) reply = 'Sorry, something went wrong.';
     CONVOS[toolId].push({role:'assistant', content:reply});
     var ab=document.createElement('div'); ab.className='msg-ai';
     ab.innerHTML='<div class="msg-bubble-ai">'+reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'</div>';
@@ -1453,7 +1463,7 @@ async function runAdsGenerator() {
   var slText = sls.length>0 ? '\nCustomer pages for sitelinks:\n'+sls.map(function(s,i){return (i+1)+'. '+s;}).join('\n') : '';
   setBtn('ads-btn','ads-btn-text',true,'');
   document.getElementById('ads-result').style.display='block';
-  var sys='You are a senior Google Ads specialist. Always respond entirely in '+lang+'. Every section heading and all content must be in '+lang+'.';
+  var sys='You are a senior Google Ads specialist with access to web search for current benchmarks and examples. Always respond entirely in '+lang+'. Every section heading and all content must be in '+lang+'.';
   var prompt='Generate a complete Google Ads Starter Kit in '+lang+'.\n\nBusiness: '+biz+'\nLocation: '+loc+'\nGoal: '+goal+'\nBudget: '+budget+'\nUSP: '+(usp||'Not specified')+slText+'\n\nProvide in '+lang+':\n\n**CAMPAIGN STRATEGY** (2-3 sentences on best campaign type and bidding)\n\n**15 HEADLINES** (max 30 chars each, numbered)\n\n**4 DESCRIPTIONS** (max 90 chars each, numbered)\n\n**4 CALLOUTS** (short phrases highlighting key benefits, max 25 chars each)\n\n**SITELINKS WITH TITLES AND DESCRIPTIONS**\n'+(sls.length>0?'Using the customer pages provided, generate a sitelink for each:\n- Sitelink Title (max 25 chars)\n- Description line 1 (max 35 chars)\n- Description line 2 (max 35 chars)':'Generate 4 sitelinks with:\n- Sitelink Title (max 25 chars)\n- Description line 1 (max 35 chars)\n- Description line 2 (max 35 chars)')+'\n\n**NEGATIVE KEYWORDS** (15 keywords, comma-separated)\n\n**RECOMMENDED BIDDING STRATEGY** (one sentence)\n\nWrite entirely in '+lang+'.';
   await callClaude('ads', sys, prompt, 'ads-output', function(text){
     setBtn('ads-btn','ads-btn-text',false,'✨ '+TL[_lang]['ads-btn-text']||'Generate My Google Ads Kit');
@@ -1475,7 +1485,7 @@ async function runAudit() {
   var lang=getLangName();
   setBtn('audit-btn','audit-btn-text',true,'');
   document.getElementById('audit-result').style.display='block';
-  var sys='You are a senior digital marketing consultant. Write your entire response in '+lang+'.';
+  var sys='You are a senior digital marketing consultant with access to web search for current best practices and competitor insights. Write your entire response in '+lang+'.';
   var prompt='Website audit in '+lang+'.\n\nWebsite: '+url+'\nBusiness: '+biz+'\nFrustration: '+frus+'\nGoal: '+goal+'\nMarket: '+(market||'Not specified')+'\n\nWrite in '+lang+':\n\n**🔴 CRITICAL ISSUE — Fix This First**\nThe single most likely reason for their frustration. 3-4 sentences. Be specific.\n\n**🟡 QUICK WIN — Do This This Week**\nOne low-effort improvement with noticeable impact. 3-4 sentences.\n\n**🟢 STRATEGIC OPPORTUNITY — Biggest Growth Lever**\nOne digital marketing opportunity they are missing. 3-4 sentences.\n\n**ONE SENTENCE VERDICT**\nThe single most important action in bold.\n\nBe direct and specific. Write entirely in '+lang+'.';
   await callClaude('audit', sys, prompt, 'audit-output', function(text){
     setBtn('audit-btn','audit-btn-text',false,'🔍 '+(TL[_lang]['audit-btn-text']||'Audit My Website'));
@@ -1581,6 +1591,12 @@ async function runRanking() {
     var psUrl='https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+encodeURIComponent(url)+'&strategy=mobile&key='+PAGESPEED_API_KEY+'&category=performance&category=seo&category=accessibility&category=best-practices';
     var psRes=await fetch(psUrl);
     psData=await psRes.json();
+    // If key is rejected (403 or error in response), retry without key
+    if(psData&&psData.error&&(psData.error.code===403||psData.error.code===400)){
+      var psUrl2='https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+encodeURIComponent(url)+'&strategy=mobile&category=performance&category=seo&category=accessibility&category=best-practices';
+      var psRes2=await fetch(psUrl2);
+      psData=await psRes2.json();
+    }
   } catch(e){ psData=null; }
 
   if(psData&&psData.lighthouseResult){
@@ -1607,7 +1623,7 @@ async function runRanking() {
   var scoreCtx=psData?'Real Google scores — Performance: '+perfScore+'/100, SEO: '+seoScore+'/100, Accessibility: '+a11yScore+'/100, Best Practices: '+bpScore+'/100':'No live scores — analyse based on business type and market.';
   var auditCtx=auditDetails.length>0?'Real audit failures:\n- '+auditDetails.join('\n- '):'No specific audit failures detected.';
 
-  var sys='You are a senior SEO and technical web specialist. Write entirely in '+lang+'.';
+  var sys='You are a senior SEO and technical web specialist with access to web search for current algorithm updates and ranking factors. Write entirely in '+lang+'.';
   var prompt='SEO and ranking analysis in '+lang+'.\n\nWebsite: '+url+'\nBusiness: '+biz+'\nKeywords: '+(kw||'Not specified')+'\nMarket: '+(market||'Not specified')+'\n\n'+scoreCtx+'\n\n'+auditCtx+'\n\nWrite in '+lang+':\n\n**🔴 CRITICAL ISSUES — Fix These First**\nList the most damaging problems. For each: name it, explain WHY it hurts ranking in plain language, give the specific fix.\n\n**🟡 RANKING POSITION ESTIMATE**\nEstimate likely Google position for their keywords. Explain the competitive landscape.\n\n**🟢 WHAT IS WORKING**\n2-3 positive signals.\n\n**📋 TOP 5 ACTIONS — Ordered by Impact**\nNumbered. What to do AND why it helps ranking.\n\n**⚡ QUICK WIN**\nOne thing fixable today in under 30 minutes.\n\nWrite entirely in '+lang+'.';
 
   await callClaude('ranking', sys, prompt, 'ranking-output', function(text){
