@@ -684,6 +684,9 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
     <button id="tab-forecast" onclick="switchTool('forecast')" style="display:flex;align-items:center;gap:8px;padding:13px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;">
       📊 <span id="tab-forecast-label">Budget Forecast</span>
     </button>
+    <button id="tab-ranking" onclick="switchTool('ranking')" style="display:flex;align-items:center;gap:8px;padding:13px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;">
+      🔎 <span id="tab-ranking-label">SEO Ranking</span>
+    </button>
   </div>
 </div>
 
@@ -1010,6 +1013,132 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+
+
+  <!-- PANEL: SEO RANKING ANALYSER -->
+  <div id="panel-ranking" style="display:none;padding:52px 0 72px;">
+    <div style="max-width:820px;margin:0 auto;padding:0 24px;">
+
+      <!-- TWO PART INTRO -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;">
+
+        <!-- Part 1 card -->
+        <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:14px;padding:22px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(135deg,#5b47e0,#4338ca);"></div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#5b47e0;margin-bottom:8px;">PART 1 — FREE, NO LOGIN</div>
+          <h4 style="font-size:16px;font-weight:800;color:#12111e;margin-bottom:6px;" id="rank-p1-title">Live Technical Audit</h4>
+          <p style="font-size:13px;color:#5c5b72;line-height:1.6;" id="rank-p1-desc">Real data from Google's PageSpeed API — Core Web Vitals, mobile score, page speed, SEO errors. No login needed.</p>
+        </div>
+
+        <!-- Part 2 card -->
+        <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:14px;padding:22px;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(135deg,#10b981,#059669);"></div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#059669;margin-bottom:8px;">PART 2 — CONNECT GOOGLE</div>
+          <h4 style="font-size:16px;font-weight:800;color:#12111e;margin-bottom:6px;" id="rank-p2-title">Real Ranking Positions</h4>
+          <p style="font-size:13px;color:#5c5b72;line-height:1.6;" id="rank-p2-desc">Connect your Google Search Console to see your actual keyword positions, clicks, impressions and why you rank where you do.</p>
+        </div>
+      </div>
+
+      <!-- ═══ PART 1: TECHNICAL AUDIT ═══ -->
+      <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;margin-bottom:28px;">
+        <div style="padding:20px 24px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:linear-gradient(135deg,#5b47e0,#4338ca);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">⚡</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#12111e;" id="rank-audit-heading">Part 1 — Live Technical Audit</div>
+            <div style="font-size:12px;color:#9896b0;" id="rank-audit-sub">Powered by Google PageSpeed Insights API</div>
+          </div>
+        </div>
+        <div style="padding:22px 24px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label style="font-size:11px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="rank-lbl-url">Website URL</label>
+              <input id="rank-url" type="text" placeholder="https://yourwebsite.com" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label style="font-size:11px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="rank-lbl-kw">Target Keywords</label>
+              <input id="rank-keywords" type="text" placeholder="e.g. dentist Barcelona, dental clinic" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label style="font-size:11px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="rank-lbl-biz">Business Type</label>
+              <input id="rank-business" type="text" placeholder="e.g. Dental clinic, Restaurant" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <label style="font-size:11px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;" id="rank-lbl-market">Target Market</label>
+              <select id="rank-market" style="padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;cursor:pointer;">
+                <option value="">Select market</option>
+                <option value="Spain / Spanish">Spain / Spanish</option>
+                <option value="Denmark / Danish">Denmark / Danish</option>
+                <option value="UK / English">UK / English</option>
+                <option value="Albania / Albanian">Albania / Albanian</option>
+                <option value="International / English">International</option>
+              </select>
+            </div>
+          </div>
+          <button id="ranking-btn" onclick="runRankingAnalysis()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);">
+            <span id="ranking-btn-text">⚡ Run Live Technical Audit</span>
+          </button>
+        </div>
+
+        <!-- PART 1 RESULTS -->
+        <div id="ranking-result" style="display:none;border-top:1.5px solid #e4e3f0;">
+          <!-- Score cards -->
+          <div id="ranking-score-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e4e3f0;border-bottom:1.5px solid #e4e3f0;"></div>
+          <!-- AI analysis output -->
+          <div id="ranking-output" style="padding:24px;font-size:14px;color:#5c5b72;line-height:1.75;white-space:pre-wrap;max-height:480px;overflow-y:auto;"></div>
+          <!-- Chat follow-up -->
+          <div id="ranking-chat-area"></div>
+          <!-- Upgrade -->
+          <div style="background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:13px;color:#5c5b72;" id="rank-upgrade-text"><strong>Want us to fix these issues for you?</strong> We handle technical SEO, speed optimisation and content improvements.</span>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">📈 Fix My SEO →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ PART 2: SEARCH CONSOLE ═══ -->
+      <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;">
+        <div style="padding:20px 24px;border-bottom:1.5px solid #e4e3f0;background:rgba(16,185,129,0.04);display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;background:linear-gradient(135deg,#10b981,#059669);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;">📊</div>
+          <div>
+            <div style="font-size:14px;font-weight:800;color:#12111e;" id="rank-gsc-heading">Part 2 — Real Google Ranking Data</div>
+            <div style="font-size:12px;color:#9896b0;" id="rank-gsc-sub">Connect Google Search Console to see your actual keyword positions</div>
+          </div>
+        </div>
+        <div id="gsc-panel" style="padding:28px 24px;text-align:center;">
+          <div style="font-size:42px;margin-bottom:14px;">🔍</div>
+          <h4 style="font-size:18px;font-weight:800;color:#12111e;margin-bottom:8px;" id="gsc-connect-title">See Your Real Google Rankings</h4>
+          <p style="font-size:14px;color:#5c5b72;max-width:480px;margin:0 auto 22px;line-height:1.65;" id="gsc-connect-desc">Connect your Google Search Console account to see exactly which keywords you rank for, your real positions, clicks and impressions. Claude then explains what the data means and how to improve it.</p>
+          <div style="background:#fafafa;border:1.5px solid #e4e3f0;border-radius:10px;padding:14px 18px;margin-bottom:22px;font-size:12.5px;color:#9896b0;text-align:left;line-height:1.6;" id="gsc-privacy-note">🔒 <strong style="color:#5c5b72;">Privacy:</strong> We only read your Search Console data. We never store it. Data is used only to generate your analysis and then discarded.</div>
+          <button id="gsc-connect-btn" onclick="connectSearchConsole()" style="display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;padding:14px 24px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;color:#12111e;cursor:pointer;transition:all 0.2s;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            <span id="gsc-btn-label">Connect Google Search Console</span>
+          </button>
+        </div>
+
+        <!-- GSC results appear here after auth -->
+        <div id="gsc-results" style="display:none;">
+          <div style="padding:20px 24px;border-top:1.5px solid #e4e3f0;border-bottom:1.5px solid #e4e3f0;background:#fafafa;display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:13px;font-weight:700;color:#059669;">✅ <span id="gsc-connected-site">Connected</span></span>
+            <button onclick="disconnectGSC()" style="font-size:12px;color:#9896b0;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;" id="gsc-disconnect-btn">Disconnect</button>
+          </div>
+          <!-- Keyword ranking table -->
+          <div id="gsc-table-wrap" style="padding:20px 24px;overflow-x:auto;"></div>
+          <!-- AI analysis of GSC data -->
+          <div id="gsc-analysis-wrap" style="padding:0 24px 20px;"></div>
+          <!-- Chat follow-up for GSC -->
+          <div id="gsc-chat-area"></div>
+          <div style="background:rgba(16,185,129,0.04);border-top:1.5px solid rgba(16,185,129,0.15);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+            <span style="font-size:13px;color:#5c5b72;" id="gsc-upgrade-text"><strong>Want expert help improving these rankings?</strong> We analyse your full Search Console data and build a ranking improvement plan.</span>
+            <a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">📈 Get a Ranking Plan →</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1348,6 +1477,179 @@ function copyResult(outputId, btnId) {
 // ═══════════════════════════════════════════════════════
 // TOOL 1 — ADS GENERATOR
 // ═══════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════
+// LANGUAGE NAMES FOR PROMPTS
+// ═══════════════════════════════════════════════════════
+var LANG_NAMES = {en:'English', es:'Spanish', sq:'Albanian', da:'Danish'};
+
+// ═══════════════════════════════════════════════════════
+// CONVERSATION HISTORY per tool
+// ═══════════════════════════════════════════════════════
+var conversations = {ads:[], audit:[], optiscore:[], forecast:[], ranking:[]};
+
+function getLang() {
+  var active = document.querySelector('.lang-btn.active');
+  return active ? active.getAttribute('data-lang') : 'en';
+}
+function getLangName() { return LANG_NAMES[getLang()] || 'English'; }
+
+// ── Render a chat message bubble ──
+function appendMessage(containerId, role, text) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var isUser = role === 'user';
+  var div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:10px;margin-bottom:16px;' + (isUser ? 'flex-direction:row-reverse;' : '');
+  var avatar = document.createElement('div');
+  avatar.style.cssText = 'width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;' + (isUser ? 'background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;' : 'background:#f0f0f8;border:1.5px solid #e4e3f0;');
+  avatar.textContent = isUser ? '👤' : '✦';
+  var bubble = document.createElement('div');
+  bubble.style.cssText = 'max-width:82%;padding:14px 16px;border-radius:' + (isUser ? '14px 4px 14px 14px' : '4px 14px 14px 14px') + ';font-size:13.5px;line-height:1.7;' + (isUser ? 'background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;' : 'background:#fff;border:1.5px solid #e4e3f0;color:#3d3c52;');
+  bubble.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+  div.appendChild(avatar);
+  div.appendChild(bubble);
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+  return bubble;
+}
+
+function showTyping(containerId) {
+  var container = document.getElementById(containerId);
+  var div = document.createElement('div');
+  div.id = containerId + '-typing';
+  div.style.cssText = 'display:flex;gap:10px;margin-bottom:16px;';
+  div.innerHTML = '<div style="width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;background:#f0f0f8;border:1.5px solid #e4e3f0;">✦</div><div style="padding:14px 16px;background:#fff;border:1.5px solid #e4e3f0;border-radius:4px 14px 14px 14px;"><span style="display:inline-flex;gap:4px;"><span style="width:7px;height:7px;background:#9896b0;border-radius:50%;animation:dotpulse 1.2s infinite;"></span><span style="width:7px;height:7px;background:#9896b0;border-radius:50%;animation:dotpulse 1.2s infinite 0.2s;"></span><span style="width:7px;height:7px;background:#9896b0;border-radius:50%;animation:dotpulse 1.2s infinite 0.4s;"></span></span></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping(containerId) {
+  var el = document.getElementById(containerId + '-typing');
+  if (el) el.remove();
+}
+
+// ── Send a follow-up message in a tool's chat ──
+async function sendFollowUp(toolId) {
+  var inputEl = document.getElementById(toolId + '-followup-input');
+  var msg = inputEl ? inputEl.value.trim() : '';
+  if (!msg) return;
+  inputEl.value = '';
+  inputEl.disabled = true;
+
+  var lang = getLangName();
+  conversations[toolId].push({role:'user', content: msg});
+  appendMessage(toolId + '-chat', 'user', msg);
+  showTyping(toolId + '-chat');
+
+  // Build messages with language instruction
+  var messages = [{role:'user', content: 'Please respond in ' + lang + ' for all your answers in this conversation.'}].concat(conversations[toolId]);
+
+  try {
+    var res = await fetch(CLAUDE_PROXY_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1000, messages: conversations[toolId]})
+    });
+    var data = await res.json();
+    removeTyping(toolId + '-chat');
+    if (res.status === 429 && data.error) {
+      appendMessage(toolId + '-chat', 'assistant', '⏱️ ' + data.error);
+      inputEl.disabled = false;
+      return;
+    }
+    var reply = data.content && data.content[0] ? data.content[0].text : 'Sorry, something went wrong.';
+    conversations[toolId].push({role:'assistant', content: reply});
+    appendMessage(toolId + '-chat', 'assistant', reply);
+  } catch(e) {
+    removeTyping(toolId + '-chat');
+    appendMessage(toolId + '-chat', 'assistant', '⚠️ Could not connect. Please try again.');
+  }
+  inputEl.disabled = false;
+  inputEl.focus();
+}
+
+// ── Render the chat follow-up UI below a result ──
+function renderChatUI(containerId, toolId, lang) {
+  var container = document.getElementById(containerId);
+  if (!container || document.getElementById(toolId + '-chat-ui')) return;
+
+  var labels = {
+    en: {placeholder:'Ask a follow-up question, give feedback, or request changes...', btn:'Send', hint:'Continue the conversation — ask Claude to adjust, clarify or expand the response.'},
+    es: {placeholder:'Haz una pregunta de seguimiento, da feedback o pide cambios...', btn:'Enviar', hint:'Continúa la conversación — pide a Claude que ajuste, aclare o amplíe la respuesta.'},
+    sq: {placeholder:'Bëni një pyetje pasuese, jepni feedback ose kërkoni ndryshime...', btn:'Dërgo', hint:'Vazhdoni bisedën — kërkojini Claude-it të rregullojë, sqarojë ose zgjerojë përgjigjen.'},
+    da: {placeholder:'Stil et opfølgningsspørgsmål, giv feedback eller anmod om ændringer...', btn:'Send', hint:'Fortsæt samtalen — bed Claude om at justere, afklare eller udvide svaret.'}
+  };
+  var l = labels[lang] || labels.en;
+
+  var ui = document.createElement('div');
+  ui.id = toolId + '-chat-ui';
+  ui.style.cssText = 'border-top:1.5px solid #e4e3f0;';
+  ui.innerHTML =
+    '<div id="' + toolId + '-chat" style="padding:20px 22px;max-height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:0;background:#fafafa;"></div>' +
+    '<div style="padding:14px 22px 20px;background:#fff;border-top:1px solid #f0f0f0;">' +
+    '<p style="font-size:11.5px;color:#9896b0;margin-bottom:10px;font-style:italic;">' + l.hint + '</p>' +
+    '<div style="display:flex;gap:8px;">' +
+    '<input id="' + toolId + '-followup-input" type="text" placeholder="' + l.placeholder + '" onkeydown="if(event.key===\'Enter\')sendFollowUp(\'' + toolId + '\')" style="flex:1;padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:\'DM Sans\',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;">' +
+    '<button onclick="sendFollowUp(\'' + toolId + '\')" style="padding:11px 20px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;border-radius:9px;font-family:\'DM Sans\',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;">' + l.btn + ' →</button>' +
+    '</div></div>';
+  container.appendChild(ui);
+}
+
+// ── Central callClaude with language + chat support ──
+async function callClaudeChat(toolId, prompt, outputId, onDone) {
+  var lang = getLangName();
+  var el = document.getElementById(outputId);
+
+  // Reset conversation for this tool
+  conversations[toolId] = [];
+
+  // System instruction + user prompt
+  var systemPrompt = 'You are a senior Google Ads and digital marketing specialist. Always respond in ' + lang + '. Be specific, practical and direct.';
+  var fullPrompt = systemPrompt + '\n\n' + prompt;
+
+  conversations[toolId].push({role:'user', content: fullPrompt});
+
+  el.innerHTML = '<span style="display:inline-flex;gap:4px;align-items:center;color:#9896b0;font-size:13px;"><span style="width:7px;height:7px;background:#5b47e0;border-radius:50%;animation:dotpulse 1.2s infinite;"></span><span style="width:7px;height:7px;background:#5b47e0;border-radius:50%;animation:dotpulse 1.2s infinite 0.2s;"></span><span style="width:7px;height:7px;background:#5b47e0;border-radius:50%;animation:dotpulse 1.2s infinite 0.4s;"></span></span>';
+
+  try {
+    var res = await fetch(CLAUDE_PROXY_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1000, messages: conversations[toolId]})
+    });
+    var data = await res.json();
+
+    if (res.status === 429 && data.error) {
+      el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px;color:#dc2626;font-size:14px;line-height:1.65;">⏱️ <strong>' + (data.code==='DAILY_CAP'?'Daily limit reached':'Hourly limit reached') + '</strong><br>' + data.error + '</div>';
+      if (onDone) onDone('');
+      return;
+    }
+
+    var text = data.content && data.content[0] ? data.content[0].text : 'Something went wrong. Please try again.';
+    conversations[toolId].push({role:'assistant', content: text});
+
+    // Typewriter effect
+    el.innerHTML = '';
+    var i = 0;
+    var timer = setInterval(function() {
+      if (i < text.length) {
+        el.innerHTML = text.slice(0,i+1).replace(/\n/g,'<br>') + '<span style="display:inline-block;width:2px;height:1em;background:#5b47e0;animation:blink2 0.8s infinite;vertical-align:text-bottom;"></span>';
+        i += 4;
+      } else {
+        el.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+        clearInterval(timer);
+        if (onDone) onDone(text);
+      }
+    }, 10);
+  } catch(e) {
+    el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:18px;color:#dc2626;font-size:14px;">⚠️ Could not connect. Please check your connection and try again, or <a href="#contact" style="color:#5b47e0">contact us directly</a>.</div>';
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// TOOL 1 — ADS GENERATOR
+// ═══════════════════════════════════════════════════════
 async function runAdsGenerator() {
   var business = document.getElementById('ads-business').value.trim();
   var location = document.getElementById('ads-location').value.trim();
@@ -1355,10 +1657,14 @@ async function runAdsGenerator() {
   var budget = document.getElementById('ads-budget').value;
   var usp = document.getElementById('ads-usp').value.trim();
   if (!business || !location || !goal || !budget) { alert('Please fill in Business Type, Location, Goal and Budget.'); return; }
+  var lang = getLangName();
   setLoading('ads-btn','ads-btn-text',true,'');
   document.getElementById('ads-result').style.display = 'block';
-  var prompt = 'You are a senior Google Ads specialist. Generate a complete Google Ads Starter Kit.\n\nBusiness: ' + business + '\nLocation: ' + location + '\nGoal: ' + goal + '\nBudget: ' + budget + '\nUSP: ' + (usp||'Not specified') + '\n\nFormat:\n\n**CAMPAIGN STRATEGY**\n2-3 sentences on best campaign type and bidding for this budget.\n\n**15 HEADLINES** (max 30 chars each, numbered 1-15)\n\n**4 DESCRIPTIONS** (max 90 chars each, numbered 1-4)\n\n**6 SITELINKS** (Title | Description)\n\n**15 NEGATIVE KEYWORDS** (comma-separated)\n\n**RECOMMENDED BIDDING STRATEGY**\nOne sentence.';
-  await callClaude(prompt, 'ads-output', function() { setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit'); });
+  var prompt = 'Generate a complete Google Ads Starter Kit in ' + lang + '.\n\nBusiness: ' + business + '\nLocation: ' + location + '\nGoal: ' + goal + '\nBudget: ' + budget + '\nUSP: ' + (usp||'Not specified') + '\n\nFormat your response in ' + lang + ':\n\n**CAMPAIGN STRATEGY** (2-3 sentences)\n\n**15 HEADLINES** (max 30 chars each, numbered 1-15)\n\n**4 DESCRIPTIONS** (max 90 chars each, numbered 1-4)\n\n**6 SITELINKS** (Title | Description)\n\n**15 NEGATIVE KEYWORDS** (comma-separated)\n\n**RECOMMENDED BIDDING STRATEGY** (one sentence)\n\nEverything must be written in ' + lang + '.';
+  await callClaudeChat('ads', prompt, 'ads-output', function(text) {
+    setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit');
+    if (text) renderChatUI(document.getElementById('ads-result').querySelector('div'), 'ads', getLang());
+  });
   setLoading('ads-btn','ads-btn-text',false,'✨ Generate My Google Ads Kit');
 }
 
@@ -1372,10 +1678,14 @@ async function runWebsiteAudit() {
   var goal = document.getElementById('audit-goal').value;
   var market = document.getElementById('audit-market').value;
   if (!url || !business || !frustration || !goal) { alert('Please fill in URL, Business Type, Frustration and Goal.'); return; }
+  var lang = getLangName();
   setLoading('audit-btn','audit-btn-text',true,'');
   document.getElementById('audit-result').style.display = 'block';
-  var prompt = 'You are a senior digital marketing consultant. Conduct a website audit.\n\nWebsite: ' + url + '\nBusiness: ' + business + '\nFrustration: ' + frustration + '\nGoal: ' + goal + '\nMarket: ' + (market||'Not specified') + '\n\nProvide exactly 3 sections:\n\n**🔴 CRITICAL ISSUE — Fix This First**\nThe single most likely reason for their frustration. 3-4 sentences. Be specific.\n\n**🟡 QUICK WIN — Do This This Week**\nOne low-effort improvement with noticeable impact. 3-4 sentences.\n\n**🟢 STRATEGIC OPPORTUNITY — Biggest Growth Lever**\nOne strategic digital marketing opportunity they are likely missing. 3-4 sentences.\n\n**ONE SENTENCE VERDICT**\nBold one-sentence summary of what would most transform their performance.\n\nBe direct and specific. No generic advice.';
-  await callClaude(prompt, 'audit-output', function() { setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website'); });
+  var prompt = 'You are a senior digital marketing consultant. Write your entire response in ' + lang + '.\n\nWebsite: ' + url + '\nBusiness: ' + business + '\nFrustration: ' + frustration + '\nGoal: ' + goal + '\nMarket: ' + (market||'Not specified') + '\n\nWrite in ' + lang + ' — provide exactly 3 sections:\n\n**🔴 CRITICAL ISSUE — Fix This First**\nThe single most likely reason for their frustration. 3-4 sentences.\n\n**🟡 QUICK WIN — Do This This Week**\nOne low-effort improvement with noticeable impact. 3-4 sentences.\n\n**🟢 STRATEGIC OPPORTUNITY — Biggest Growth Lever**\nOne strategic digital marketing opportunity they are missing. 3-4 sentences.\n\n**ONE SENTENCE VERDICT**\nOne bold sentence summarising the single most important action.\n\nBe direct, specific and write entirely in ' + lang + '.';
+  await callClaudeChat('audit', prompt, 'audit-output', function(text) {
+    setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website');
+    if (text) renderChatUI(document.getElementById('audit-result').querySelector('div'), 'audit', getLang());
+  });
   setLoading('audit-btn','audit-btn-text',false,'🔍 Audit My Website');
 }
 
@@ -1389,11 +1699,12 @@ async function runOptiscore() {
     if (!v) { alert('Please answer all 8 questions.'); return; }
     answers.push(v);
   }
+  var lang = getLangName();
   setLoading('optiscore-btn','optiscore-btn-text',true,'');
   document.getElementById('optiscore-result').style.display = 'block';
-  var ansText = ['Conversion tracking','Bidding strategy','Headlines count','Ad extensions','Negative keywords','Ad strength','Audience targeting','Optimisation frequency'].map(function(q,i){ return q+': '+answers[i]; }).join('\n');
-  var prompt = 'You are a certified Google Ads specialist. Simulate an Optiscore based on these answers:\n\n' + ansText + '\n\nIMPORTANT: Output the VERY FIRST line as exactly: SCORE: [number]\n\nThen provide:\n\n**OPTISCORE BREAKDOWN**\nWhat the score means. 2 sentences.\n\n**WHAT IS PULLING YOUR SCORE DOWN**\nTop 2-3 issues with specific fixes.\n\n**WHAT IS WORKING**\n1-2 strengths.\n\n**TOP 3 ACTIONS TO RAISE YOUR SCORE**\nNumbered, specific, ordered by impact.\n\n**ESTIMATED SCORE AFTER FIXES**\nRealistic range.\n\nScore guide: poor setup=30-50, average=55-72, good=75-88, excellent=89+';
-  await callClaude(prompt, 'optiscore-output', function(text) {
+  var ansText = ['Conversion tracking','Bidding strategy','Headlines count','Ad extensions','Negative keywords','Ad strength','Audience targeting','Optimisation frequency'].map(function(q,idx){ return q+': '+answers[idx]; }).join('\n');
+  var prompt = 'You are a certified Google Ads specialist. Write your entire response in ' + lang + '.\n\nAccount setup:\n' + ansText + '\n\nIMPORTANT: First line must be exactly: SCORE: [number]\n\nThen write in ' + lang + ':\n\n**OPTISCORE BREAKDOWN** — what the score means (2 sentences)\n\n**WHAT IS PULLING YOUR SCORE DOWN** — top 2-3 issues with specific fixes\n\n**WHAT IS WORKING** — 1-2 strengths\n\n**TOP 3 ACTIONS TO RAISE YOUR SCORE** — numbered, specific, ordered by impact\n\n**ESTIMATED SCORE AFTER FIXES** — realistic range\n\nScore guide: poor=30-50, average=55-72, good=75-88, excellent=89+. Write entirely in ' + lang + '.';
+  await callClaudeChat('optiscore', prompt, 'optiscore-output', function(text) {
     setLoading('optiscore-btn','optiscore-btn-text',false,'⚡ Simulate My Optiscore');
     var match = text.match(/SCORE:\s*(\d+)/);
     if (match) {
@@ -1404,6 +1715,7 @@ async function runOptiscore() {
       var out = document.getElementById('optiscore-output');
       out.innerHTML = out.innerHTML.replace(/SCORE:\s*\d+(<br>)?/,'');
     }
+    if (text) renderChatUI(document.getElementById('optiscore-result').querySelector('div'), 'optiscore', getLang());
   });
   setLoading('optiscore-btn','optiscore-btn-text',false,'⚡ Simulate My Optiscore');
 }
@@ -1418,10 +1730,11 @@ async function runForecast() {
   var type = document.getElementById('fc-type').value;
   var goal = document.getElementById('fc-goal').value;
   if (!industry || !market || !budget || !type || !goal) { alert('Please fill in all fields.'); return; }
+  var lang = getLangName();
   setLoading('forecast-btn','forecast-btn-text',true,'');
   document.getElementById('forecast-result').style.display = 'block';
-  var prompt = 'You are a Google Ads strategist. Generate a realistic budget forecast.\n\nIndustry: ' + industry + '\nMarket: ' + market + '\nBudget: ' + budget + '\nCampaign: ' + type + '\nGoal: ' + goal + '\n\nIMPORTANT: Output these FIRST (exact format):\nIMPRESSIONS: [number with commas]\nCLICKS: [number]\nLEADS: [number]\nCPL: €[number]\n\nThen provide:\n\n**MONTHLY FORECAST BREAKDOWN**\nExplain the numbers in plain language. 2-3 sentences.\n\n**KEY ASSUMPTIONS**\nCTR, conversion rate and CPC benchmarks used. 3-4 bullet points.\n\n**HOW TO MAXIMISE THIS BUDGET**\n3 specific practical recommendations.\n\n**SCALING POTENTIAL**\nWhat happens if they double the budget. 2 sentences.\n\n**RECOMMENDED NEXT STEP**\nOne clear sentence.\n\nBe realistic. Base on real European market benchmarks.';
-  await callClaude(prompt, 'forecast-output', function(text) {
+  var prompt = 'You are a Google Ads strategist. Write your entire response in ' + lang + '.\n\nIndustry: ' + industry + '\nMarket: ' + market + '\nBudget: ' + budget + '\nCampaign: ' + type + '\nGoal: ' + goal + '\n\nFirst output these exact lines (before any other text):\nIMPRESSIONS: [number with commas]\nCLICKS: [number]\nLEADS: [number]\nCPL: €[number]\n\nThen write everything in ' + lang + ':\n\n**MONTHLY FORECAST BREAKDOWN** — explain the numbers in plain language (2-3 sentences)\n\n**KEY ASSUMPTIONS** — CTR, conversion rate and CPC benchmarks (3-4 bullet points)\n\n**HOW TO MAXIMISE THIS BUDGET** — 3 specific practical recommendations\n\n**SCALING POTENTIAL** — what happens if they double the budget (2 sentences)\n\n**RECOMMENDED NEXT STEP** — one clear sentence\n\nBase on real European benchmarks. Write entirely in ' + lang + '.';
+  await callClaudeChat('forecast', prompt, 'forecast-output', function(text) {
     setLoading('forecast-btn','forecast-btn-text',false,'📊 Generate My Forecast');
     var imp = text.match(/IMPRESSIONS:\s*([\d,]+)/);
     var clk = text.match(/CLICKS:\s*([\d,]+)/);
@@ -1437,6 +1750,7 @@ async function runForecast() {
       var out = document.getElementById('forecast-output');
       out.innerHTML = out.innerHTML.replace(/IMPRESSIONS:.*?<br>/,'').replace(/CLICKS:.*?<br>/,'').replace(/LEADS:.*?<br>/,'').replace(/CPL:.*?<br>/,'');
     }
+    if (text) renderChatUI(document.getElementById('forecast-result').querySelector('div'), 'forecast', getLang());
   });
   setLoading('forecast-btn','forecast-btn-text',false,'📊 Generate My Forecast');
 }
@@ -1455,6 +1769,459 @@ var obs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
 }, {threshold: 0.07});
 document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+
+// ═══════════════════════════════════════════════════════
+// TOOL 5 — SEO RANKING ANALYSER (PART 1 + PART 2)
+// ═══════════════════════════════════════════════════════
+
+// REPLACE THIS with your real key from console.cloud.google.com
+var PAGESPEED_API_KEY = 'AIzaSyDlzJn4wjrNinj__CScDZx9aPj0PYqD0tg';
+// REPLACE THIS with your OAuth Client ID from console.cloud.google.com
+var GSC_CLIENT_ID = 'YOUR_GOOGLE_OAUTH_CLIENT_ID';
+var GSC_TOKEN = null;
+
+// ── Score card colours ──
+function scoreColor(score) {
+  if (score >= 90) return '#10b981';
+  if (score >= 50) return '#f59e0b';
+  return '#ef4444';
+}
+function scoreLabel(score) {
+  if (score >= 90) return 'Good';
+  if (score >= 50) return 'Needs Work';
+  return 'Poor';
+}
+
+// ── Build score card HTML ──
+function scoreCard(label, score, icon) {
+  var pct = score + '%';
+  var color = scoreColor(score);
+  return '<div style="background:#fff;padding:20px 16px;text-align:center;">' +
+    '<div style="font-size:22px;margin-bottom:6px;">' + icon + '</div>' +
+    '<div style="font-family:Inter,sans-serif;font-size:28px;font-weight:900;color:' + color + ';line-height:1;">' + score + '</div>' +
+    '<div style="width:100%;height:4px;background:#f0f0f8;border-radius:2px;margin:8px 0;">' +
+    '<div style="width:' + pct + ';height:100%;background:' + color + ';border-radius:2px;transition:width 1s ease;"></div></div>' +
+    '<div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;letter-spacing:0.8px;">' + label + '</div>' +
+    '<div style="font-size:11px;font-weight:700;color:' + color + ';margin-top:2px;">' + scoreLabel(score) + '</div>' +
+    '</div>';
+}
+
+// ═══════════════════════════════════════════════════════
+// PART 1 — PageSpeed + AI Analysis
+// ═══════════════════════════════════════════════════════
+async function runRankingAnalysis() {
+  var url = document.getElementById('rank-url').value.trim();
+  var keywords = document.getElementById('rank-keywords').value.trim();
+  var business = document.getElementById('rank-business').value.trim();
+  var market = document.getElementById('rank-market').value;
+  if (!url || !business) { alert('Please enter your website URL and business type.'); return; }
+  if (!url.startsWith('http')) url = 'https://' + url;
+
+  var lang = getLangName();
+  setLoading('ranking-btn', 'ranking-btn-text', true, '');
+  document.getElementById('ranking-result').style.display = 'block';
+  document.getElementById('ranking-score-cards').innerHTML =
+    '<div style="background:#fff;padding:20px;text-align:center;grid-column:1/-1;color:#9896b0;font-size:13px;">⏳ Fetching real data from Google PageSpeed API...</div>';
+  document.getElementById('ranking-output').innerHTML = '';
+
+  // ── Call PageSpeed API ──
+  var psData = null;
+  var psError = null;
+
+  if (PAGESPEED_API_KEY && PAGESPEED_API_KEY !== 'YOUR_PAGESPEED_API_KEY') {
+    try {
+      var psUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=' +
+        encodeURIComponent(url) + '&strategy=mobile&key=' + PAGESPEED_API_KEY +
+        '&category=performance&category=seo&category=accessibility&category=best-practices';
+      var psRes = await fetch(psUrl);
+      psData = await psRes.json();
+    } catch(e) {
+      psError = 'Could not reach PageSpeed API: ' + e.message;
+    }
+  } else {
+    psError = 'NO_KEY';
+  }
+
+  // ── Extract scores ──
+  var perfScore = 0, seoScore = 0, a11yScore = 0, bpScore = 0;
+  var auditDetails = [];
+
+  if (psData && psData.lighthouseResult) {
+    var cats = psData.lighthouseResult.categories;
+    perfScore = Math.round((cats.performance && cats.performance.score || 0) * 100);
+    seoScore  = Math.round((cats.seo && cats.seo.score || 0) * 100);
+    a11yScore = Math.round((cats.accessibility && cats.accessibility.score || 0) * 100);
+    bpScore   = Math.round((cats['best-practices'] && cats['best-practices'].score || 0) * 100);
+
+    // Extract specific audit failures
+    var audits = psData.lighthouseResult.audits;
+    var importantAudits = [
+      'meta-description','document-title','hreflang','canonical','robots-txt',
+      'image-alt','link-text','crawlable-anchors','is-crawlable',
+      'first-contentful-paint','largest-contentful-paint','total-blocking-time',
+      'cumulative-layout-shift','speed-index','interactive','uses-https',
+      'viewport','font-size','tap-targets'
+    ];
+    importantAudits.forEach(function(key) {
+      if (audits[key] && audits[key].score !== null && audits[key].score < 1) {
+        auditDetails.push({
+          id: key,
+          title: audits[key].title,
+          desc: audits[key].description ? audits[key].description.split('.')[0] : '',
+          score: audits[key].score
+        });
+      }
+    });
+
+    // Show score cards
+    document.getElementById('ranking-score-cards').innerHTML =
+      scoreCard('Performance', perfScore, '⚡') +
+      scoreCard('SEO', seoScore, '🔍') +
+      scoreCard('Accessibility', a11yScore, '♿') +
+      scoreCard('Best Practices', bpScore, '✅');
+
+  } else {
+    // No API key — show placeholder cards with 0 and explain
+    document.getElementById('ranking-score-cards').innerHTML =
+      '<div style="background:#fff;padding:20px 24px;grid-column:1/-1;">' +
+      '<div style="background:rgba(245,158,11,0.08);border:1.5px solid rgba(245,158,11,0.25);border-radius:10px;padding:14px 16px;font-size:13px;color:#92400e;line-height:1.6;">' +
+      '⚠️ <strong>PageSpeed API key not configured.</strong> To see real Google scores (Performance, SEO, Accessibility), add your free API key. ' +
+      'Get it at <a href="https://console.cloud.google.com" target="_blank" style="color:#5b47e0;font-weight:600;">console.cloud.google.com</a> → APIs & Services → PageSpeed Insights API → Credentials.<br><br>' +
+      'For now, Claude will provide an AI-powered analysis based on the information you provided.</div></div>';
+  }
+
+  // ── Build prompt for Claude ──
+  var auditSummary = auditDetails.length > 0
+    ? 'REAL GOOGLE PAGESPEED AUDIT FAILURES:\n' + auditDetails.map(function(a) {
+        return '- ' + a.title + (a.desc ? ': ' + a.desc : '') + ' (score: ' + Math.round(a.score*100) + '/100)';
+      }).join('\n')
+    : (psError === 'NO_KEY'
+        ? 'PageSpeed API not configured — analyse based on business type and market context.'
+        : 'All PageSpeed audits passed for this URL.');
+
+  var scoreContext = psData
+    ? 'REAL GOOGLE SCORES: Performance=' + perfScore + '/100, SEO=' + seoScore + '/100, Accessibility=' + a11yScore + '/100, Best Practices=' + bpScore + '/100'
+    : 'No live scores available — use your expertise to estimate.';
+
+  var promptParts = [
+    'You are a senior SEO and technical web specialist. Write your entire response in ' + lang + '.',
+    '',
+    'Website: ' + url,
+    'Business: ' + business,
+    'Target keywords: ' + (keywords || 'Not specified'),
+    'Market: ' + (market || 'Not specified'),
+    '',
+    scoreContext,
+    '',
+    auditSummary,
+    '',
+    'Write a comprehensive SEO and ranking analysis in ' + lang + ' with these sections:',
+    '',
+    '**🔴 CRITICAL ISSUES — Fix These First**',
+    'List the most damaging problems found. For each: name it, explain WHY it hurts ranking in plain language, and give the specific fix. Be direct.',
+    '',
+    '**🟡 RANKING POSITION ESTIMATE**',
+    'Based on the scores and business type, estimate likely Google ranking position for their target keywords. Explain the competitive landscape for this type of business in this market.',
+    '',
+    '**🟢 WHAT IS WORKING**',
+    'List 2-3 positive signals found.',
+    '',
+    '**📋 TOP 5 ACTIONS — Ordered by Impact**',
+    'Numbered. Specific. Each action should explain what to do AND why it will help ranking.',
+    '',
+    '**⚡ QUICK WIN**',
+    'One thing they can fix today in under 30 minutes that will have an immediate positive signal.',
+    '',
+    'Be specific and technical where needed but always explain WHY in plain language. Write entirely in ' + lang + '.'
+  ];
+
+  var prompt = promptParts.join('\n');
+  conversations['ranking'] = [];
+
+  await callClaudeChat('ranking', prompt, 'ranking-output', function(text) {
+    setLoading('ranking-btn', 'ranking-btn-text', false, '⚡ Run Live Technical Audit');
+    if (text) renderChatUI(document.getElementById('ranking-chat-area'), 'ranking', getLang());
+  });
+  setLoading('ranking-btn', 'ranking-btn-text', false, '⚡ Run Live Technical Audit');
+}
+
+// ═══════════════════════════════════════════════════════
+// PART 2 — Google Search Console OAuth + Data
+// ═══════════════════════════════════════════════════════
+function connectSearchConsole() {
+  if (!GSC_CLIENT_ID || GSC_CLIENT_ID === 'YOUR_GOOGLE_OAUTH_CLIENT_ID') {
+    document.getElementById('gsc-panel').innerHTML =
+      '<div style="padding:10px 0;background:rgba(245,158,11,0.08);border:1.5px solid rgba(245,158,11,0.25);border-radius:10px;padding:16px 20px;font-size:13px;color:#92400e;line-height:1.65;">' +
+      '⚠️ <strong>Google OAuth Client ID not configured yet.</strong><br><br>' +
+      'To enable real Search Console data:<br>' +
+      '1. Go to <a href="https://console.cloud.google.com" target="_blank" style="color:#5b47e0;font-weight:600;">console.cloud.google.com</a><br>' +
+      '2. Enable the <strong>Google Search Console API</strong><br>' +
+      '3. Create an <strong>OAuth 2.0 Client ID</strong> (Web application type)<br>' +
+      '4. Add your GitHub Pages URL as an authorised origin<br>' +
+      '5. Paste the Client ID into the website code where it says <code>YOUR_GOOGLE_OAUTH_CLIENT_ID</code><br><br>' +
+      'Once configured, visitors can log in with Google and see their real keyword rankings here.</div>';
+    return;
+  }
+
+  // Load Google Identity Services and trigger OAuth
+  if (!window.google || !window.google.accounts) {
+    var script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.onload = function() { initiateGSCAuth(); };
+    document.head.appendChild(script);
+  } else {
+    initiateGSCAuth();
+  }
+}
+
+function initiateGSCAuth() {
+  var btn = document.getElementById('gsc-connect-btn');
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; }
+  window.google.accounts.oauth2.initTokenClient({
+    client_id: GSC_CLIENT_ID,
+    scope: 'https://www.googleapis.com/auth/webmasters.readonly',
+    callback: function(tokenResponse) {
+      if (tokenResponse && tokenResponse.access_token) {
+        GSC_TOKEN = tokenResponse.access_token;
+        loadSearchConsoleData();
+      } else {
+        alert('Google authentication failed. Please try again.');
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+      }
+    }
+  }).requestAccessToken();
+}
+
+async function loadSearchConsoleData() {
+  var panel = document.getElementById('gsc-panel');
+  panel.innerHTML = '<div style="text-align:center;padding:20px;color:#9896b0;font-size:13px;">⏳ Loading your Search Console data...</div>';
+
+  try {
+    // Step 1: Get list of verified sites
+    var sitesRes = await fetch('https://www.googleapis.com/webmasters/v3/sites', {
+      headers: { 'Authorization': 'Bearer ' + GSC_TOKEN }
+    });
+    var sitesData = await sitesRes.json();
+    var sites = (sitesData.siteEntry || []).filter(function(s) {
+      return s.permissionLevel === 'siteOwner' || s.permissionLevel === 'siteFullUser' || s.permissionLevel === 'siteRestrictedUser';
+    });
+
+    if (sites.length === 0) {
+      panel.innerHTML = '<div style="padding:20px;background:rgba(239,68,68,0.06);border-radius:10px;margin:16px;font-size:13px;color:#dc2626;line-height:1.65;">No verified sites found in your Search Console account. Make sure your website is <a href="https://search.google.com/search-console" target="_blank" style="color:#5b47e0;">verified in Google Search Console</a> first.</div>';
+      return;
+    }
+
+    // If multiple sites, let user pick
+    var siteUrl = sites[0].siteUrl;
+    if (sites.length > 1) {
+      var options = sites.map(function(s, i) {
+        return '<option value="' + s.siteUrl + '">' + s.siteUrl + '</option>';
+      }).join('');
+      panel.innerHTML = '<div style="padding:20px 24px;"><label style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;display:block;margin-bottom:8px;">Select your website</label><div style="display:flex;gap:10px;"><select id="gsc-site-select" style="flex:1;padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:DM Sans,sans-serif;font-size:14px;"><option value="">Choose site...</option>' + options + '</select><button onclick="loadGSCForSite(document.getElementById(\'gsc-site-select\').value)" style="padding:11px 20px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;border-radius:9px;font-family:DM Sans,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Load →</button></div></div>';
+      return;
+    }
+
+    loadGSCForSite(siteUrl);
+  } catch(e) {
+    document.getElementById('gsc-panel').innerHTML = '<div style="padding:20px;font-size:13px;color:#dc2626;">⚠️ Error loading Search Console data: ' + e.message + '</div>';
+  }
+}
+
+async function loadGSCForSite(siteUrl) {
+  if (!siteUrl) { alert('Please select a site.'); return; }
+  var panel = document.getElementById('gsc-panel');
+  panel.innerHTML = '<div style="text-align:center;padding:20px;color:#9896b0;font-size:13px;">⏳ Fetching ranking data for ' + siteUrl + '...</div>';
+
+  // Date range: last 28 days
+  var endDate = new Date();
+  var startDate = new Date();
+  startDate.setDate(endDate.getDate() - 28);
+  var fmt = function(d) { return d.toISOString().slice(0,10); };
+
+  try {
+    // Get top queries by clicks
+    var queryRes = await fetch(
+      'https://www.googleapis.com/webmasters/v3/sites/' + encodeURIComponent(siteUrl) + '/searchAnalytics/query',
+      {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + GSC_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          startDate: fmt(startDate),
+          endDate: fmt(endDate),
+          dimensions: ['query'],
+          rowLimit: 20,
+          orderBy: [{ fieldName: 'clicks', sortOrder: 'DESCENDING' }]
+        })
+      }
+    );
+    var queryData = await queryRes.json();
+
+    // Get top pages
+    var pageRes = await fetch(
+      'https://www.googleapis.com/webmasters/v3/sites/' + encodeURIComponent(siteUrl) + '/searchAnalytics/query',
+      {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + GSC_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          startDate: fmt(startDate),
+          endDate: fmt(endDate),
+          dimensions: ['page'],
+          rowLimit: 10,
+          orderBy: [{ fieldName: 'clicks', sortOrder: 'DESCENDING' }]
+        })
+      }
+    );
+    var pageData = await pageRes.json();
+
+    // Totals
+    var totalRes = await fetch(
+      'https://www.googleapis.com/webmasters/v3/sites/' + encodeURIComponent(siteUrl) + '/searchAnalytics/query',
+      {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + GSC_TOKEN, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ startDate: fmt(startDate), endDate: fmt(endDate), dimensions: [] })
+      }
+    );
+    var totalData = await totalRes.json();
+
+    panel.style.display = 'none';
+    displayGSCResults(siteUrl, queryData, pageData, totalData);
+
+  } catch(e) {
+    panel.innerHTML = '<div style="padding:20px;font-size:13px;color:#dc2626;">⚠️ Error: ' + e.message + '</div>';
+  }
+}
+
+async function loadGSCForSite_select(siteUrl) {
+  loadGSCForSite(siteUrl);
+}
+
+function disconnectGSC() {
+  GSC_TOKEN = null;
+  document.getElementById('gsc-results').style.display = 'none';
+  document.getElementById('gsc-panel').style.display = 'block';
+  document.getElementById('gsc-panel').innerHTML =
+    '<div style="padding:28px 24px;text-align:center;">' +
+    '<div style="font-size:42px;margin-bottom:14px;">🔍</div>' +
+    '<button id="gsc-connect-btn" onclick="connectSearchConsole()" style="display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;padding:14px 24px;font-family:\'DM Sans\',sans-serif;font-size:15px;font-weight:700;color:#12111e;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.06);">' +
+    '<svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>' +
+    '<span>Reconnect Google Search Console</span></button></div>';
+}
+
+function displayGSCResults(siteUrl, queryData, pageData, totalData) {
+  var results = document.getElementById('gsc-results');
+  results.style.display = 'block';
+
+  var row = totalData.rows && totalData.rows[0] || {};
+  var totalClicks = row.clicks || 0;
+  var totalImpressions = row.impressions || 0;
+  var avgCTR = row.ctr ? (row.ctr * 100).toFixed(1) + '%' : '0%';
+  var avgPos = row.position ? row.position.toFixed(1) : 'N/A';
+
+  document.getElementById('gsc-connected-site').textContent = '✅ ' + siteUrl + ' — last 28 days';
+
+  // Summary cards
+  var tableWrap = document.getElementById('gsc-table-wrap');
+  tableWrap.innerHTML =
+    '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;">' +
+    '<div style="background:#f8f8fc;border:1.5px solid #e4e3f0;border-radius:10px;padding:16px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + totalClicks.toLocaleString() + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;margin-top:4px;">Total Clicks</div></div>' +
+    '<div style="background:#f8f8fc;border:1.5px solid #e4e3f0;border-radius:10px;padding:16px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + totalImpressions.toLocaleString() + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;margin-top:4px;">Impressions</div></div>' +
+    '<div style="background:#f8f8fc;border:1.5px solid #e4e3f0;border-radius:10px;padding:16px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + avgCTR + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;margin-top:4px;">Avg CTR</div></div>' +
+    '<div style="background:#f8f8fc;border:1.5px solid #e4e3f0;border-radius:10px;padding:16px;text-align:center;"><div style="font-family:Inter,sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + avgPos + '</div><div style="font-size:11px;font-weight:700;color:#9896b0;text-transform:uppercase;margin-top:4px;">Avg Position</div></div>' +
+    '</div>' +
+
+    // Top keywords table
+    '<div style="font-size:12px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:10px;">Top Keywords — Last 28 Days</div>' +
+    '<div style="border:1.5px solid #e4e3f0;border-radius:10px;overflow:hidden;">' +
+    '<table style="width:100%;border-collapse:collapse;font-size:13px;">' +
+    '<thead><tr style="background:#f8f8fc;">' +
+    '<th style="padding:10px 14px;text-align:left;font-weight:700;color:#5c5b72;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #e4e3f0;">Keyword</th>' +
+    '<th style="padding:10px 14px;text-align:center;font-weight:700;color:#5c5b72;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #e4e3f0;">Position</th>' +
+    '<th style="padding:10px 14px;text-align:center;font-weight:700;color:#5c5b72;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #e4e3f0;">Clicks</th>' +
+    '<th style="padding:10px 14px;text-align:center;font-weight:700;color:#5c5b72;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #e4e3f0;">Impressions</th>' +
+    '<th style="padding:10px 14px;text-align:center;font-weight:700;color:#5c5b72;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;border-bottom:1.5px solid #e4e3f0;">CTR</th>' +
+    '</tr></thead><tbody>' +
+    (queryData.rows || []).map(function(r, i) {
+      var pos = r.position.toFixed(1);
+      var posColor = r.position <= 3 ? '#10b981' : r.position <= 10 ? '#f59e0b' : '#ef4444';
+      var posIcon = r.position <= 3 ? '🟢' : r.position <= 10 ? '🟡' : '🔴';
+      return '<tr style="border-bottom:1px solid #f0f0f8;">' +
+        '<td style="padding:10px 14px;color:#12111e;font-weight:500;">' + r.keys[0] + '</td>' +
+        '<td style="padding:10px 14px;text-align:center;"><span style="display:inline-flex;align-items:center;gap:4px;font-weight:800;color:' + posColor + ';">' + posIcon + ' #' + pos + '</span></td>' +
+        '<td style="padding:10px 14px;text-align:center;color:#5c5b72;font-weight:600;">' + r.clicks + '</td>' +
+        '<td style="padding:10px 14px;text-align:center;color:#5c5b72;">' + r.impressions.toLocaleString() + '</td>' +
+        '<td style="padding:10px 14px;text-align:center;color:#5c5b72;">' + (r.ctr * 100).toFixed(1) + '%</td>' +
+        '</tr>';
+    }).join('') +
+    '</tbody></table></div>';
+
+  // Now ask Claude to analyse the real data
+  analyseGSCData(siteUrl, queryData, pageData, totalData, avgPos, totalClicks, totalImpressions);
+}
+
+async function analyseGSCData(siteUrl, queryData, pageData, totalData, avgPos, clicks, impressions) {
+  var analysisWrap = document.getElementById('gsc-analysis-wrap');
+  var lang = getLangName();
+
+  // Create output element
+  analysisWrap.innerHTML =
+    '<div style="margin-top:20px;padding:20px;background:#f8f8fc;border:1.5px solid #e4e3f0;border-radius:12px;">' +
+    '<div style="font-size:12px;font-weight:700;color:#5b47e0;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">✦ Claude AI Analysis of Your Real Data</div>' +
+    '<div id="gsc-ai-output" style="font-size:14px;color:#5c5b72;line-height:1.75;"></div></div>';
+
+  var topKeywords = (queryData.rows || []).slice(0, 10).map(function(r) {
+    return r.keys[0] + ' (pos: ' + r.position.toFixed(1) + ', clicks: ' + r.clicks + ', CTR: ' + (r.ctr*100).toFixed(1) + '%)';
+  }).join('\n');
+
+  var topPages = (pageData.rows || []).slice(0, 5).map(function(r) {
+    return r.keys[0] + ' (' + r.clicks + ' clicks)';
+  }).join('\n');
+
+  var promptParts = [
+    'You are a senior SEO strategist. Write your entire response in ' + lang + '.',
+    '',
+    'I have the REAL Google Search Console data for: ' + siteUrl,
+    '',
+    'REAL DATA — Last 28 days:',
+    'Total clicks: ' + clicks,
+    'Total impressions: ' + impressions.toLocaleString(),
+    'Average position: ' + avgPos,
+    '',
+    'TOP RANKING KEYWORDS:',
+    topKeywords,
+    '',
+    'TOP PAGES BY CLICKS:',
+    topPages,
+    '',
+    'Based on this REAL data, write an expert analysis in ' + lang + ':',
+    '',
+    '**📊 WHAT YOUR DATA IS TELLING YOU**',
+    'Interpret the numbers in plain language. What do the positions, CTR and impressions mean for this site?',
+    '',
+    '**🔴 BIGGEST RANKING PROBLEMS**',
+    'What specific issues does this data reveal? For example: high impressions but low CTR means weak titles/descriptions. Low positions for important keywords. Missing keywords. Be specific about what the numbers reveal.',
+    '',
+    '**🟢 WHAT IS WORKING**',
+    'What keywords or pages are performing well and why?',
+    '',
+    '**📈 TOP 5 ACTIONS TO IMPROVE RANKINGS**',
+    'Based on the actual data — not generic advice. Each action should reference specific keywords or pages from the data.',
+    '',
+    '**⚡ HIGHEST IMPACT QUICK WIN**',
+    'The single most impactful thing they could do this week based on this data.',
+    '',
+    'Write entirely in ' + lang + '. Reference specific keywords and numbers from the data.'
+  ];
+
+  conversations['ranking'] = [];
+  await callClaudeChat('ranking', promptParts.join('\n'), 'gsc-ai-output', function(text) {
+    if (text) {
+      conversations['ranking'].push({role:'assistant', content: text});
+      renderChatUI(document.getElementById('gsc-chat-area'), 'ranking', getLang());
+    }
+  });
+}
 
 </script>
 </body>
