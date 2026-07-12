@@ -268,6 +268,137 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
   ]
 }
 </script>
+
+
+
+<style>
+.ttab{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;}
+.ttab-active{background:rgba(91,71,224,0.25)!important;color:#a78bfa!important;border-bottom:3px solid #7c3aed!important;}
+.tpanel{display:none;padding:52px 0 72px;}
+.tpanel-active{display:block;}
+.tform{max-width:800px;margin:0 auto;padding:0 24px;}
+.trow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.trow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
+.trow1{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
+.tfield{display:flex;flex-direction:column;gap:5px;}
+.tfield label{font-size:11px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;}
+.tfield input,.tfield select,.tfield textarea{padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;transition:border-color 0.2s;}
+.tfield input:focus,.tfield select:focus,.tfield textarea:focus{border-color:#5b47e0;background:#fff;}
+.tfield textarea{resize:vertical;min-height:88px;line-height:1.6;}
+.tbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);margin-top:4px;transition:all 0.2s;}
+.tbtn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,71,224,0.38);}
+.tbtn:disabled{opacity:0.65;cursor:not-allowed;transform:none;}
+.tres{display:none;margin-top:22px;}
+.tres-box{background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
+.tres-head{display:flex;align-items:center;justify-content:space-between;padding:15px 22px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);}
+.tres-copy{padding:7px 14px;border:1.5px solid #e4e3f0;border-radius:7px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#5c5b72;cursor:pointer;transition:all 0.2s;}
+.tres-copy:hover{border-color:#5b47e0;color:#5b47e0;}
+.tres-out{padding:24px;font-size:14px;color:#3d3c52;line-height:1.8;white-space:pre-wrap;max-height:500px;overflow-y:auto;}
+.tres-upgrade{background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.tres-upgrade-cta{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;white-space:nowrap;}
+/* CHAT */
+.tchat{border-top:1.5px solid #e4e3f0;}
+.tchat-msgs{padding:18px 22px;max-height:380px;overflow-y:auto;background:#fafafa;display:flex;flex-direction:column;gap:14px;}
+.tchat-input-row{padding:14px 22px 18px;background:#fff;border-top:1px solid #f0f0f0;}
+.tchat-hint{font-size:11.5px;color:#9896b0;margin-bottom:8px;font-style:italic;}
+.tchat-row{display:flex;gap:8px;}
+.tchat-input{flex:1;padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;}
+.tchat-input:focus{border-color:#5b47e0;background:#fff;}
+.tchat-send{padding:11px 20px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.msg-user{display:flex;justify-content:flex-end;}
+.msg-ai{display:flex;justify-content:flex-start;}
+.msg-bubble-user{max-width:80%;padding:12px 16px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border-radius:14px 4px 14px 14px;font-size:13.5px;line-height:1.65;}
+.msg-bubble-ai{max-width:80%;padding:12px 16px;background:#fff;border:1.5px solid #e4e3f0;color:#3d3c52;border-radius:4px 14px 14px 14px;font-size:13.5px;line-height:1.65;}
+.free-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:16px;}
+@keyframes dotpulse2{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
+.typing-dots span{display:inline-block;width:7px;height:7px;background:#9896b0;border-radius:50%;animation:dotpulse2 1.2s infinite;}
+.typing-dots span:nth-child(2){animation-delay:0.2s;}
+.typing-dots span:nth-child(3){animation-delay:0.4s;}
+@media(max-width:700px){.trow,.trow3{grid-template-columns:1fr;}.ttab{padding:10px 12px;font-size:12px;}}
+</style>
+<style>
+/* Scanner styles */
+.scan-wrap{background:linear-gradient(135deg,#0d0d14 0%,#1a1030 50%,#0d0d14 100%);padding:64px 0 48px;position:relative;overflow:hidden;}
+.scan-wrap::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(91,71,224,0.07) 1px,transparent 1px);background-size:36px 36px;}
+.scan-inner{max-width:660px;margin:0 auto;padding:0 24px;text-align:center;position:relative;z-index:2;}
+.scan-tag{display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:14px;}
+.scan-h1{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(26px,4vw,44px);letter-spacing:-2px;line-height:1.06;color:#fff;margin-bottom:10px;}
+.scan-h1 span{background:linear-gradient(135deg,#a78bfa,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.scan-sub{font-size:14.5px;color:rgba(255,255,255,0.55);margin-bottom:28px;line-height:1.65;}
+.scan-box{display:flex;gap:0;background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;}
+.scan-input{flex:1;padding:16px 20px;background:transparent;border:none;font-family:'DM Sans',sans-serif;font-size:15px;color:#fff;outline:none;}
+.scan-input::placeholder{color:rgba(255,255,255,0.3);}
+.scan-btn{padding:16px 26px;background:linear-gradient(135deg,#7c3aed,#5b47e0);border:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap;}
+.scan-btn:disabled{opacity:0.6;cursor:not-allowed;}
+.scan-examples{margin-top:12px;font-size:12px;color:rgba(255,255,255,0.25);}
+.scan-progress{display:none;margin-top:28px;}
+.scan-progress.active{display:block;}
+.scan-steps{display:flex;flex-direction:column;gap:8px;text-align:left;max-width:400px;margin:0 auto;}
+.scan-step{display:flex;align-items:center;gap:12px;padding:9px 14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;font-size:13px;color:rgba(255,255,255,0.45);transition:all 0.4s;}
+.scan-step.done{color:rgba(255,255,255,0.9);border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.08);}
+.scan-step.active{color:#a78bfa;border-color:rgba(124,58,237,0.6);background:rgba(124,58,237,0.12);}
+.scan-step-icon{font-size:15px;width:22px;text-align:center;}
+.scan-step-spinner{width:15px;height:15px;border:2px solid rgba(124,58,237,0.3);border-top-color:#7c3aed;border-radius:50%;animation:spin2 0.8s linear infinite;flex-shrink:0;}
+@keyframes spin2{to{transform:rotate(360deg)}}
+.scan-dashboard{display:none;background:#f8f8fc;border-top:3px solid #7c3aed;}
+.scan-dashboard.visible{display:block;}
+.dash-inner{max-width:1100px;margin:0 auto;padding:44px 24px;}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:14px;}
+.dash-site{display:flex;align-items:center;gap:12px;}
+.dash-favicon{width:34px;height:34px;background:linear-gradient(135deg,#5b47e0,#4338ca);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.dash-url{font-size:14px;font-weight:700;color:#12111e;}
+.dash-url-sub{font-size:11.5px;color:#9896b0;}
+.dash-rescan{padding:8px 16px;background:#fff;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:600;color:#5c5b72;cursor:pointer;}
+.dash-rescan:hover{border-color:#5b47e0;color:#5b47e0;}
+.score-cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px;}
+.score-card{background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;padding:16px 12px;text-align:center;position:relative;overflow:hidden;}
+.score-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.score-card.green::before{background:linear-gradient(135deg,#10b981,#059669);}
+.score-card.amber::before{background:linear-gradient(135deg,#f59e0b,#d97706);}
+.score-card.red::before{background:linear-gradient(135deg,#ef4444,#dc2626);}
+.sc-num{font-family:'Inter',sans-serif;font-size:28px;font-weight:900;line-height:1;margin-bottom:4px;}
+.sc-num.green{color:#10b981;}.sc-num.amber{color:#f59e0b;}.sc-num.red{color:#ef4444;}
+.sc-bar{width:100%;height:3px;background:#f0f0f8;border-radius:2px;margin:6px 0 4px;}
+.sc-bar-fill{height:100%;border-radius:2px;transition:width 1.2s ease;}
+.sc-label{font-size:9.5px;font-weight:700;color:#9896b0;text-transform:uppercase;letter-spacing:0.8px;}
+.dash-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin-bottom:20px;}
+.dash-panel{background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;overflow:hidden;}
+.dash-panel-head{padding:12px 16px;border-bottom:1.5px solid #e4e3f0;display:flex;align-items:center;gap:8px;background:rgba(91,71,224,0.03);}
+.dash-panel-icon{font-size:15px;}
+.dash-panel-title{font-size:12.5px;font-weight:800;color:#12111e;}
+.dash-panel-body{padding:16px;font-size:13px;color:#3d3c52;line-height:1.75;max-height:380px;overflow-y:auto;}
+.social-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.social-card{background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;padding:14px;}
+.social-icon{font-size:22px;margin-bottom:6px;}
+.social-name{font-size:11px;font-weight:800;color:#12111e;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px;}
+.social-tip{font-size:11.5px;color:#5c5b72;line-height:1.5;}
+.dash-tools-bar{background:rgba(91,71,224,0.05);border:1.5px solid rgba(91,71,224,0.15);border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin-bottom:20px;}
+.dash-tools-text{font-size:13.5px;color:#3d3c52;}
+.dash-tools-btns{display:flex;gap:7px;flex-wrap:wrap;}
+.dash-tool-btn{padding:7px 13px;background:#fff;border:1.5px solid rgba(91,71,224,0.25);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:#5b47e0;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.dash-tool-btn:hover{background:rgba(91,71,224,0.06);}
+.dash-chat{background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;overflow:hidden;}
+.dash-chat-head{padding:12px 16px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.03);display:flex;align-items:center;gap:8px;}
+.dash-chat-msgs{padding:14px 16px;max-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;background:#fafafa;}
+.dash-chat-input-row{padding:11px 16px;background:#fff;border-top:1px solid #f0f0f8;display:flex;gap:8px;}
+.dash-chat-inp{flex:1;padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:#12111e;background:#f8f8fc;outline:none;}
+.dash-chat-inp:focus{border-color:#5b47e0;background:#fff;}
+.dash-chat-send{padding:9px 16px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;}
+/* Individual tool accordion */
+.tool-accordion{background:#fff;border:1.5px solid #e4e3f0;border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.tool-accordion-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;cursor:pointer;transition:background 0.2s;}
+.tool-accordion-head:hover{background:rgba(91,71,224,0.04);}
+.tool-accordion-title{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;color:#12111e;}
+.tool-accordion-arrow{font-size:12px;color:#9896b0;transition:transform 0.2s;}
+.tool-accordion-body{display:none;border-top:1.5px solid #e4e3f0;padding:0;}
+.tool-accordion-body.open{display:block;}
+.tool-accordion-arrow.open{transform:rotate(180deg);}
+@media(max-width:768px){
+  .score-cards{grid-template-columns:repeat(3,1fr);}
+  .dash-grid{grid-template-columns:1fr;}
+  .social-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
 </head>
 <body>
 
@@ -362,6 +493,566 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
   </div>
 </div>
 
+
+<div id="tools">
+
+<!-- SCANNER HERO -->
+<div class="scan-wrap">
+  <div class="scan-inner">
+    <div class="scan-tag" id="scan-tag">🔍 Free Instant Analysis</div>
+    <h1 class="scan-h1" id="scan-h1">Drop your website.<br><span>Get your full growth plan.</span></h1>
+    <p class="scan-sub" id="scan-sub">One URL. 30 seconds. We analyse your website, score your digital presence, and give you an AI-powered strategy across SEO, Google Ads, and social media.</p>
+
+    <div class="scan-box">
+      <input class="scan-input" id="master-url" type="text" placeholder="https://yourwebsite.com" onkeydown="if(event.key==='Enter')runMasterScan()">
+      <button class="scan-btn" id="scan-btn" onclick="runMasterScan()"><span id="scan-btn-text">Analyse →</span></button>
+    </div>
+    <div class="scan-examples" id="scan-examples">Try it: paste any website URL above</div>
+
+    <!-- Scanning progress -->
+    <div class="scan-progress" id="scan-progress">
+      <div class="scan-steps">
+        <div class="scan-step" id="step-1"><span class="scan-step-icon">🌐</span> Fetching website data</div>
+        <div class="scan-step" id="step-2"><span class="scan-step-icon">⚡</span> Running PageSpeed analysis</div>
+        <div class="scan-step" id="step-3"><span class="scan-step-icon">🔍</span> Analysing SEO signals</div>
+        <div class="scan-step" id="step-4"><span class="scan-step-icon">📈</span> Building Google Ads strategy</div>
+        <div class="scan-step" id="step-5"><span class="scan-step-icon">📱</span> Creating social media plan</div>
+        <div class="scan-step" id="step-6"><span class="scan-step-icon">✦</span> Generating your full report</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD RESULTS -->
+<div class="scan-dashboard" id="scan-dashboard">
+  <div class="dash-inner">
+
+    <!-- Header -->
+    <div class="dash-header">
+      <div class="dash-site">
+        <div class="dash-favicon">🌐</div>
+        <div>
+          <div class="dash-url" id="dash-url-display">yourwebsite.com</div>
+          <div class="dash-url-sub" id="dash-url-sub">Full Digital Analysis Report</div>
+        </div>
+      </div>
+      <button class="dash-rescan" onclick="resetScanner()" id="dash-rescan-btn">← Analyse Another Site</button>
+    </div>
+
+    <!-- Score Cards -->
+    <div class="score-cards" id="score-cards">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Unlock other tools -->
+    <div class="dash-tools-bar">
+      <div class="dash-tools-text" id="dash-tools-text"><strong>Go deeper with individual tools</strong> — pre-filled with your website details</div>
+      <div class="dash-tools-btns">
+        <button class="dash-tool-btn" onclick="jumpToTool('ads')" id="dt-ads">📈 Ads Generator</button>
+        <button class="dash-tool-btn" onclick="jumpToTool('audit')" id="dt-audit">🔍 Website Audit</button>
+        <button class="dash-tool-btn" onclick="jumpToTool('optiscore')" id="dt-opti">⚡ Optiscore</button>
+        <button class="dash-tool-btn" onclick="jumpToTool('forecast')" id="dt-forecast">📊 Forecast</button>
+        <button class="dash-tool-btn" onclick="jumpToTool('ranking')" id="dt-ranking">🔎 SEO Ranking</button>
+        <button class="dash-tool-btn" onclick="jumpToTool('brief')" id="dt-brief">🌐 Website Brief</button>
+      </div>
+    </div>
+
+    <!-- Main Analysis Grid -->
+    <div class="dash-grid">
+      <!-- Left: Full AI Report -->
+      <div class="dash-panel">
+        <div class="dash-panel-head">
+          <span class="dash-panel-icon">✦</span>
+          <span class="dash-panel-title" id="dash-report-title">Full Digital Growth Report</span>
+        </div>
+        <div class="dash-panel-body" id="dash-report-output" style="max-height:480px;overflow-y:auto;"></div>
+      </div>
+      <!-- Right: Quick wins -->
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="dash-panel">
+          <div class="dash-panel-head">
+            <span class="dash-panel-icon">🔴</span>
+            <span class="dash-panel-title" id="dash-critical-title">Critical Issues</span>
+          </div>
+          <div class="dash-panel-body" id="dash-critical-output"></div>
+        </div>
+        <div class="dash-panel">
+          <div class="dash-panel-head">
+            <span class="dash-panel-icon">⚡</span>
+            <span class="dash-panel-title" id="dash-quickwin-title">Quick Wins This Week</span>
+          </div>
+          <div class="dash-panel-body" id="dash-quickwin-output"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Media Strategy -->
+    <div class="dash-panel" style="margin-bottom:20px;">
+      <div class="dash-panel-head">
+        <span class="dash-panel-icon">📱</span>
+        <span class="dash-panel-title" id="dash-social-title">Social Media Strategy</span>
+      </div>
+      <div style="padding:18px;">
+        <div class="social-grid" id="social-grid">
+          <!-- Filled by JS -->
+        </div>
+        <div style="font-size:13px;color:#5c5b72;line-height:1.7;" id="dash-social-detail"></div>
+      </div>
+    </div>
+
+    <!-- Follow-up Chat -->
+    <div class="dash-chat">
+      <div class="dash-chat-head">
+        <span style="font-size:16px;">💬</span>
+        <span style="font-size:13px;font-weight:800;color:#12111e;" id="dash-chat-title">Ask anything about this analysis</span>
+      </div>
+      <div class="dash-chat-msgs" id="dash-chat-msgs"></div>
+      <div class="dash-chat-input-row">
+        <input class="dash-chat-inp" id="dash-chat-input" type="text" placeholder="e.g. How do I fix the SEO score? What should I post on Instagram?" onkeydown="if(event.key==='Enter')sendDashChat()">
+        <button class="dash-chat-send" onclick="sendDashChat()" id="dash-chat-send-btn">Send →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- INDIVIDUAL TOOLS (hidden until scan runs or user jumps to them) -->
+<div id="tools-detail" style="display:none;background:#f8f8fc;border-top:1.5px solid #e4e3f0;">
+<div style="max-width:1100px;margin:0 auto;padding:36px 24px;">
+<p style="font-size:13px;color:#9896b0;text-align:center;margin-bottom:20px;" id="tools-detail-hint">Click any tool below to expand it</p>
+<div class="tool-accordion" id="accordion-ads">
+  <div class="tool-accordion-head" onclick="toggleAccordion('ads')">
+    <div class="tool-accordion-title"><span style="font-size:20px;">📈</span> <span id="accordion-title-ads">Google Ads Starter Kit</span></div>
+    <span class="tool-accordion-arrow" id="accordion-arrow-ads">▼</span>
+  </div>
+  <div class="tool-accordion-body" id="accordion-body-ads">
+    <div id="panel-ads" style="padding:0;">
+<div class="tform">
+  <span class="free-badge" id="ads-badge">✓ 100% Free</span>
+  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="ads-title">Google Ads Starter Kit Generator</h3>
+  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="ads-desc">Tell us about your business. We generate headlines, descriptions, callouts, sitelinks with titles and descriptions, negative keywords and a bidding strategy.</p>
+  <div class="trow">
+    <div class="tfield"><label id="ads-lbl-biz">Business Type</label><input id="ads-business" type="text" placeholder="e.g. Dental clinic, Plumber, Online shop"></div>
+    <div class="tfield"><label id="ads-lbl-loc">Location / Market</label><input id="ads-location" type="text" placeholder="e.g. Barcelona, Denmark, UK"></div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="ads-lbl-goal">Primary Goal</label>
+      <select id="ads-goal">
+        <option value="" id="ads-goal-default">Select your goal</option>
+        <option value="phone calls and direct enquiries">Phone calls / Enquiries</option>
+        <option value="lead form submissions">Lead form submissions</option>
+        <option value="online sales">Online sales</option>
+        <option value="in-store visits">In-store visits</option>
+        <option value="brand awareness">Brand awareness</option>
+      </select>
+    </div>
+    <div class="tfield"><label id="ads-lbl-budget">Monthly Budget</label>
+      <select id="ads-budget">
+        <option value="">Select budget range</option>
+        <option value="under €300/month">Under €300/month</option>
+        <option value="€300–€700/month">€300–€700/month</option>
+        <option value="€700–€1,500/month">€700–€1,500/month</option>
+        <option value="€1,500–€3,000/month">€1,500–€3,000/month</option>
+        <option value="over €3,000/month">Over €3,000/month</option>
+      </select>
+    </div>
+  </div>
+  <div class="trow1">
+    <div class="tfield"><label id="ads-lbl-usp">What makes you different? (optional)</label><input id="ads-usp" type="text" placeholder="e.g. Same-day service, 20 years experience, free consultation"></div>
+  </div>
+  <div class="trow1" style="background:#f0f0f8;border:1.5px solid #e4e3f0;border-radius:12px;padding:16px 18px;margin-bottom:14px;">
+    <p style="font-size:12.5px;font-weight:700;color:#5b47e0;margin-bottom:10px;" id="ads-sitelinks-title">📎 Tell us your website pages for Sitelinks (optional)</p>
+    <p style="font-size:12px;color:#9896b0;margin-bottom:12px;" id="ads-sitelinks-desc">Add up to 4 pages and we will generate the perfect sitelink title and description for each one.</p>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl1-page" type="text" placeholder="Page name e.g. About Us" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl1-url" type="text" placeholder="Page URL e.g. /about" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl2-page" type="text" placeholder="Page name e.g. Services" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl2-url" type="text" placeholder="Page URL e.g. /services" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl3-page" type="text" placeholder="Page name e.g. Pricing" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl3-url" type="text" placeholder="Page URL e.g. /pricing" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl4-page" type="text" placeholder="Page name e.g. Contact" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl4-url" type="text" placeholder="Page URL e.g. /contact" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:stretch;">
+    <button class="tbtn" id="ads-btn" onclick="runAdsGenerator()" style="flex:1;"><span id="ads-btn-text">✨ Generate My Google Ads Kit</span></button>
+    <button onclick="startVoice('ads-business','ads-btn')" title="Speak your business type" style="padding:0 16px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;cursor:pointer;font-size:20px;transition:all 0.2s;" id="ads-mic-btn">🎙️</button>
+  </div>
+  <div class="tres" id="ads-result">
+    <div class="tres-box">
+      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Google Ads Kit</span><button class="tres-copy" id="ads-copy-btn" onclick="copyOut('ads-output','ads-copy-btn')">📋 Copy All</button></div>
+      <div class="tres-out" id="ads-output"></div>
+      <div class="tchat" id="ads-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="ads-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="ads-chat-hint">Ask a follow-up — request changes, add more headlines, adjust tone, ask anything.</p>
+          <div class="tchat-row"><input class="tchat-input" id="ads-followup" type="text" placeholder="Ask anything — change the ads, ask about pricing, sales strategy, competitors..." onkeydown="if(event.key==='Enter')sendChat('ads')"><button class="tchat-send" onclick="sendChat('ads')" id="ads-send-btn">Send →</button></div>
+        </div>
+      </div>
+      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="ads-upgrade-text"><strong>Want us to build and run this campaign?</strong> We handle setup, tracking and optimisation.</span><a href="#contact" class="tres-upgrade-cta">🚀 Get It Running →</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL: WEBSITE AUDIT ══ -->
+  </div>
+</div>
+<div class="tool-accordion" id="accordion-audit">
+  <div class="tool-accordion-head" onclick="toggleAccordion('audit')">
+    <div class="tool-accordion-title"><span style="font-size:20px;">🔍</span> <span id="accordion-title-audit">Website Audit</span></div>
+    <span class="tool-accordion-arrow" id="accordion-arrow-audit">▼</span>
+  </div>
+  <div class="tool-accordion-body" id="accordion-body-audit">
+    <div id="panel-audit" style="padding:0;">
+<div class="tform">
+  <span class="free-badge" id="audit-badge">✓ 100% Free</span>
+  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="audit-title">60-Second Website Audit</h3>
+  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="audit-desc">Tell us your website and biggest frustration. Get three concrete, personalised recommendations.</p>
+  <div class="trow">
+    <div class="tfield"><label id="audit-lbl-url">Your Website URL</label><input id="audit-url" type="text" placeholder="https://yourwebsite.com"></div>
+    <div class="tfield"><label id="audit-lbl-biz">Business Type</label><input id="audit-business" type="text" placeholder="e.g. Restaurant, Law firm, Online shop"></div>
+  </div>
+  <div class="trow1">
+    <div class="tfield"><label id="audit-lbl-frustration">What is your biggest frustration right now?</label><textarea id="audit-frustration" placeholder="e.g. We get traffic but nobody contacts us. Our booking page has high dropout..."></textarea></div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="audit-lbl-goal">Main Goal</label>
+      <select id="audit-goal">
+        <option value="">Select goal</option>
+        <option value="more leads and enquiries">More leads / enquiries</option>
+        <option value="better Google ranking">Better Google ranking</option>
+        <option value="more online sales">More online sales</option>
+        <option value="better user experience">Better user experience</option>
+        <option value="stronger brand presence">Stronger brand presence</option>
+      </select>
+    </div>
+    <div class="tfield"><label id="audit-lbl-market">Market</label>
+      <select id="audit-market">
+        <option value="">Select market</option>
+        <option value="Spain / Spanish">Spain / Spanish</option>
+        <option value="Denmark / Danish">Denmark / Danish</option>
+        <option value="UK / English">UK / English</option>
+        <option value="Albania / Albanian">Albania / Albanian</option>
+        <option value="International / English">International</option>
+      </select>
+    </div>
+  </div>
+  <button class="tbtn" id="audit-btn" onclick="runAudit()"><span id="audit-btn-text">🔍 Audit My Website</span></button>
+  <div class="tres" id="audit-result">
+    <div class="tres-box">
+      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Website Audit</span><button class="tres-copy" onclick="copyOut('audit-output','audit-copy-btn')" id="audit-copy-btn">📋 Copy</button></div>
+      <div class="tres-out" id="audit-output"></div>
+      <div class="tchat" id="audit-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="audit-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="audit-chat-hint">Ask a follow-up — request more detail, push back, ask how to fix something specific.</p>
+          <div class="tchat-row"><input class="tchat-input" id="audit-followup" type="text" placeholder="Ask anything — how to fix issues, sales advice, business strategy, website ideas..." onkeydown="if(event.key==='Enter')sendChat('audit')"><button class="tchat-send" onclick="sendChat('audit')">Send →</button></div>
+        </div>
+      </div>
+      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="audit-upgrade-text"><strong>Want us to fix these issues?</strong> We build pages, improve SEO and set up lead capture.</span><a href="#contact" class="tres-upgrade-cta">🛠️ Fix It With Us →</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL: OPTISCORE ══ -->
+  </div>
+</div>
+<div class="tool-accordion" id="accordion-optiscore">
+  <div class="tool-accordion-head" onclick="toggleAccordion('optiscore')">
+    <div class="tool-accordion-title"><span style="font-size:20px;">⚡</span> <span id="accordion-title-optiscore">Optiscore Simulator</span></div>
+    <span class="tool-accordion-arrow" id="accordion-arrow-optiscore">▼</span>
+  </div>
+  <div class="tool-accordion-body" id="accordion-body-optiscore">
+    <div id="panel-optiscore" style="padding:0;">
+<div class="tform">
+  <span class="free-badge" id="opti-badge">✓ 100% Free</span>
+  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="opti-title">Google Ads Optiscore Simulator</h3>
+  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="opti-desc">Answer 8 questions about your Google Ads setup. We simulate your Optiscore and tell you exactly what to fix.</p>
+  <div class="trow">
+    <div class="tfield"><label id="os-lbl-1">1. Conversion tracking?</label><select id="os-1"><option value="">Select</option><option value="Yes, fully set up">Yes, fully set up</option><option value="Partially tracking">Partially tracking</option><option value="No conversion tracking">No conversion tracking</option></select></div>
+    <div class="tfield"><label id="os-lbl-2">2. Bidding strategy?</label><select id="os-2"><option value="">Select</option><option value="Smart Bidding (Target CPA/ROAS)">Smart Bidding (Target CPA/ROAS)</option><option value="Maximise Clicks">Maximise Clicks</option><option value="Manual CPC">Manual CPC</option><option value="Not sure">Not sure</option></select></div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="os-lbl-3">3. Number of headlines?</label><select id="os-3"><option value="">Select</option><option value="15 (maximum)">15 (maximum)</option><option value="10-14">10–14</option><option value="Fewer than 10">Fewer than 10</option><option value="Not sure">Not sure</option></select></div>
+    <div class="tfield"><label id="os-lbl-4">4. Ad extensions?</label><select id="os-4"><option value="">Select</option><option value="Yes, multiple types">Yes — multiple types</option><option value="Some (1-2 types)">Some (1–2 types)</option><option value="None">None</option></select></div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="os-lbl-5">5. Negative keywords?</label><select id="os-5"><option value="">Select</option><option value="Yes, strong list">Yes, strong list</option><option value="A few">A few</option><option value="None">None</option></select></div>
+    <div class="tfield"><label id="os-lbl-6">6. Ad strength?</label><select id="os-6"><option value="">Select</option><option value="All Good or Excellent">All Good/Excellent</option><option value="Some Poor or Average">Some Poor/Average</option><option value="Not sure">Not sure</option></select></div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="os-lbl-7">7. Audience targeting?</label><select id="os-7"><option value="">Select</option><option value="Yes, full setup">Yes — full setup</option><option value="Observation mode only">Observation mode only</option><option value="No targeting">No targeting</option></select></div>
+    <div class="tfield"><label id="os-lbl-8">8. How often do you optimise?</label><select id="os-8"><option value="">Select</option><option value="Weekly or more">Weekly or more</option><option value="Monthly">Monthly</option><option value="Rarely or never">Rarely / never</option></select></div>
+  </div>
+  <button class="tbtn" id="optiscore-btn" onclick="runOptiscore()"><span id="optiscore-btn-text">⚡ Simulate My Optiscore</span></button>
+  <div class="tres" id="optiscore-result">
+    <div class="tres-box">
+      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Optiscore Report</span></div>
+      <div style="text-align:center;padding:24px 0 0;">
+        <div style="display:inline-block;position:relative;width:130px;height:130px;">
+          <div id="score-ring" style="width:130px;height:130px;border-radius:50%;background:conic-gradient(#5b47e0 0%,#e4e3f0 0%);display:flex;align-items:center;justify-content:center;">
+            <div style="width:100px;height:100px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+              <span id="score-num" style="font-family:'Inter',sans-serif;font-size:32px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;">--</span>
+              <span style="font-size:10px;font-weight:700;color:#9896b0;">/100</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="tres-out" id="optiscore-output"></div>
+      <div class="tchat" id="optiscore-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="optiscore-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="opti-chat-hint">Ask a follow-up — how to fix a specific issue, what impact each change would have, etc.</p>
+          <div class="tchat-row"><input class="tchat-input" id="optiscore-followup" type="text" placeholder="Ask anything — Google Ads help, business questions, sales strategy, anything..." onkeydown="if(event.key==='Enter')sendChat('optiscore')"><button class="tchat-send" onclick="sendChat('optiscore')">Send →</button></div>
+        </div>
+      </div>
+      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="opti-upgrade-text"><strong>Want us to push your score above 90?</strong> Our Growth package includes full account optimisation.</span><a href="#contact" class="tres-upgrade-cta">📈 Improve My Score →</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL: FORECAST ══ -->
+  </div>
+</div>
+<div class="tool-accordion" id="accordion-forecast">
+  <div class="tool-accordion-head" onclick="toggleAccordion('forecast')">
+    <div class="tool-accordion-title"><span style="font-size:20px;">📊</span> <span id="accordion-title-forecast">Budget Forecast</span></div>
+    <span class="tool-accordion-arrow" id="accordion-arrow-forecast">▼</span>
+  </div>
+  <div class="tool-accordion-body" id="accordion-body-forecast">
+    <div id="panel-forecast" style="padding:0;">
+<div class="tform">
+  <span class="free-badge" id="fc-badge">✓ 100% Free</span>
+  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="fc-title">Google Ads Budget Forecast</h3>
+  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="fc-desc">Tell us your industry, market and budget. Get estimated impressions, clicks, leads and cost-per-lead.</p>
+  <div class="trow3">
+    <div class="tfield"><label id="fc-lbl-industry">Industry</label>
+      <select id="fc-industry"><option value="">Select</option><option value="Healthcare / Dental">Healthcare / Dental</option><option value="Legal / Law firm">Legal / Law firm</option><option value="Home Services">Home Services</option><option value="Real Estate">Real Estate</option><option value="E-commerce / Retail">E-commerce / Retail</option><option value="Restaurant / Food">Restaurant / Food</option><option value="Education / Coaching">Education / Coaching</option><option value="Finance / Insurance">Finance / Insurance</option><option value="SaaS / Software">SaaS / Software</option><option value="Other">Other</option></select>
+    </div>
+    <div class="tfield"><label id="fc-lbl-market">Target Market</label>
+      <select id="fc-market"><option value="">Select</option><option value="Spain">Spain</option><option value="Denmark">Denmark</option><option value="United Kingdom">United Kingdom</option><option value="Germany">Germany</option><option value="Scandinavia">Scandinavia</option><option value="Albania">Albania</option><option value="International">International</option></select>
+    </div>
+    <div class="tfield"><label id="fc-lbl-budget">Monthly Budget</label>
+      <select id="fc-budget"><option value="">Select</option><option value="€200">€200</option><option value="€500">€500</option><option value="€1,000">€1,000</option><option value="€2,000">€2,000</option><option value="€5,000">€5,000</option><option value="€10,000+">€10,000+</option></select>
+    </div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="fc-lbl-type">Campaign Type</label>
+      <select id="fc-type"><option value="">Select</option><option value="Search (text ads)">Search (text ads)</option><option value="Performance Max">Performance Max</option><option value="Display (banners)">Display (banners)</option><option value="Not sure — recommend">Not sure — recommend</option></select>
+    </div>
+    <div class="tfield"><label id="fc-lbl-goal">Primary Goal</label>
+      <select id="fc-goal"><option value="">Select</option><option value="Phone calls / Enquiries">Phone calls / Enquiries</option><option value="Online sales">Online sales</option><option value="Form leads">Form leads</option><option value="Store visits">Store visits</option></select>
+    </div>
+  </div>
+  <button class="tbtn" id="forecast-btn" onclick="runForecast()"><span id="forecast-btn-text">📊 Generate My Forecast</span></button>
+  <div class="tres" id="forecast-result">
+    <div class="tres-box">
+      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Budget Forecast</span><button class="tres-copy" onclick="copyOut('forecast-output','fc-copy-btn')" id="fc-copy-btn">📋 Copy</button></div>
+      <div id="forecast-cards" style="padding:18px 22px 0;"></div>
+      <div class="tres-out" id="forecast-output"></div>
+      <div class="tchat" id="forecast-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="forecast-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="fc-chat-hint">Ask a follow-up — adjust budget, change market, ask what would happen if you doubled spend, etc.</p>
+          <div class="tchat-row"><input class="tchat-input" id="forecast-followup" type="text" placeholder="Ask anything — budget questions, sales strategy, business planning, pricing..." onkeydown="if(event.key==='Enter')sendChat('forecast')"><button class="tchat-send" onclick="sendChat('forecast')">Send →</button></div>
+        </div>
+      </div>
+      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="fc-upgrade-text"><strong>Ready to turn this into real results?</strong> We set up and manage the campaign for you.</span><a href="#contact" class="tres-upgrade-cta">🎯 Start My Campaign →</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PANEL: SEO RANKING ══ -->
+  </div>
+</div>
+<div class="tool-accordion" id="accordion-ranking">
+  <div class="tool-accordion-head" onclick="toggleAccordion('ranking')">
+    <div class="tool-accordion-title"><span style="font-size:20px;">🔎</span> <span id="accordion-title-ranking">SEO Ranking Analyser</span></div>
+    <span class="tool-accordion-arrow" id="accordion-arrow-ranking">▼</span>
+  </div>
+  <div class="tool-accordion-body" id="accordion-body-ranking">
+    <div id="panel-ranking" style="padding:0;">
+<div class="tform">
+  <span class="free-badge" id="rank-badge">✓ 100% Free</span>
+  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="rank-title">SEO Ranking Analyser</h3>
+  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:20px;line-height:1.65;" id="rank-desc">Enter your URL and target keywords. Part 1 runs a live Google PageSpeed audit. Part 2 connects your Search Console for real keyword positions.</p>
+
+  <!-- Part 1 -->
+  <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:14px;overflow:hidden;margin-bottom:20px;">
+    <div style="padding:16px 20px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);display:flex;align-items:center;gap:8px;">
+      <span style="font-size:18px;">⚡</span>
+      <div><div style="font-size:13px;font-weight:800;color:#12111e;" id="rank-p1-head">Part 1 — Live Technical Audit</div><div style="font-size:11.5px;color:#9896b0;" id="rank-p1-sub">Real scores from Google PageSpeed Insights API — no login needed</div></div>
+    </div>
+    <div style="padding:20px;">
+      <div class="trow">
+        <div class="tfield"><label id="rank-lbl-url">Website URL</label><input id="rank-url" type="text" placeholder="https://yourwebsite.com"></div>
+        <div class="tfield"><label id="rank-lbl-kw">Target Keywords</label><input id="rank-keywords" type="text" placeholder="e.g. dentist Barcelona, dental clinic"></div>
+      </div>
+      <div class="trow">
+        <div class="tfield"><label id="rank-lbl-biz">Business Type</label><input id="rank-business" type="text" placeholder="e.g. Dental clinic, Restaurant"></div>
+        <div class="tfield"><label id="rank-lbl-market">Target Market</label>
+          <select id="rank-market"><option value="">Select market</option><option value="Spain / Spanish">Spain / Spanish</option><option value="Denmark / Danish">Denmark / Danish</option><option value="UK / English">UK / English</option><option value="Albania / Albanian">Albania / Albanian</option><option value="International / English">International</option></select>
+        </div>
+      </div>
+      <button class="tbtn" id="ranking-btn" onclick="runRanking()"><span id="ranking-btn-text">⚡ Run Live Technical Audit</span></button>
+    </div>
+    <div id="ranking-result" style="display:none;border-top:1.5px solid #e4e3f0;">
+      <div id="ranking-score-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e4e3f0;border-bottom:1.5px solid #e4e3f0;"></div>
+      <div class="tres-out" id="ranking-output"></div>
+      <div class="tchat" id="ranking-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="ranking-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="rank-chat-hint">Ask a follow-up — how to fix specific issues, what would improve performance score, etc.</p>
+          <div class="tchat-row"><input class="tchat-input" id="ranking-followup" type="text" placeholder="Ask anything — SEO fixes, business advice, sales tips, competitor questions..." onkeydown="if(event.key==='Enter')sendChat('ranking')"><button class="tchat-send" onclick="sendChat('ranking')">Send →</button></div>
+        </div>
+      </div>
+      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="rank-upgrade-text"><strong>Want us to fix these issues?</strong> We handle technical SEO, speed and content improvements.</span><a href="#contact" class="tres-upgrade-cta">📈 Fix My SEO →</a></div>
+    </div>
+  </div>
+
+  <!-- Part 2 -->
+  <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:14px;overflow:hidden;">
+    <div style="padding:16px 20px;border-bottom:1.5px solid #e4e3f0;background:rgba(16,185,129,0.04);display:flex;align-items:center;gap:8px;">
+      <span style="font-size:18px;">📊</span>
+      <div><div style="font-size:13px;font-weight:800;color:#12111e;" id="rank-p2-head">Part 2 — Real Google Ranking Data</div><div style="font-size:11.5px;color:#9896b0;" id="rank-p2-sub">Connect Search Console to see your actual keyword positions</div></div>
+    </div>
+    <div id="gsc-panel" style="padding:28px 24px;text-align:center;">
+      <div style="font-size:38px;margin-bottom:12px;">🔍</div>
+      <h4 style="font-size:17px;font-weight:800;color:#12111e;margin-bottom:8px;" id="gsc-title">See Your Real Google Rankings</h4>
+      <p style="font-size:13.5px;color:#5c5b72;max-width:460px;margin:0 auto 18px;line-height:1.65;" id="gsc-desc">Connect your Google Search Console to see which keywords you rank for, real positions, clicks and impressions — then Claude explains what to improve.</p>
+      <div style="background:#fafafa;border:1.5px solid #e4e3f0;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:12px;color:#9896b0;text-align:left;line-height:1.6;" id="gsc-privacy">🔒 <strong style="color:#5c5b72;">Privacy:</strong> We only read your data to generate the analysis. Nothing is stored.</div>
+      <button id="gsc-btn" onclick="connectGSC()" style="display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;padding:13px 22px;font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:700;color:#12111e;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        <span id="gsc-btn-label">Connect Google Search Console</span>
+      </button>
+    </div>
+    <div id="gsc-results" style="display:none;">
+      <div style="padding:14px 20px;border-top:1.5px solid #e4e3f0;border-bottom:1.5px solid #e4e3f0;background:#fafafa;display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-size:13px;font-weight:700;color:#059669;" id="gsc-connected-label">✅ Connected</span>
+        <button onclick="disconnectGSC()" style="font-size:12px;color:#9896b0;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;" id="gsc-disconnect-btn">Disconnect</button>
+      </div>
+      <div id="gsc-table" style="padding:18px 22px;overflow-x:auto;"></div>
+      <div id="gsc-ai-wrap" style="padding:0 22px 18px;"></div>
+      <div class="tchat" id="gsc-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="gsc-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="gsc-chat-hint">Ask about your real ranking data — why certain keywords are low, how to improve CTR, etc.</p>
+          <div class="tchat-row"><input class="tchat-input" id="gsc-followup" type="text" placeholder="Ask anything — ranking questions, business strategy, sales advice, website tips..." onkeydown="if(event.key==='Enter')sendChat('gsc')"><button class="tchat-send" onclick="sendChat('gsc')">Send →</button></div>
+        </div>
+      </div>
+      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="gsc-upgrade-text"><strong>Want expert help improving these rankings?</strong> We build a full ranking improvement plan from your data.</span><a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">📈 Get a Ranking Plan →</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ══ PANEL: WEBSITE BRIEF GENERATOR ══ -->
+  </div>
+</div>
+<div class="tool-accordion" id="accordion-brief">
+  <div class="tool-accordion-head" onclick="toggleAccordion('brief')">
+    <div class="tool-accordion-title"><span style="font-size:20px;">🌐</span> <span id="accordion-title-brief">Website Brief Generator</span></div>
+    <span class="tool-accordion-arrow" id="accordion-arrow-brief">▼</span>
+  </div>
+  <div class="tool-accordion-body" id="accordion-body-brief">
+    <div id="panel-brief" style="padding:0;">
+<div class="tform">
+  <span class="free-badge" id="brief-badge">✓ 100% Free</span>
+  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="brief-title">AI Website Brief Generator</h3>
+  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="brief-desc">Describe your business and we will generate a complete website structure — page by page, with content brief, design direction and everything a developer needs to build it. Ready to use or hand to any agency.</p>
+  <div class="trow">
+    <div class="tfield"><label id="brief-lbl-biz">Business Name</label><input id="brief-biz" type="text" placeholder="e.g. Kola Dental Clinic"></div>
+    <div class="tfield"><label id="brief-lbl-type">Business Type</label><input id="brief-type" type="text" placeholder="e.g. Dental clinic, Law firm, Restaurant"></div>
+  </div>
+  <div class="trow1">
+    <div class="tfield"><label id="brief-lbl-desc">What does your business do? Who are your customers?</label><textarea id="brief-desc-input" placeholder="e.g. We are a dental clinic in Madrid serving families and professionals. We offer general dentistry, implants and aesthetics. Our customers are mainly 30-55 year olds who value quality and convenience..."></textarea></div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="brief-lbl-goal">Main Website Goal</label>
+      <select id="brief-goal">
+        <option value="">Select goal</option>
+        <option value="generate phone calls and appointment bookings">Get appointments / bookings</option>
+        <option value="generate leads and enquiry form submissions">Get enquiries / leads</option>
+        <option value="sell products online">Sell products online</option>
+        <option value="build brand credibility and trust">Build brand credibility</option>
+        <option value="showcase a portfolio of work">Showcase portfolio</option>
+      </select>
+    </div>
+    <div class="tfield"><label id="brief-lbl-pages">Approx. number of pages</label>
+      <select id="brief-pages">
+        <option value="">Select</option>
+        <option value="3-4 pages (simple)">3–4 pages (simple)</option>
+        <option value="5-7 pages (standard)">5–7 pages (standard)</option>
+        <option value="8-12 pages (detailed)">8–12 pages (detailed)</option>
+        <option value="as many as needed">As many as needed</option>
+      </select>
+    </div>
+  </div>
+  <div class="trow">
+    <div class="tfield"><label id="brief-lbl-style">Design Style</label>
+      <select id="brief-style">
+        <option value="">Select</option>
+        <option value="clean and minimal">Clean and minimal</option>
+        <option value="bold and modern">Bold and modern</option>
+        <option value="warm and friendly">Warm and friendly</option>
+        <option value="professional and corporate">Professional and corporate</option>
+        <option value="creative and distinctive">Creative and distinctive</option>
+      </select>
+    </div>
+    <div class="tfield"><label id="brief-lbl-lang">Website Language</label>
+      <select id="brief-lang">
+        <option value="">Select</option>
+        <option value="English">English</option>
+        <option value="Spanish">Spanish</option>
+        <option value="Danish">Danish</option>
+        <option value="Albanian">Albanian</option>
+        <option value="Italian">Italian</option>
+        <option value="Multilingual">Multilingual</option>
+      </select>
+    </div>
+  </div>
+  <div class="trow1">
+    <div class="tfield"><label id="brief-lbl-extra">Anything else we should know? (competitors, must-have features, inspiration sites)</label><textarea id="brief-extra" placeholder="e.g. Our competitors are X and Y. We want a booking form on every page. We like the style of apple.com and the warmth of airbnb.com..."></textarea></div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:stretch;">
+    <button class="tbtn" id="brief-btn" onclick="runBriefGenerator()" style="flex:1;"><span id="brief-btn-text">🌐 Generate My Website Brief</span></button>
+    <button onclick="startVoice('brief-desc-input','brief-btn')" title="Describe your business by voice" style="padding:0 16px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;cursor:pointer;font-size:20px;transition:all 0.2s;" id="brief-mic-btn">🎙️</button>
+  </div>
+  <div class="tres" id="brief-result">
+    <div class="tres-box">
+      <div class="tres-head">
+        <span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Website Brief</span>
+        <button class="tres-copy" id="brief-copy-btn" onclick="copyOut('brief-output','brief-copy-btn')">📋 Copy Brief</button>
+      </div>
+      <div class="tres-out" id="brief-output"></div>
+      <div class="tchat" id="brief-chat-section" style="display:none;">
+        <div class="tchat-msgs" id="brief-chat-msgs"></div>
+        <div class="tchat-input-row">
+          <p class="tchat-hint" id="brief-chat-hint">Ask anything — add a page, change the style direction, ask about costs, request a specific feature, ask how to find a developer.</p>
+          <div class="tchat-row">
+            <input class="tchat-input" id="brief-followup" type="text" placeholder="e.g. Add an FAQ page, make it more minimalist, how much would this cost to build?" onkeydown="if(event.key==='Enter')sendChat('brief')">
+            <button class="tchat-send" onclick="sendChat('brief')">Send →</button>
+          </div>
+        </div>
+      </div>
+      <div class="tres-upgrade">
+        <span style="font-size:13px;color:#5c5b72;" id="brief-upgrade-text"><strong>Want us to build this website for you?</strong> We design and deliver professional websites — fast, mobile-first and built to convert.</span>
+        <a href="#contact" class="tres-upgrade-cta">🚀 Build It With Us →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div><!-- /panels bg -->
+  </div>
+</div>
+</div>
+</div><!-- /tools-detail -->
+
+
+</div><!-- /tools -->
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-track">
@@ -391,6 +1082,12 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
     <div class="ticker-item"><div class="tdot"></div>Madrid Based</div>
   </div>
 </div>
+
+
+
+
+
+
 
 <!-- SERVICES -->
 <div class="container">
@@ -694,564 +1391,159 @@ footer{padding:32px 64px;border-top:1.5px solid var(--brd);display:flex;align-it
      4 AI-powered tools, all inline on the page
 ═══════════════════════════════════════════════════ -->
 
-<style>
-/* ── TOOLS SECTION ── */
-.tools-hero{background:linear-gradient(135deg,#0d0d14 0%,#1a1030 50%,#0d0d14 100%);padding:96px 0 0;position:relative;overflow:hidden}
-.tools-hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(91,71,224,0.08) 1px,transparent 1px);background-size:36px 36px}
-.tools-hero-inner{position:relative;z-index:1;text-align:center;padding-bottom:72px}
-.tools-hero-inner .stag{color:#a78bfa;justify-content:center}
-.tools-hero-inner .stag::before{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
-.tools-hero-inner h2{color:#fff;margin-bottom:14px}
-.tools-hero-inner .sdesc{color:rgba(255,255,255,0.6);margin:0 auto 6px;text-align:center}
-.tools-hero-inner .sdesc2{color:rgba(255,255,255,0.35);margin:0 auto 52px;text-align:center}
+PE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urawise — Google Ads & Digital Growth Agency | Madrid</title>
+<meta name="description" content="Urawise is a Google Ads and digital growth agency based in Madrid. We manage Google Ads campaigns, SEO, websites and lead generation for businesses across Europe. Free AI tools included.">
+<meta name="keywords" content="Google Ads agency Madrid, Google Ads management Spain, SEO Madrid, digital marketing Spain, Google Ads specialist, PPC agency Madrid, Google Ads Denmark, lead generation Spain">
+<meta name="author" content="Urawise">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://workguardai.github.io/urawise-site/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://workguardai.github.io/urawise-site/">
+<meta property="og:title" content="Urawise — Google Ads & Digital Growth Agency | Madrid">
+<meta property="og:description" content="Google Ads management, SEO, websites and lead generation for businesses across Europe. Free AI tools — generate your Google Ads kit, audit your website and forecast your budget instantly.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Urawise — Google Ads & Digital Growth | Madrid">
+<meta name="twitter:description" content="Google Ads management, SEO and websites for European businesses. Free AI tools included.">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Urawise","description":"Google Ads and digital growth agency based in Madrid, serving clients across Europe.","url":"https://workguardai.github.io/urawise-site/","email":"ek@workguardai.com","address":{"@type":"PostalAddress","addressLocality":"Madrid","addressCountry":"ES"},"areaServed":["ES","DK","GB","AL","EU"],"serviceType":["Google Ads Management","SEO","Website Design","Lead Generation"],"knowsLanguage":["en","es","da","sq","it"]}</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet">
 
-/* TOOL TABS */
-.tool-tabs{display:flex;gap:0;justify-content:center;margin-bottom:0;flex-wrap:wrap;padding:0 24px}
-.tool-tab{display:flex;align-items:center;gap:9px;padding:14px 22px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all 0.22s;border-bottom:2px solid transparent;white-space:nowrap}
-.tool-tab:first-child{border-radius:10px 0 0 0}
-.tool-tab:last-child{border-radius:0 10px 0 0}
-.tool-tab:hover{color:rgba(255,255,255,0.75);background:rgba(255,255,255,0.1)}
-.tool-tab.active{background:rgba(91,71,224,0.18);color:#a78bfa;border-bottom:2px solid #7c3aed}
-.tool-tab-icon{font-size:18px}
 
-/* TOOL PANELS */
-.tool-panels{background:var(--surf);border-top:1.5px solid var(--brd)}
-.tool-panel{display:none;padding:52px 0 72px}
-.tool-panel.active{display:block}
+<!-- HREFLANG — tells Google this page exists in 4 languages -->
+<link rel="alternate" hreflang="en" href="https://workguardai.github.io/urawise-site/">
+<link rel="alternate" hreflang="es" href="https://workguardai.github.io/urawise-site/?lang=es">
+<link rel="alternate" hreflang="da" href="https://workguardai.github.io/urawise-site/?lang=da">
+<link rel="alternate" hreflang="sq" href="https://workguardai.github.io/urawise-site/?lang=sq">
+<link rel="alternate" hreflang="x-default" href="https://workguardai.github.io/urawise-site/">
 
-/* SHARED FORM STYLES */
-.tool-form{max-width:780px;margin:0 auto;padding:0 24px}
-.tool-form h3{font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:var(--ink);margin-bottom:8px}
-.tool-form .tool-desc{font-size:15px;color:var(--dim);margin-bottom:32px;line-height:1.65}
-.tool-form .free-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:22px}
+<!-- MULTILINGUAL STRUCTURED DATA — all 3 cities -->
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://workguardai.github.io/urawise-site/#madrid",
+    "name": "Urawise — Agencia Google Ads Madrid",
+    "description": "Agencia especializada en Google Ads, SEO y marketing digital en Madrid. Gestión de campañas, generación de leads y diseño web para empresas en España y Europa.",
+    "url": "https://workguardai.github.io/urawise-site/",
+    "email": "ek@workguardai.com",
+    "address": {"@type": "PostalAddress", "addressLocality": "Madrid", "addressRegion": "Madrid", "addressCountry": "ES"},
+    "areaServed": "ES",
+    "serviceType": ["Gestión Google Ads", "SEO Madrid", "Marketing Digital", "Generación de Leads", "Diseño Web"],
+    "knowsLanguage": ["es", "en", "da", "sq", "it"]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://workguardai.github.io/urawise-site/#copenhagen",
+    "name": "Urawise — Google Ads Bureau København",
+    "description": "Google Ads bureau baseret i Madrid, der betjener danske virksomheder. Kampagnehåndtering, SEO og leadgenerering på dansk.",
+    "url": "https://workguardai.github.io/urawise-site/",
+    "email": "ek@workguardai.com",
+    "address": {"@type": "PostalAddress", "addressLocality": "Madrid", "addressCountry": "ES"},
+    "areaServed": "DK",
+    "serviceType": ["Google Ads", "SEO", "Digital Markedsføring", "Leadgenerering"],
+    "knowsLanguage": ["da", "en", "es", "sq"]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": "https://workguardai.github.io/urawise-site/#tirana",
+    "name": "Urawise — Agjensi Google Ads Tiranë",
+    "description": "Agjensi e specializuar në Google Ads, SEO dhe marketing dixhital. Menaxhim fushatash, gjenerим kontaktesh dhe dizajn faqesh për biznese shqiptare.",
+    "url": "https://workguardai.github.io/urawise-site/",
+    "email": "ek@workguardai.com",
+    "address": {"@type": "PostalAddress", "addressLocality": "Madrid", "addressCountry": "ES"},
+    "areaServed": "AL",
+    "serviceType": ["Google Ads", "SEO", "Marketing Dixhital", "Gjenerim Kontaktesh"],
+    "knowsLanguage": ["sq", "en", "es", "da"]
+  }
+]
+</script>
 
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-row.single{grid-template-columns:1fr}
-.form-row.triple{grid-template-columns:1fr 1fr 1fr}
-.form-field{display:flex;flex-direction:column;gap:6px}
-.form-field label{font-size:12px;font-weight:700;color:var(--dim);letter-spacing:0.5px;text-transform:uppercase}
-.form-field input,.form-field select,.form-field textarea{padding:11px 14px;border:1.5px solid var(--brd);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--ink);background:var(--white);transition:border-color 0.2s;outline:none}
-.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--p);box-shadow:0 0 0 3px rgba(91,71,224,0.08)}
-.form-field textarea{resize:vertical;min-height:90px;line-height:1.6}
-.form-field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239896b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
-
-.tool-submit{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:14px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.22s;box-shadow:0 4px 18px rgba(91,71,224,0.28);margin-top:20px;width:100%}
-.tool-submit:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,71,224,0.4)}
-.tool-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
-.tool-submit .spin{animation:spin 1s linear infinite;display:inline-block}
-@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-/* RESULT AREA */
-.tool-result{max-width:780px;margin:28px auto 0;padding:0 24px;display:none}
-.tool-result.visible{display:block}
-.result-box{background:var(--white);border:1.5px solid var(--brd);border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
-.result-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1.5px solid var(--brd);background:rgba(91,71,224,0.04)}
-.result-header-left{display:flex;align-items:center;gap:10px}
-.result-dot{width:8px;height:8px;background:#10b981;border-radius:50%;animation:pulse 2s infinite}
-.result-title{font-size:13px;font-weight:700;color:var(--p);letter-spacing:0.3px}
-.result-actions{display:flex;gap:8px}
-.result-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border:1.5px solid var(--brd);border-radius:7px;background:var(--white);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--dim);cursor:pointer;transition:all 0.2s}
-.result-btn:hover{border-color:var(--p);color:var(--p);background:rgba(91,71,224,0.04)}
-.result-btn.copied{border-color:#10b981;color:#059669;background:rgba(16,185,129,0.06)}
-.result-content{padding:24px;font-size:14px;color:var(--dim);line-height:1.75;white-space:pre-wrap;font-family:'DM Sans',sans-serif;max-height:520px;overflow-y:auto}
-.result-content strong{color:var(--ink);font-weight:700}
-.result-content .section-label{display:block;font-size:10.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--p);margin:18px 0 8px;padding-bottom:6px;border-bottom:1px solid var(--brd)}
-.result-content .result-chip{display:inline-block;background:rgba(91,71,224,0.07);border:1px solid rgba(91,71,224,0.16);color:var(--p);font-size:12px;font-weight:600;padding:4px 11px;border-radius:6px;margin:3px 4px 3px 0}
-.result-upgrade{background:linear-gradient(135deg,rgba(91,71,224,0.07),rgba(67,56,202,0.04));border-top:1.5px solid rgba(91,71,224,0.1);padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.upgrade-text{font-size:13px;color:var(--dim)}
-.upgrade-text strong{color:var(--ink)}
-.upgrade-cta{display:flex;align-items:center;gap:7px;background:var(--g);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;white-space:nowrap;transition:all 0.2s;box-shadow:0 3px 12px rgba(91,71,224,0.25)}
-.upgrade-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(91,71,224,0.38)}
-
-/* OPTISCORE SPECIFIC */
-.score-ring-wrap{text-align:center;margin:28px 0}
-.score-ring{display:inline-flex;align-items:center;justify-content:center;flex-direction:column;width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--p) 0%,var(--brd) 0%);border:none;position:relative;box-shadow:0 8px 32px rgba(91,71,224,0.2);transition:background 1s ease}
-.score-ring-inner{width:108px;height:108px;background:var(--white);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;position:absolute}
-.score-num{font-family:'Inter',sans-serif;font-size:38px;font-weight:900;letter-spacing:-2px;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.score-lbl{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
-
-/* FORECAST SPECIFIC */
-.forecast-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
-.forecast-card{background:var(--white);border:1.5px solid var(--brd);border-radius:12px;padding:20px 16px;text-align:center;transition:all 0.2s}
-.forecast-card:hover{border-color:rgba(91,71,224,0.3);box-shadow:0 4px 16px rgba(91,71,224,0.08)}
-.forecast-val{font-family:'Inter',sans-serif;font-size:28px;font-weight:900;letter-spacing:-1px;background:var(--g);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;margin-bottom:5px}
-.forecast-key{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px}
-
-/* LOADING DOTS */
-.loading-dots{display:inline-flex;gap:5px;align-items:center}
-.loading-dots span{width:7px;height:7px;background:rgba(255,255,255,0.7);border-radius:50%;animation:dotpulse 1.2s infinite}
-.loading-dots span:nth-child(2){animation-delay:0.2s}
-.loading-dots span:nth-child(3){animation-delay:0.4s}
-@keyframes dotpulse{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
-
-.typing-cursor{display:inline-block;width:2px;height:1em;background:var(--p);margin-left:2px;vertical-align:text-bottom;animation:blink2 0.8s infinite}
-@keyframes blink2{0%,100%{opacity:1}50%{opacity:0}}
-
-/* SHARE LINK */
-.share-row{display:flex;gap:8px;margin-top:14px;align-items:center}
-.share-input{flex:1;padding:9px 13px;border:1.5px solid var(--brd);border-radius:8px;font-size:12.5px;color:var(--muted);background:var(--surf);font-family:monospace;outline:none}
-.share-copy-btn{padding:9px 16px;background:var(--surf);border:1.5px solid var(--brd);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;color:var(--dim);cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.share-copy-btn:hover{border-color:var(--p);color:var(--p)}
-
-@media(max-width:700px){
-  .form-row,.form-row.triple{grid-template-columns:1fr}
-  .forecast-grid{grid-template-columns:1fr}
-  .tool-tab{padding:11px 14px;font-size:12px}
-  .tool-tab-icon{display:none}
-  .result-upgrade{flex-direction:column}
+<!-- FREE TOOLS STRUCTURED DATA — helps rank for tool-specific searches -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Urawise Free Google Ads Tools",
+  "url": "https://workguardai.github.io/urawise-site/#tools",
+  "description": "Free AI-powered Google Ads tools: Google Ads kit generator, website audit tool, Optiscore simulator, budget forecast calculator, SEO ranking analyser, and website brief generator.",
+  "applicationCategory": "BusinessApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "featureList": [
+    "Free Google Ads Starter Kit Generator",
+    "Free Website Audit Tool",
+    "Free Google Ads Optiscore Simulator",
+    "Free Google Ads Budget Forecast Calculator",
+    "Free SEO Ranking Analyser",
+    "Free Website Brief Generator"
+  ]
 }
-</style>
+</script>
+</head>
+<body>
 
-<!-- TOOLS SECTION STARTS -->
+<!-- MULTILINGUAL SEO CONTENT — readable by Google, hidden from visitors -->
+<div style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;" aria-hidden="true">
 
-<div id="tools">
-<div style="background:linear-gradient(135deg,#0d0d14 0%,#1a1030 50%,#0d0d14 100%);padding:72px 0 0;position:relative;">
-  <div style="max-width:1140px;margin:0 auto;padding:0 40px;text-align:center;padding-bottom:52px;">
-    <div id="tools-tag" style="display:inline-flex;align-items:center;gap:8px;font-size:10.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#a78bfa;margin-bottom:14px;">Free AI Tools</div>
-    <h2 id="tools-h2" style="font-family:'Inter',sans-serif;font-weight:900;font-size:42px;letter-spacing:-2px;color:#fff;margin-bottom:12px;">Five tools. Completely free. Powered by AI.</h2>
-    <p id="tools-p1" style="font-size:16px;color:rgba(255,255,255,0.55);max-width:540px;margin:0 auto 8px;">Try them now — no sign-up, no credit card needed.</p>
-    <p id="tools-p2" style="font-size:13px;color:rgba(255,255,255,0.3);max-width:500px;margin:0 auto 44px;">Based on what you get, you decide if Urawise is the right partner.</p>
-  </div>
-  <div id="tool-tabs-bar" style="max-width:1140px;margin:0 auto;padding:0 20px;display:flex;gap:3px;flex-wrap:wrap;justify-content:center;">
-    <button id="tab-ads" data-tool="ads" onclick="switchTool('ads')" class="ttab ttab-active">📈 <span id="tab-ads-label">Ads Generator</span></button>
-    <button id="tab-audit" data-tool="audit" onclick="switchTool('audit')" class="ttab">🔍 <span id="tab-audit-label">Website Audit</span></button>
-    <button id="tab-optiscore" data-tool="optiscore" onclick="switchTool('optiscore')" class="ttab">⚡ <span id="tab-optiscore-label">Optiscore</span></button>
-    <button id="tab-forecast" data-tool="forecast" onclick="switchTool('forecast')" class="ttab">📊 <span id="tab-forecast-label">Budget Forecast</span></button>
-    <button id="tab-ranking" data-tool="ranking" onclick="switchTool('ranking')" class="ttab">🔎 <span id="tab-ranking-label">SEO Ranking</span></button>
-    <button id="tab-brief" data-tool="brief" onclick="switchTool('brief')" class="ttab">🌐 <span id="tab-brief-label">Website Brief</span></button>
-  </div>
-</div>
+  <!-- SPANISH / MADRID -->
+  <section lang="es">
+    <h1>Agencia Google Ads Madrid — Urawise</h1>
+    <p>Urawise es una agencia especializada en Google Ads y crecimiento digital basada en Madrid. Gestionamos campañas de Google Ads, SEO, diseño web y generación de leads para empresas en España y toda Europa.</p>
+    <h2>Servicios de Google Ads en Madrid</h2>
+    <p>Gestión completa de Google Ads: configuración de campañas, optimización de pujas, seguimiento de conversiones, PMAX, AI Max, Smart Bidding, Optiscore, sitelinks, callouts y más. Trabajamos con empresas en Madrid, Barcelona, Valencia y toda España.</p>
+    <h2>Herramientas gratuitas de Google Ads</h2>
+    <p>Prueba nuestras herramientas gratuitas: generador de kit Google Ads, auditoría web gratuita, simulador de Optiscore, previsión de presupuesto Google Ads, analizador de posicionamiento SEO y generador de brief web. Sin registro, completamente gratis.</p>
+    <h2>Agencia Google Ads para empresas españolas</h2>
+    <p>Hablamos español, danés, albanés, inglés e italiano. Sin barreras idiomáticas. Clientes en Madrid, España y toda Europa.</p>
+  </section>
 
-<style>
-.ttab{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border:none;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.45);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border-radius:10px 10px 0 0;border-bottom:3px solid transparent;transition:all 0.2s;}
-.ttab-active{background:rgba(91,71,224,0.25)!important;color:#a78bfa!important;border-bottom:3px solid #7c3aed!important;}
-.tpanel{display:none;padding:52px 0 72px;}
-.tpanel-active{display:block;}
-.tform{max-width:800px;margin:0 auto;padding:0 24px;}
-.trow{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-.trow3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px;}
-.trow1{display:grid;grid-template-columns:1fr;gap:14px;margin-bottom:14px;}
-.tfield{display:flex;flex-direction:column;gap:5px;}
-.tfield label{font-size:11px;font-weight:700;color:#5c5b72;letter-spacing:0.5px;text-transform:uppercase;}
-.tfield input,.tfield select,.tfield textarea{padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;transition:border-color 0.2s;}
-.tfield input:focus,.tfield select:focus,.tfield textarea:focus{border-color:#5b47e0;background:#fff;}
-.tfield textarea{resize:vertical;min-height:88px;line-height:1.6;}
-.tbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 18px rgba(91,71,224,0.28);margin-top:4px;transition:all 0.2s;}
-.tbtn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,71,224,0.38);}
-.tbtn:disabled{opacity:0.65;cursor:not-allowed;transform:none;}
-.tres{display:none;margin-top:22px;}
-.tres-box{background:#fff;border:1.5px solid #e4e3f0;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.06);}
-.tres-head{display:flex;align-items:center;justify-content:space-between;padding:15px 22px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);}
-.tres-copy{padding:7px 14px;border:1.5px solid #e4e3f0;border-radius:7px;background:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:#5c5b72;cursor:pointer;transition:all 0.2s;}
-.tres-copy:hover{border-color:#5b47e0;color:#5b47e0;}
-.tres-out{padding:24px;font-size:14px;color:#3d3c52;line-height:1.8;white-space:pre-wrap;max-height:500px;overflow-y:auto;}
-.tres-upgrade{background:rgba(91,71,224,0.04);border-top:1.5px solid rgba(91,71,224,0.1);padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.tres-upgrade-cta{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;white-space:nowrap;}
-/* CHAT */
-.tchat{border-top:1.5px solid #e4e3f0;}
-.tchat-msgs{padding:18px 22px;max-height:380px;overflow-y:auto;background:#fafafa;display:flex;flex-direction:column;gap:14px;}
-.tchat-input-row{padding:14px 22px 18px;background:#fff;border-top:1px solid #f0f0f0;}
-.tchat-hint{font-size:11.5px;color:#9896b0;margin-bottom:8px;font-style:italic;}
-.tchat-row{display:flex;gap:8px;}
-.tchat-input{flex:1;padding:11px 14px;border:1.5px solid #e4e3f0;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;color:#12111e;background:#f8f8fc;outline:none;}
-.tchat-input:focus{border-color:#5b47e0;background:#fff;}
-.tchat-send{padding:11px 20px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;}
-.msg-user{display:flex;justify-content:flex-end;}
-.msg-ai{display:flex;justify-content:flex-start;}
-.msg-bubble-user{max-width:80%;padding:12px 16px;background:linear-gradient(135deg,#5b47e0,#4338ca);color:#fff;border-radius:14px 4px 14px 14px;font-size:13.5px;line-height:1.65;}
-.msg-bubble-ai{max-width:80%;padding:12px 16px;background:#fff;border:1.5px solid #e4e3f0;color:#3d3c52;border-radius:4px 14px 14px 14px;font-size:13.5px;line-height:1.65;}
-.free-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);color:#059669;font-size:11px;font-weight:700;padding:3px 11px;border-radius:20px;letter-spacing:0.8px;text-transform:uppercase;margin-bottom:16px;}
-@keyframes dotpulse2{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
-.typing-dots span{display:inline-block;width:7px;height:7px;background:#9896b0;border-radius:50%;animation:dotpulse2 1.2s infinite;}
-.typing-dots span:nth-child(2){animation-delay:0.2s;}
-.typing-dots span:nth-child(3){animation-delay:0.4s;}
-@media(max-width:700px){.trow,.trow3{grid-template-columns:1fr;}.ttab{padding:10px 12px;font-size:12px;}}
-</style>
+  <!-- DANISH / COPENHAGEN -->
+  <section lang="da">
+    <h1>Google Ads Bureau København — Urawise</h1>
+    <p>Urawise er et specialiseret Google Ads og digital vækst bureau baseret i Madrid, der betjener danske virksomheder. Vi administrerer Google Ads kampagner, SEO, webdesign og leadgenerering for virksomheder i Danmark og hele Europa.</p>
+    <h2>Google Ads til danske virksomheder</h2>
+    <p>Komplet Google Ads håndtering: kampagneopsætning, budoptimering, konverteringssporing, PMAX, AI Max, Smart Budgivning, Optiscore, sitelinks, callouts og mere. Vi arbejder med virksomheder i København, Aarhus, Odense og hele Danmark.</p>
+    <h2>Gratis Google Ads værktøjer på dansk</h2>
+    <p>Prøv vores gratis værktøjer: Google Ads startpakke generator, gratis webstedsrevision, Optiscore simulator, budgetprognose, SEO ranking analysator og websteds brief generator. Ingen tilmelding, helt gratis.</p>
+    <h2>Google Ads bureau for danske virksomheder</h2>
+    <p>Vi taler dansk, spansk, albansk, engelsk og italiensk. Ingen sprogbarrierer. Kunder i Danmark og hele Europa.</p>
+  </section>
 
-<div style="background:#f8f8fc;border-top:2px solid #e4e3f0;">
+  <!-- ALBANIAN / TIRANA -->
+  <section lang="sq">
+    <h1>Agjensi Google Ads Tiranë — Urawise</h1>
+    <p>Urawise është një agjensi e specializuar në Google Ads dhe rritje dixhitale bazuar në Madrid, duke shërbyer biznese shqiptare. Ne menaxhojmë fushata Google Ads, SEO, dizajn faqesh dhe gjenerim kontaktesh për biznese në Shqipëri dhe në të gjithë Europën.</p>
+    <h2>Google Ads për biznese shqiptare</h2>
+    <p>Menaxhim i plotë i Google Ads: konfigurimi i fushatave, optimizimi i ofertave, gjurmimi i konvertimeve, PMAX, AI Max, Smart Bidding, Optiscore, sitelinks, callouts dhe më shumë. Punojmë me biznese në Tiranë, Durrës, Vlorë dhe në të gjithë Shqipërinë.</p>
+    <h2>Mjete falas të Google Ads</h2>
+    <p>Provoni mjetet tona falas: gjenerator kiti Google Ads, auditim faqeje falas, simulues Optiscore, parashikim buxheti, analizues renditjeje SEO dhe gjenerator brefi faqeje. Pa regjistrim, plotësisht falas.</p>
+    <h2>Agjensi Google Ads për biznese shqiptare</h2>
+    <p>Flasim shqip, spanjisht, danisht, anglisht dhe italisht. Pa barriera gjuhësore. Klientë në Shqipëri dhe në të gjithë Europën.</p>
+  </section>
 
-<!-- ══ PANEL: ADS GENERATOR ══ -->
-<div id="panel-ads" class="tpanel tpanel-active">
-<div class="tform">
-  <span class="free-badge" id="ads-badge">✓ 100% Free</span>
-  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="ads-title">Google Ads Starter Kit Generator</h3>
-  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="ads-desc">Tell us about your business. We generate headlines, descriptions, callouts, sitelinks with titles and descriptions, negative keywords and a bidding strategy.</p>
-  <div class="trow">
-    <div class="tfield"><label id="ads-lbl-biz">Business Type</label><input id="ads-business" type="text" placeholder="e.g. Dental clinic, Plumber, Online shop"></div>
-    <div class="tfield"><label id="ads-lbl-loc">Location / Market</label><input id="ads-location" type="text" placeholder="e.g. Barcelona, Denmark, UK"></div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="ads-lbl-goal">Primary Goal</label>
-      <select id="ads-goal">
-        <option value="" id="ads-goal-default">Select your goal</option>
-        <option value="phone calls and direct enquiries">Phone calls / Enquiries</option>
-        <option value="lead form submissions">Lead form submissions</option>
-        <option value="online sales">Online sales</option>
-        <option value="in-store visits">In-store visits</option>
-        <option value="brand awareness">Brand awareness</option>
-      </select>
-    </div>
-    <div class="tfield"><label id="ads-lbl-budget">Monthly Budget</label>
-      <select id="ads-budget">
-        <option value="">Select budget range</option>
-        <option value="under €300/month">Under €300/month</option>
-        <option value="€300–€700/month">€300–€700/month</option>
-        <option value="€700–€1,500/month">€700–€1,500/month</option>
-        <option value="€1,500–€3,000/month">€1,500–€3,000/month</option>
-        <option value="over €3,000/month">Over €3,000/month</option>
-      </select>
-    </div>
-  </div>
-  <div class="trow1">
-    <div class="tfield"><label id="ads-lbl-usp">What makes you different? (optional)</label><input id="ads-usp" type="text" placeholder="e.g. Same-day service, 20 years experience, free consultation"></div>
-  </div>
-  <div class="trow1" style="background:#f0f0f8;border:1.5px solid #e4e3f0;border-radius:12px;padding:16px 18px;margin-bottom:14px;">
-    <p style="font-size:12.5px;font-weight:700;color:#5b47e0;margin-bottom:10px;" id="ads-sitelinks-title">📎 Tell us your website pages for Sitelinks (optional)</p>
-    <p style="font-size:12px;color:#9896b0;margin-bottom:12px;" id="ads-sitelinks-desc">Add up to 4 pages and we will generate the perfect sitelink title and description for each one.</p>
-    <div style="display:flex;flex-direction:column;gap:8px;">
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl1-page" type="text" placeholder="Page name e.g. About Us" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl1-url" type="text" placeholder="Page URL e.g. /about" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl2-page" type="text" placeholder="Page name e.g. Services" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl2-url" type="text" placeholder="Page URL e.g. /services" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl3-page" type="text" placeholder="Page name e.g. Pricing" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl3-url" type="text" placeholder="Page URL e.g. /pricing" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
-      <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;"><input id="sl4-page" type="text" placeholder="Page name e.g. Contact" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"><input id="sl4-url" type="text" placeholder="Page URL e.g. /contact" style="padding:9px 12px;border:1.5px solid #e4e3f0;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:#12111e;background:#fff;outline:none;"></div>
-    </div>
-  </div>
-  <div style="display:flex;gap:10px;align-items:stretch;">
-    <button class="tbtn" id="ads-btn" onclick="runAdsGenerator()" style="flex:1;"><span id="ads-btn-text">✨ Generate My Google Ads Kit</span></button>
-    <button onclick="startVoice('ads-business','ads-btn')" title="Speak your business type" style="padding:0 16px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;cursor:pointer;font-size:20px;transition:all 0.2s;" id="ads-mic-btn">🎙️</button>
-  </div>
-  <div class="tres" id="ads-result">
-    <div class="tres-box">
-      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Google Ads Kit</span><button class="tres-copy" id="ads-copy-btn" onclick="copyOut('ads-output','ads-copy-btn')">📋 Copy All</button></div>
-      <div class="tres-out" id="ads-output"></div>
-      <div class="tchat" id="ads-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="ads-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="ads-chat-hint">Ask a follow-up — request changes, add more headlines, adjust tone, ask anything.</p>
-          <div class="tchat-row"><input class="tchat-input" id="ads-followup" type="text" placeholder="Ask anything — change the ads, ask about pricing, sales strategy, competitors..." onkeydown="if(event.key==='Enter')sendChat('ads')"><button class="tchat-send" onclick="sendChat('ads')" id="ads-send-btn">Send →</button></div>
-        </div>
-      </div>
-      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="ads-upgrade-text"><strong>Want us to build and run this campaign?</strong> We handle setup, tracking and optimisation.</span><a href="#contact" class="tres-upgrade-cta">🚀 Get It Running →</a></div>
-    </div>
-  </div>
-</div>
-</div>
+  <!-- ENGLISH — tool-specific keywords -->
+  <section lang="en">
+    <h1>Free Google Ads Tools — Urawise</h1>
+    <p>Free Google Ads starter kit generator. Free website audit tool. Free Google Ads Optiscore simulator. Free Google Ads budget forecast calculator. Free SEO ranking analyser. Free website brief generator. No sign-up required.</p>
+    <h2>Google Ads Agency Madrid</h2>
+    <p>Urawise is a Google Ads management agency based in Madrid serving clients across Europe. We offer Google Ads setup, campaign optimisation, conversion tracking, PMAX, AI Max, Smart Bidding, and full account management.</p>
+    <h2>Google Ads Management Spain Denmark Albania</h2>
+    <p>We speak English, Spanish, Danish, Albanian and Italian. Google Ads specialists serving businesses in Madrid, Copenhagen, Tirana and across Europe. No language barriers.</p>
+  </section>
 
-<!-- ══ PANEL: WEBSITE AUDIT ══ -->
-<div id="panel-audit" class="tpanel">
-<div class="tform">
-  <span class="free-badge" id="audit-badge">✓ 100% Free</span>
-  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="audit-title">60-Second Website Audit</h3>
-  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="audit-desc">Tell us your website and biggest frustration. Get three concrete, personalised recommendations.</p>
-  <div class="trow">
-    <div class="tfield"><label id="audit-lbl-url">Your Website URL</label><input id="audit-url" type="text" placeholder="https://yourwebsite.com"></div>
-    <div class="tfield"><label id="audit-lbl-biz">Business Type</label><input id="audit-business" type="text" placeholder="e.g. Restaurant, Law firm, Online shop"></div>
-  </div>
-  <div class="trow1">
-    <div class="tfield"><label id="audit-lbl-frustration">What is your biggest frustration right now?</label><textarea id="audit-frustration" placeholder="e.g. We get traffic but nobody contacts us. Our booking page has high dropout..."></textarea></div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="audit-lbl-goal">Main Goal</label>
-      <select id="audit-goal">
-        <option value="">Select goal</option>
-        <option value="more leads and enquiries">More leads / enquiries</option>
-        <option value="better Google ranking">Better Google ranking</option>
-        <option value="more online sales">More online sales</option>
-        <option value="better user experience">Better user experience</option>
-        <option value="stronger brand presence">Stronger brand presence</option>
-      </select>
-    </div>
-    <div class="tfield"><label id="audit-lbl-market">Market</label>
-      <select id="audit-market">
-        <option value="">Select market</option>
-        <option value="Spain / Spanish">Spain / Spanish</option>
-        <option value="Denmark / Danish">Denmark / Danish</option>
-        <option value="UK / English">UK / English</option>
-        <option value="Albania / Albanian">Albania / Albanian</option>
-        <option value="International / English">International</option>
-      </select>
-    </div>
-  </div>
-  <button class="tbtn" id="audit-btn" onclick="runAudit()"><span id="audit-btn-text">🔍 Audit My Website</span></button>
-  <div class="tres" id="audit-result">
-    <div class="tres-box">
-      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Website Audit</span><button class="tres-copy" onclick="copyOut('audit-output','audit-copy-btn')" id="audit-copy-btn">📋 Copy</button></div>
-      <div class="tres-out" id="audit-output"></div>
-      <div class="tchat" id="audit-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="audit-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="audit-chat-hint">Ask a follow-up — request more detail, push back, ask how to fix something specific.</p>
-          <div class="tchat-row"><input class="tchat-input" id="audit-followup" type="text" placeholder="Ask anything — how to fix issues, sales advice, business strategy, website ideas..." onkeydown="if(event.key==='Enter')sendChat('audit')"><button class="tchat-send" onclick="sendChat('audit')">Send →</button></div>
-        </div>
-      </div>
-      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="audit-upgrade-text"><strong>Want us to fix these issues?</strong> We build pages, improve SEO and set up lead capture.</span><a href="#contact" class="tres-upgrade-cta">🛠️ Fix It With Us →</a></div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ══ PANEL: OPTISCORE ══ -->
-<div id="panel-optiscore" class="tpanel">
-<div class="tform">
-  <span class="free-badge" id="opti-badge">✓ 100% Free</span>
-  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="opti-title">Google Ads Optiscore Simulator</h3>
-  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="opti-desc">Answer 8 questions about your Google Ads setup. We simulate your Optiscore and tell you exactly what to fix.</p>
-  <div class="trow">
-    <div class="tfield"><label id="os-lbl-1">1. Conversion tracking?</label><select id="os-1"><option value="">Select</option><option value="Yes, fully set up">Yes, fully set up</option><option value="Partially tracking">Partially tracking</option><option value="No conversion tracking">No conversion tracking</option></select></div>
-    <div class="tfield"><label id="os-lbl-2">2. Bidding strategy?</label><select id="os-2"><option value="">Select</option><option value="Smart Bidding (Target CPA/ROAS)">Smart Bidding (Target CPA/ROAS)</option><option value="Maximise Clicks">Maximise Clicks</option><option value="Manual CPC">Manual CPC</option><option value="Not sure">Not sure</option></select></div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="os-lbl-3">3. Number of headlines?</label><select id="os-3"><option value="">Select</option><option value="15 (maximum)">15 (maximum)</option><option value="10-14">10–14</option><option value="Fewer than 10">Fewer than 10</option><option value="Not sure">Not sure</option></select></div>
-    <div class="tfield"><label id="os-lbl-4">4. Ad extensions?</label><select id="os-4"><option value="">Select</option><option value="Yes, multiple types">Yes — multiple types</option><option value="Some (1-2 types)">Some (1–2 types)</option><option value="None">None</option></select></div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="os-lbl-5">5. Negative keywords?</label><select id="os-5"><option value="">Select</option><option value="Yes, strong list">Yes, strong list</option><option value="A few">A few</option><option value="None">None</option></select></div>
-    <div class="tfield"><label id="os-lbl-6">6. Ad strength?</label><select id="os-6"><option value="">Select</option><option value="All Good or Excellent">All Good/Excellent</option><option value="Some Poor or Average">Some Poor/Average</option><option value="Not sure">Not sure</option></select></div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="os-lbl-7">7. Audience targeting?</label><select id="os-7"><option value="">Select</option><option value="Yes, full setup">Yes — full setup</option><option value="Observation mode only">Observation mode only</option><option value="No targeting">No targeting</option></select></div>
-    <div class="tfield"><label id="os-lbl-8">8. How often do you optimise?</label><select id="os-8"><option value="">Select</option><option value="Weekly or more">Weekly or more</option><option value="Monthly">Monthly</option><option value="Rarely or never">Rarely / never</option></select></div>
-  </div>
-  <button class="tbtn" id="optiscore-btn" onclick="runOptiscore()"><span id="optiscore-btn-text">⚡ Simulate My Optiscore</span></button>
-  <div class="tres" id="optiscore-result">
-    <div class="tres-box">
-      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Optiscore Report</span></div>
-      <div style="text-align:center;padding:24px 0 0;">
-        <div style="display:inline-block;position:relative;width:130px;height:130px;">
-          <div id="score-ring" style="width:130px;height:130px;border-radius:50%;background:conic-gradient(#5b47e0 0%,#e4e3f0 0%);display:flex;align-items:center;justify-content:center;">
-            <div style="width:100px;height:100px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;">
-              <span id="score-num" style="font-family:'Inter',sans-serif;font-size:32px;font-weight:900;background:linear-gradient(135deg,#5b47e0,#4338ca);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;">--</span>
-              <span style="font-size:10px;font-weight:700;color:#9896b0;">/100</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tres-out" id="optiscore-output"></div>
-      <div class="tchat" id="optiscore-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="optiscore-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="opti-chat-hint">Ask a follow-up — how to fix a specific issue, what impact each change would have, etc.</p>
-          <div class="tchat-row"><input class="tchat-input" id="optiscore-followup" type="text" placeholder="Ask anything — Google Ads help, business questions, sales strategy, anything..." onkeydown="if(event.key==='Enter')sendChat('optiscore')"><button class="tchat-send" onclick="sendChat('optiscore')">Send →</button></div>
-        </div>
-      </div>
-      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="opti-upgrade-text"><strong>Want us to push your score above 90?</strong> Our Growth package includes full account optimisation.</span><a href="#contact" class="tres-upgrade-cta">📈 Improve My Score →</a></div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ══ PANEL: FORECAST ══ -->
-<div id="panel-forecast" class="tpanel">
-<div class="tform">
-  <span class="free-badge" id="fc-badge">✓ 100% Free</span>
-  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="fc-title">Google Ads Budget Forecast</h3>
-  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="fc-desc">Tell us your industry, market and budget. Get estimated impressions, clicks, leads and cost-per-lead.</p>
-  <div class="trow3">
-    <div class="tfield"><label id="fc-lbl-industry">Industry</label>
-      <select id="fc-industry"><option value="">Select</option><option value="Healthcare / Dental">Healthcare / Dental</option><option value="Legal / Law firm">Legal / Law firm</option><option value="Home Services">Home Services</option><option value="Real Estate">Real Estate</option><option value="E-commerce / Retail">E-commerce / Retail</option><option value="Restaurant / Food">Restaurant / Food</option><option value="Education / Coaching">Education / Coaching</option><option value="Finance / Insurance">Finance / Insurance</option><option value="SaaS / Software">SaaS / Software</option><option value="Other">Other</option></select>
-    </div>
-    <div class="tfield"><label id="fc-lbl-market">Target Market</label>
-      <select id="fc-market"><option value="">Select</option><option value="Spain">Spain</option><option value="Denmark">Denmark</option><option value="United Kingdom">United Kingdom</option><option value="Germany">Germany</option><option value="Scandinavia">Scandinavia</option><option value="Albania">Albania</option><option value="International">International</option></select>
-    </div>
-    <div class="tfield"><label id="fc-lbl-budget">Monthly Budget</label>
-      <select id="fc-budget"><option value="">Select</option><option value="€200">€200</option><option value="€500">€500</option><option value="€1,000">€1,000</option><option value="€2,000">€2,000</option><option value="€5,000">€5,000</option><option value="€10,000+">€10,000+</option></select>
-    </div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="fc-lbl-type">Campaign Type</label>
-      <select id="fc-type"><option value="">Select</option><option value="Search (text ads)">Search (text ads)</option><option value="Performance Max">Performance Max</option><option value="Display (banners)">Display (banners)</option><option value="Not sure — recommend">Not sure — recommend</option></select>
-    </div>
-    <div class="tfield"><label id="fc-lbl-goal">Primary Goal</label>
-      <select id="fc-goal"><option value="">Select</option><option value="Phone calls / Enquiries">Phone calls / Enquiries</option><option value="Online sales">Online sales</option><option value="Form leads">Form leads</option><option value="Store visits">Store visits</option></select>
-    </div>
-  </div>
-  <button class="tbtn" id="forecast-btn" onclick="runForecast()"><span id="forecast-btn-text">📊 Generate My Forecast</span></button>
-  <div class="tres" id="forecast-result">
-    <div class="tres-box">
-      <div class="tres-head"><span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Budget Forecast</span><button class="tres-copy" onclick="copyOut('forecast-output','fc-copy-btn')" id="fc-copy-btn">📋 Copy</button></div>
-      <div id="forecast-cards" style="padding:18px 22px 0;"></div>
-      <div class="tres-out" id="forecast-output"></div>
-      <div class="tchat" id="forecast-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="forecast-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="fc-chat-hint">Ask a follow-up — adjust budget, change market, ask what would happen if you doubled spend, etc.</p>
-          <div class="tchat-row"><input class="tchat-input" id="forecast-followup" type="text" placeholder="Ask anything — budget questions, sales strategy, business planning, pricing..." onkeydown="if(event.key==='Enter')sendChat('forecast')"><button class="tchat-send" onclick="sendChat('forecast')">Send →</button></div>
-        </div>
-      </div>
-      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="fc-upgrade-text"><strong>Ready to turn this into real results?</strong> We set up and manage the campaign for you.</span><a href="#contact" class="tres-upgrade-cta">🎯 Start My Campaign →</a></div>
-    </div>
-  </div>
-</div>
-</div>
-
-<!-- ══ PANEL: SEO RANKING ══ -->
-<div id="panel-ranking" class="tpanel">
-<div class="tform">
-  <span class="free-badge" id="rank-badge">✓ 100% Free</span>
-  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="rank-title">SEO Ranking Analyser</h3>
-  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:20px;line-height:1.65;" id="rank-desc">Enter your URL and target keywords. Part 1 runs a live Google PageSpeed audit. Part 2 connects your Search Console for real keyword positions.</p>
-
-  <!-- Part 1 -->
-  <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:14px;overflow:hidden;margin-bottom:20px;">
-    <div style="padding:16px 20px;border-bottom:1.5px solid #e4e3f0;background:rgba(91,71,224,0.04);display:flex;align-items:center;gap:8px;">
-      <span style="font-size:18px;">⚡</span>
-      <div><div style="font-size:13px;font-weight:800;color:#12111e;" id="rank-p1-head">Part 1 — Live Technical Audit</div><div style="font-size:11.5px;color:#9896b0;" id="rank-p1-sub">Real scores from Google PageSpeed Insights API — no login needed</div></div>
-    </div>
-    <div style="padding:20px;">
-      <div class="trow">
-        <div class="tfield"><label id="rank-lbl-url">Website URL</label><input id="rank-url" type="text" placeholder="https://yourwebsite.com"></div>
-        <div class="tfield"><label id="rank-lbl-kw">Target Keywords</label><input id="rank-keywords" type="text" placeholder="e.g. dentist Barcelona, dental clinic"></div>
-      </div>
-      <div class="trow">
-        <div class="tfield"><label id="rank-lbl-biz">Business Type</label><input id="rank-business" type="text" placeholder="e.g. Dental clinic, Restaurant"></div>
-        <div class="tfield"><label id="rank-lbl-market">Target Market</label>
-          <select id="rank-market"><option value="">Select market</option><option value="Spain / Spanish">Spain / Spanish</option><option value="Denmark / Danish">Denmark / Danish</option><option value="UK / English">UK / English</option><option value="Albania / Albanian">Albania / Albanian</option><option value="International / English">International</option></select>
-        </div>
-      </div>
-      <button class="tbtn" id="ranking-btn" onclick="runRanking()"><span id="ranking-btn-text">⚡ Run Live Technical Audit</span></button>
-    </div>
-    <div id="ranking-result" style="display:none;border-top:1.5px solid #e4e3f0;">
-      <div id="ranking-score-cards" style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#e4e3f0;border-bottom:1.5px solid #e4e3f0;"></div>
-      <div class="tres-out" id="ranking-output"></div>
-      <div class="tchat" id="ranking-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="ranking-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="rank-chat-hint">Ask a follow-up — how to fix specific issues, what would improve performance score, etc.</p>
-          <div class="tchat-row"><input class="tchat-input" id="ranking-followup" type="text" placeholder="Ask anything — SEO fixes, business advice, sales tips, competitor questions..." onkeydown="if(event.key==='Enter')sendChat('ranking')"><button class="tchat-send" onclick="sendChat('ranking')">Send →</button></div>
-        </div>
-      </div>
-      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="rank-upgrade-text"><strong>Want us to fix these issues?</strong> We handle technical SEO, speed and content improvements.</span><a href="#contact" class="tres-upgrade-cta">📈 Fix My SEO →</a></div>
-    </div>
-  </div>
-
-  <!-- Part 2 -->
-  <div style="background:#fff;border:1.5px solid #e4e3f0;border-radius:14px;overflow:hidden;">
-    <div style="padding:16px 20px;border-bottom:1.5px solid #e4e3f0;background:rgba(16,185,129,0.04);display:flex;align-items:center;gap:8px;">
-      <span style="font-size:18px;">📊</span>
-      <div><div style="font-size:13px;font-weight:800;color:#12111e;" id="rank-p2-head">Part 2 — Real Google Ranking Data</div><div style="font-size:11.5px;color:#9896b0;" id="rank-p2-sub">Connect Search Console to see your actual keyword positions</div></div>
-    </div>
-    <div id="gsc-panel" style="padding:28px 24px;text-align:center;">
-      <div style="font-size:38px;margin-bottom:12px;">🔍</div>
-      <h4 style="font-size:17px;font-weight:800;color:#12111e;margin-bottom:8px;" id="gsc-title">See Your Real Google Rankings</h4>
-      <p style="font-size:13.5px;color:#5c5b72;max-width:460px;margin:0 auto 18px;line-height:1.65;" id="gsc-desc">Connect your Google Search Console to see which keywords you rank for, real positions, clicks and impressions — then Claude explains what to improve.</p>
-      <div style="background:#fafafa;border:1.5px solid #e4e3f0;border-radius:10px;padding:12px 16px;margin-bottom:18px;font-size:12px;color:#9896b0;text-align:left;line-height:1.6;" id="gsc-privacy">🔒 <strong style="color:#5c5b72;">Privacy:</strong> We only read your data to generate the analysis. Nothing is stored.</div>
-      <button id="gsc-btn" onclick="connectGSC()" style="display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;padding:13px 22px;font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:700;color:#12111e;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
-        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        <span id="gsc-btn-label">Connect Google Search Console</span>
-      </button>
-    </div>
-    <div id="gsc-results" style="display:none;">
-      <div style="padding:14px 20px;border-top:1.5px solid #e4e3f0;border-bottom:1.5px solid #e4e3f0;background:#fafafa;display:flex;align-items:center;justify-content:space-between;">
-        <span style="font-size:13px;font-weight:700;color:#059669;" id="gsc-connected-label">✅ Connected</span>
-        <button onclick="disconnectGSC()" style="font-size:12px;color:#9896b0;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;" id="gsc-disconnect-btn">Disconnect</button>
-      </div>
-      <div id="gsc-table" style="padding:18px 22px;overflow-x:auto;"></div>
-      <div id="gsc-ai-wrap" style="padding:0 22px 18px;"></div>
-      <div class="tchat" id="gsc-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="gsc-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="gsc-chat-hint">Ask about your real ranking data — why certain keywords are low, how to improve CTR, etc.</p>
-          <div class="tchat-row"><input class="tchat-input" id="gsc-followup" type="text" placeholder="Ask anything — ranking questions, business strategy, sales advice, website tips..." onkeydown="if(event.key==='Enter')sendChat('gsc')"><button class="tchat-send" onclick="sendChat('gsc')">Send →</button></div>
-        </div>
-      </div>
-      <div class="tres-upgrade"><span style="font-size:13px;color:#5c5b72;" id="gsc-upgrade-text"><strong>Want expert help improving these rankings?</strong> We build a full ranking improvement plan from your data.</span><a href="#contact" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#10b981,#059669);color:#fff;text-decoration:none;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;">📈 Get a Ranking Plan →</a></div>
-    </div>
-  </div>
-</div>
 </div>
 
 
-<!-- ══ PANEL: WEBSITE BRIEF GENERATOR ══ -->
-<div id="panel-brief" class="tpanel">
-<div class="tform">
-  <span class="free-badge" id="brief-badge">✓ 100% Free</span>
-  <h3 style="font-family:'Inter',sans-serif;font-size:24px;font-weight:900;letter-spacing:-0.8px;color:#12111e;margin-bottom:6px;" id="brief-title">AI Website Brief Generator</h3>
-  <p style="font-size:14.5px;color:#5c5b72;margin-bottom:24px;line-height:1.65;" id="brief-desc">Describe your business and we will generate a complete website structure — page by page, with content brief, design direction and everything a developer needs to build it. Ready to use or hand to any agency.</p>
-  <div class="trow">
-    <div class="tfield"><label id="brief-lbl-biz">Business Name</label><input id="brief-biz" type="text" placeholder="e.g. Kola Dental Clinic"></div>
-    <div class="tfield"><label id="brief-lbl-type">Business Type</label><input id="brief-type" type="text" placeholder="e.g. Dental clinic, Law firm, Restaurant"></div>
-  </div>
-  <div class="trow1">
-    <div class="tfield"><label id="brief-lbl-desc">What does your business do? Who are your customers?</label><textarea id="brief-desc-input" placeholder="e.g. We are a dental clinic in Madrid serving families and professionals. We offer general dentistry, implants and aesthetics. Our customers are mainly 30-55 year olds who value quality and convenience..."></textarea></div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="brief-lbl-goal">Main Website Goal</label>
-      <select id="brief-goal">
-        <option value="">Select goal</option>
-        <option value="generate phone calls and appointment bookings">Get appointments / bookings</option>
-        <option value="generate leads and enquiry form submissions">Get enquiries / leads</option>
-        <option value="sell products online">Sell products online</option>
-        <option value="build brand credibility and trust">Build brand credibility</option>
-        <option value="showcase a portfolio of work">Showcase portfolio</option>
-      </select>
-    </div>
-    <div class="tfield"><label id="brief-lbl-pages">Approx. number of pages</label>
-      <select id="brief-pages">
-        <option value="">Select</option>
-        <option value="3-4 pages (simple)">3–4 pages (simple)</option>
-        <option value="5-7 pages (standard)">5–7 pages (standard)</option>
-        <option value="8-12 pages (detailed)">8–12 pages (detailed)</option>
-        <option value="as many as needed">As many as needed</option>
-      </select>
-    </div>
-  </div>
-  <div class="trow">
-    <div class="tfield"><label id="brief-lbl-style">Design Style</label>
-      <select id="brief-style">
-        <option value="">Select</option>
-        <option value="clean and minimal">Clean and minimal</option>
-        <option value="bold and modern">Bold and modern</option>
-        <option value="warm and friendly">Warm and friendly</option>
-        <option value="professional and corporate">Professional and corporate</option>
-        <option value="creative and distinctive">Creative and distinctive</option>
-      </select>
-    </div>
-    <div class="tfield"><label id="brief-lbl-lang">Website Language</label>
-      <select id="brief-lang">
-        <option value="">Select</option>
-        <option value="English">English</option>
-        <option value="Spanish">Spanish</option>
-        <option value="Danish">Danish</option>
-        <option value="Albanian">Albanian</option>
-        <option value="Italian">Italian</option>
-        <option value="Multilingual">Multilingual</option>
-      </select>
-    </div>
-  </div>
-  <div class="trow1">
-    <div class="tfield"><label id="brief-lbl-extra">Anything else we should know? (competitors, must-have features, inspiration sites)</label><textarea id="brief-extra" placeholder="e.g. Our competitors are X and Y. We want a booking form on every page. We like the style of apple.com and the warmth of airbnb.com..."></textarea></div>
-  </div>
-  <div style="display:flex;gap:10px;align-items:stretch;">
-    <button class="tbtn" id="brief-btn" onclick="runBriefGenerator()" style="flex:1;"><span id="brief-btn-text">🌐 Generate My Website Brief</span></button>
-    <button onclick="startVoice('brief-desc-input','brief-btn')" title="Describe your business by voice" style="padding:0 16px;background:#fff;border:1.5px solid #e4e3f0;border-radius:10px;cursor:pointer;font-size:20px;transition:all 0.2s;" id="brief-mic-btn">🎙️</button>
-  </div>
-  <div class="tres" id="brief-result">
-    <div class="tres-box">
-      <div class="tres-head">
-        <span style="font-size:13px;font-weight:700;color:#5b47e0;">✅ Your Website Brief</span>
-        <button class="tres-copy" id="brief-copy-btn" onclick="copyOut('brief-output','brief-copy-btn')">📋 Copy Brief</button>
-      </div>
-      <div class="tres-out" id="brief-output"></div>
-      <div class="tchat" id="brief-chat-section" style="display:none;">
-        <div class="tchat-msgs" id="brief-chat-msgs"></div>
-        <div class="tchat-input-row">
-          <p class="tchat-hint" id="brief-chat-hint">Ask anything — add a page, change the style direction, ask about costs, request a specific feature, ask how to find a developer.</p>
-          <div class="tchat-row">
-            <input class="tchat-input" id="brief-followup" type="text" placeholder="e.g. Add an FAQ page, make it more minimalist, how much would this cost to build?" onkeydown="if(event.key==='Enter')sendChat('brief')">
-            <button class="tchat-send" onclick="sendChat('brief')">Send →</button>
-          </div>
-        </div>
-      </div>
-      <div class="tres-upgrade">
-        <span style="font-size:13px;color:#5c5b72;" id="brief-upgrade-text"><strong>Want us to build this website for you?</strong> We design and deliver professional websites — fast, mobile-first and built to convert.</span>
-        <a href="#contact" class="tres-upgrade-cta">🚀 Build It With Us →</a>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-
-</div><!-- /panels bg -->
-</div><!-- /tools -->
 
 
 <footer>
@@ -2315,6 +2607,44 @@ async function runBriefGenerator() {
 }
 
 // ═══════════════════════════════════
+// ACCORDION for individual tools
+// ═══════════════════════════════════
+function toggleAccordion(toolId) {
+  var body = document.getElementById('accordion-body-'+toolId);
+  var arrow = document.getElementById('accordion-arrow-'+toolId);
+  if(!body) return;
+  var isOpen = body.classList.contains('open');
+  // Close all others
+  ['ads','audit','optiscore','forecast','ranking','brief'].forEach(function(t){
+    var b=document.getElementById('accordion-body-'+t);
+    var a=document.getElementById('accordion-arrow-'+t);
+    if(b){b.classList.remove('open');}
+    if(a){a.classList.remove('open');}
+  });
+  // Toggle this one
+  if(!isOpen){
+    body.classList.add('open');
+    arrow.classList.add('open');
+    body.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+
+// Update accordion titles on language change
+var ACCORDION_TITLES = {
+  en:{ads:'Google Ads Starter Kit',audit:'Website Audit',optiscore:'Optiscore Simulator',forecast:'Budget Forecast',ranking:'SEO Ranking Analyser',brief:'Website Brief Generator'},
+  es:{ads:'Kit Google Ads',audit:'Auditoría Web',optiscore:'Simulador Optiscore',forecast:'Previsión Presupuesto',ranking:'Analizador SEO',brief:'Generador Brief Web'},
+  sq:{ads:'Kit Google Ads',audit:'Auditim Faqeje',optiscore:'Simulues Optiscore',forecast:'Parashikim Buxheti',ranking:'Analizues SEO',brief:'Gjenerator Brief Faqeje'},
+  da:{ads:'Google Ads Startpakke',audit:'Webstedsrevision',optiscore:'Optiscore Simulator',forecast:'Budgetprognose',ranking:'SEO Ranking Analysator',brief:'Websteds Brief Generator'},
+};
+function updateAccordionTitles(lang){
+  var titles = ACCORDION_TITLES[lang]||ACCORDION_TITLES.en;
+  Object.keys(titles).forEach(function(tid){
+    var el=document.getElementById('accordion-title-'+tid);
+    if(el) el.textContent=titles[tid];
+  });
+}
+
+// ═══════════════════════════════════
 // SMOOTH SCROLL + REVEAL
 // ═══════════════════════════════════
 document.querySelectorAll('a[href^="#"]').forEach(function(a){
@@ -2322,6 +2652,434 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
 });
 var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.07});
 document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+
+
+
+// ═══════════════════════════════════════════════════════
+// MASTER SCANNER
+// ═══════════════════════════════════════════════════════
+var SCAN_URL = '';
+var SCAN_DATA = {};
+var DASH_CONVOS = [];
+
+var SCAN_STEP_LABELS = {
+  en: ['Fetching website data','Running PageSpeed analysis','Analysing SEO signals','Building Google Ads strategy','Creating social media plan','Generating your full report'],
+  es: ['Obteniendo datos del sitio','Ejecutando análisis PageSpeed','Analizando señales SEO','Construyendo estrategia Google Ads','Creando plan de redes sociales','Generando tu informe completo'],
+  sq: ['Duke marrë të dhënat e faqes','Duke ekzekutuar analizën PageSpeed','Duke analizuar sinjalet SEO','Duke ndërtuar strategjinë Google Ads','Duke krijuar planin e rrjeteve sociale','Duke gjeneruar raportin tuaj të plotë'],
+  da: ['Henter webstedsdata','Kører PageSpeed-analyse','Analyserer SEO-signaler','Bygger Google Ads-strategi','Opretter sociale medier-plan','Genererer din fulde rapport']
+};
+
+function getStepLabels() {
+  return SCAN_STEP_LABELS[_lang] || SCAN_STEP_LABELS.en;
+}
+
+async function runMasterScan() {
+  var urlInput = document.getElementById('master-url').value.trim();
+  if(!urlInput){ alert('Please enter a website URL.'); return; }
+  if(!urlInput.startsWith('http')) urlInput = 'https://' + urlInput;
+  SCAN_URL = urlInput;
+  DASH_CONVOS = [];
+
+  var btn = document.getElementById('scan-btn');
+  var btnTxt = document.getElementById('scan-btn-text');
+  btn.disabled = true;
+  btnTxt.textContent = '...';
+
+  // Show progress
+  document.getElementById('scan-progress').classList.add('active');
+  document.getElementById('scan-examples').style.display = 'none';
+
+  // Update step labels for language
+  var labels = getStepLabels();
+  for(var i=1;i<=6;i++){
+    var s = document.getElementById('step-'+i);
+    if(s) s.querySelector('span:last-child') && (s.lastChild.textContent = ' '+labels[i-1]);
+  }
+
+  // Animate steps
+  var stepDelay = [0, 1800, 3400, 5200, 7000, 8800];
+  var stepDone = [1200, 2800, 4600, 6400, 8200, 0];
+
+  for(var j=1;j<=6;j++){
+    (function(n){
+      setTimeout(function(){
+        var el = document.getElementById('step-'+n);
+        if(el){
+          el.classList.add('active');
+          var icon = el.querySelector('.scan-step-icon');
+          if(icon){ var orig = icon.textContent; icon.innerHTML = '<div class="scan-step-spinner"></div>'; }
+        }
+      }, stepDelay[n-1]);
+      if(stepDone[n-1]){
+        setTimeout(function(){
+          var el = document.getElementById('step-'+n);
+          if(el){
+            el.classList.remove('active');
+            el.classList.add('done');
+            var spinner = el.querySelector('.scan-step-spinner');
+            if(spinner) spinner.outerHTML = '<span class="scan-step-icon">✅</span>';
+          }
+        }, stepDone[n-1]);
+      }
+    })(j);
+  }
+
+  // Fetch PageSpeed data
+  var psData = null;
+  var perfScore=0, seoScore=0, a11yScore=0, bpScore=0;
+  var auditDetails = [];
+  try {
+    var psUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url='+encodeURIComponent(urlInput)+'&strategy=mobile&key='+PAGESPEED_API_KEY+'&category=performance&category=seo&category=accessibility&category=best-practices';
+    var psRes = await fetch(psUrl);
+    psData = await psRes.json();
+    if(psData && psData.lighthouseResult){
+      var cats = psData.lighthouseResult.categories;
+      perfScore = Math.round((cats.performance&&cats.performance.score||0)*100);
+      seoScore  = Math.round((cats.seo&&cats.seo.score||0)*100);
+      a11yScore = Math.round((cats.accessibility&&cats.accessibility.score||0)*100);
+      bpScore   = Math.round((cats['best-practices']&&cats['best-practices'].score||0)*100);
+      var audits = psData.lighthouseResult.audits;
+      ['meta-description','document-title','image-alt','is-crawlable','largest-contentful-paint',
+       'total-blocking-time','cumulative-layout-shift','uses-https','viewport','font-size'].forEach(function(k){
+        if(audits[k]&&audits[k].score!==null&&audits[k].score<1){
+          auditDetails.push(audits[k].title+' (score: '+Math.round((audits[k].score||0)*100)+'/100)');
+        }
+      });
+    }
+  } catch(e){ psData = null; }
+
+  // Overall score
+  var overallScore = psData && (perfScore+seoScore+a11yScore+bpScore > 0)
+    ? Math.round((perfScore+seoScore+a11yScore+bpScore)/4)
+    : 0;
+
+  SCAN_DATA = {url: urlInput, perfScore, seoScore, a11yScore, bpScore, overallScore, auditDetails};
+
+  // Wait for animation to mostly finish then show dashboard
+  setTimeout(async function(){
+    document.getElementById('scan-progress').classList.remove('active');
+    showDashboard();
+    await generateMasterReport();
+    btn.disabled = false;
+    btnTxt.textContent = 'Analyse →';
+  }, 10000);
+}
+
+function showDashboard() {
+  var lang = _lang || 'en';
+  var urlDisplay = SCAN_URL.replace(/^https?:\/\//,'').replace(/\/$/,'');
+  document.getElementById('dash-url-display').textContent = urlDisplay;
+  document.getElementById('scan-dashboard').classList.add('visible');
+  document.getElementById('scan-dashboard').scrollIntoView({behavior:'smooth', block:'start'});
+
+  // Build score cards
+  var scores = [
+    {label:{en:'Overall',es:'General',sq:'Gjithësia',da:'Samlet'}, val: SCAN_DATA.overallScore||0, icon:'⭐'},
+    {label:{en:'Performance',es:'Rendimiento',sq:'Performanca',da:'Ydeevne'}, val: SCAN_DATA.perfScore||0, icon:'⚡'},
+    {label:{en:'SEO',es:'SEO',sq:'SEO',da:'SEO'}, val: SCAN_DATA.seoScore||0, icon:'🔍'},
+    {label:{en:'Accessibility',es:'Accesibilidad',sq:'Aksesueshmëria',da:'Tilgængelighed'}, val: SCAN_DATA.a11yScore||0, icon:'♿'},
+    {label:{en:'Best Practices',es:'Buenas Prácticas',sq:'Praktikat Më të Mira',da:'Bedste Praksisser'}, val: SCAN_DATA.bpScore||0, icon:'✅'},
+  ];
+  var cardsHtml = '';
+  scores.forEach(function(s){
+    var v = s.val;
+    var cls = v>=75?'green':v>=50?'amber':'red';
+    var lbl = s.label[lang]||s.label.en;
+    cardsHtml += '<div class="score-card '+cls+'"><div style="font-size:20px;margin-bottom:6px;">'+s.icon+'</div><div class="sc-num '+cls+'">'+v+'</div><div class="sc-bar"><div class="sc-bar-fill" style="width:'+v+'%;background:'+(v>=75?'#10b981':v>=50?'#f59e0b':'#ef4444')+'"></div></div><div class="sc-label">'+lbl+'</div></div>';
+  });
+  document.getElementById('score-cards').innerHTML = cardsHtml;
+
+  // Show social placeholders
+  var socials = [
+    {icon:'🔵',name:'Google',tip:{en:'Search ads + Google Business Profile',es:'Anuncios + Google Business',sq:'Reklama + Google Business',da:'Annoncer + Google Business'}},
+    {icon:'📸',name:'Instagram',tip:{en:'Visual content + Stories + Reels',es:'Contenido visual + Stories + Reels',sq:'Përmbajtje vizuale + Stories + Reels',da:'Visuelt indhold + Stories + Reels'}},
+    {icon:'💼',name:'LinkedIn',tip:{en:'B2B content + thought leadership',es:'Contenido B2B + liderazgo de opinión',sq:'Përmbajtje B2B + lidershipi mendor',da:'B2B indhold + thought leadership'}},
+    {icon:'🎵',name:'TikTok',tip:{en:'Short video + trending content',es:'Video corto + contenido trending',sq:'Video e shkurtër + përmbajtje trenduese',da:'Kort video + trending indhold'}},
+  ];
+  var socialHtml = '';
+  socials.forEach(function(s){
+    socialHtml += '<div class="social-card"><div class="social-icon">'+s.icon+'</div><div class="social-name">'+s.name+'</div><div class="social-tip">'+(s.tip[lang]||s.tip.en)+'</div></div>';
+  });
+  document.getElementById('social-grid').innerHTML = socialHtml;
+}
+
+async function generateMasterReport() {
+  var lang = getLangName();
+  var urlDisplay = SCAN_URL.replace(/^https?:\/\//,'').replace(/\/$/,'');
+  var scoreCtx = SCAN_DATA.overallScore > 0
+    ? 'PageSpeed scores: Performance='+SCAN_DATA.perfScore+'/100, SEO='+SCAN_DATA.seoScore+'/100, Accessibility='+SCAN_DATA.a11yScore+'/100, Best Practices='+SCAN_DATA.bpScore+'/100. Issues found: '+(SCAN_DATA.auditDetails.length>0?SCAN_DATA.auditDetails.join(', '):'none detected')
+    : 'PageSpeed data not available for this URL.';
+
+  var NL = '\n';
+  var prompt = 'You are a senior digital growth strategist. Write entirely in '+lang+'. Analyse this website comprehensively: '+SCAN_URL+NL+NL+scoreCtx+NL+NL+'Generate a complete digital growth report in '+lang+' with these sections:'+NL+NL+'**OVERALL VERDICT** (2-3 sentences — honest assessment of digital presence)'+NL+NL+'**SEO & TECHNICAL** — top 3 issues and fixes based on the scores'+NL+NL+'**GOOGLE ADS POTENTIAL** — is this site ready for Google Ads? What campaign type, budget and goal would work best?'+NL+NL+'**CONTENT STRATEGY** — what type of content should this business create and on which platforms?'+NL+NL+'**GOOGLE BUSINESS PROFILE** — is it likely set up? What to optimise?'+NL+NL+'**TOP 5 GROWTH ACTIONS** — numbered, ordered by impact, specific to this business'+NL+NL+'Be direct, specific and honest. Write entirely in '+lang+'.';
+
+  // Also generate critical issues and quick wins separately
+  var criticalPrompt = 'Based on this website '+SCAN_URL+' with scores Performance='+SCAN_DATA.perfScore+'/100, SEO='+SCAN_DATA.seoScore+'/100. Write in '+lang+'. List the 3 most critical issues harming this website right now. Each on its own line starting with 🔴. Be specific. Max 2 sentences each.';
+
+  var quickwinPrompt = 'Based on this website '+SCAN_URL+'. Write in '+lang+'. List 3 quick wins they can implement this week to improve their digital presence. Each starting with ⚡. Be specific and actionable. Max 2 sentences each.';
+
+  // Social strategy
+  var socialPrompt = 'You are a social media strategist. Write in '+lang+'. For the website '+SCAN_URL+' — based on what you can infer about this business — write a practical social media strategy covering: which platform to prioritise and why, what type of content to post, how often, and one specific content idea for each: Google, Instagram, LinkedIn and TikTok. Be specific to this type of business. Max 120 words total.';
+
+  // Set loading states
+  document.getElementById('dash-report-output').innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+  document.getElementById('dash-critical-output').innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+  document.getElementById('dash-quickwin-output').innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+  document.getElementById('dash-social-detail').innerHTML = '<span class="typing-dots"><span></span><span></span><span></span></span>';
+
+  // Run all 4 in parallel
+  var sys = 'You are a senior digital growth strategist for Urawise, a Google Ads and digital marketing agency. Write entirely in '+lang+'. Be direct and professional. Do not use emoji except where specified. Do not mention being an AI.';
+
+  await Promise.all([
+    callClaudeSimple(sys, prompt, 'dash-report-output', function(text){
+      DASH_CONVOS.push({role:'user', content: prompt});
+      DASH_CONVOS.push({role:'assistant', content: text});
+    }),
+    callClaudeSimple(sys, criticalPrompt, 'dash-critical-output', null),
+    callClaudeSimple(sys, quickwinPrompt, 'dash-quickwin-output', null),
+    callClaudeSimple(sys, socialPrompt, 'dash-social-detail', null),
+  ]);
+}
+
+async function callClaudeSimple(sys, prompt, outputId, onDone) {
+  var el = document.getElementById(outputId);
+  try {
+    var res = await fetch(CLAUDE_PROXY_URL, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:800, messages:[{role:'user', content:sys+'\\n\\n'+prompt}]})
+    });
+    var data = await res.json();
+    var text = '';
+    if(data.content && Array.isArray(data.content)){
+      data.content.forEach(function(b){ if(b && b.type==='text') text+=b.text; });
+    }
+    if(!text) text = 'Analysis unavailable. Please try again.';
+    if(el) el.innerHTML = text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+    if(onDone) onDone(text);
+  } catch(e) {
+    if(el) el.innerHTML = '<span style="color:#dc2626;">Could not load. Please try again.</span>';
+  }
+}
+
+async function sendDashChat() {
+  var inp = document.getElementById('dash-chat-input');
+  var msg = inp ? inp.value.trim() : '';
+  if(!msg) return;
+  inp.value=''; inp.disabled=true;
+  var msgs = document.getElementById('dash-chat-msgs');
+  var lang = getLangName();
+
+  // User bubble
+  var ub=document.createElement('div'); ub.className='msg-user';
+  ub.innerHTML='<div class="msg-bubble-user">'+escHtml(msg)+'</div>';
+  msgs.appendChild(ub); msgs.scrollTop=msgs.scrollHeight;
+
+  // Typing
+  var tbId='dctb-'+Date.now();
+  var tb=document.createElement('div'); tb.className='msg-ai'; tb.id=tbId;
+  tb.innerHTML='<div class="msg-bubble-ai"><span class="typing-dots"><span></span><span></span><span></span></span></div>';
+  msgs.appendChild(tb); msgs.scrollTop=msgs.scrollHeight;
+
+  var sys = 'You are a senior digital growth advisor for Urawise. The user has just received a full analysis of the website: '+SCAN_URL+'. Answer their questions about this analysis, or any other business/marketing question. Be direct and conversational. Respond in '+lang+'. Do not mention being an AI.';
+
+  // Build safe history
+  var safeHist = DASH_CONVOS.filter(function(m){ return typeof m.content==='string' && m.content.indexOf('[object')===-1; }).slice(-6);
+  safeHist.push({role:'user', content:msg});
+  DASH_CONVOS.push({role:'user', content:msg});
+
+  if(safeHist.length>0){
+    safeHist[0]={role:'user',content:sys+'\\n\\n'+safeHist[0].content};
+  }
+
+  try {
+    var res = await fetch(CLAUDE_PROXY_URL,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,messages:safeHist})
+    });
+    var data = await res.json();
+    var tbEl=document.getElementById(tbId); if(tbEl) tbEl.remove();
+    var reply='';
+    if(data.content&&Array.isArray(data.content)){data.content.forEach(function(b){if(b&&b.type==='text')reply+=b.text;});}
+    if(!reply) reply='Could not respond. Please try again.';
+    DASH_CONVOS.push({role:'assistant',content:reply});
+    var ab=document.createElement('div'); ab.className='msg-ai';
+    ab.innerHTML='<div class="msg-bubble-ai">'+reply.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')+'</div>';
+    msgs.appendChild(ab); msgs.scrollTop=msgs.scrollHeight;
+  } catch(e){
+    var tbEl2=document.getElementById(tbId); if(tbEl2) tbEl2.remove();
+    var eb=document.createElement('div'); eb.className='msg-ai';
+    eb.innerHTML='<div class="msg-bubble-ai" style="color:#dc2626;">⚠️ Could not connect.</div>';
+    msgs.appendChild(eb);
+  }
+  inp.disabled=false; inp.focus();
+}
+
+function jumpToTool(toolId) {
+  // Show the tools detail section
+  document.getElementById('tools-detail').style.display='block';
+  // Pre-fill URL fields
+  ['rank-url','audit-url','brief-biz'].forEach(function(id){
+    var f=document.getElementById(id);
+    if(f && id.indexOf('url')>=0 && SCAN_URL) f.value=SCAN_URL;
+  });
+  // Open the accordion for this tool
+  toggleAccordion(toolId);
+  // Scroll to tools detail
+  setTimeout(function(){
+    var td=document.getElementById('tools-detail');
+    if(td) td.scrollIntoView({behavior:'smooth',block:'start'});
+  },100);
+}
+
+function resetScanner() {
+  document.getElementById('scan-dashboard').classList.remove('visible');
+  document.getElementById('scan-progress').classList.remove('active');
+  document.getElementById('scan-examples').style.display='block';
+  document.getElementById('master-url').value='';
+  document.getElementById('scan-btn').disabled=false;
+  document.getElementById('scan-btn-text').textContent='Analyse →';
+  for(var i=1;i<=6;i++){
+    var s=document.getElementById('step-'+i);
+    if(s){s.classList.remove('active','done');}
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Scanner language translations
+var SCAN_TL = {
+  en:{
+    'scan-tag':'🔍 Free Instant Analysis',
+    'scan-h1':'Drop your website.<br><span>Get your full growth plan.</span>',
+    'scan-sub':'One URL. 30 seconds. We analyse your website, score your digital presence, and give you an AI-powered strategy across SEO, Google Ads, and social media.',
+    'scan-btn-text':'Analyse →',
+    'scan-examples':'Try it: paste any website URL above',
+    'dash-tools-text':'<strong>Go deeper with individual tools</strong> — pre-filled with your website details',
+    'dash-report-title':'Full Digital Growth Report',
+    'dash-critical-title':'Critical Issues',
+    'dash-quickwin-title':'Quick Wins This Week',
+    'dash-social-title':'Social Media Strategy',
+    'dash-chat-title':'Ask anything about this analysis',
+    'dash-rescan-btn':'← Analyse Another Site',
+    'dt-ads':'📈 Ads Generator','dt-audit':'🔍 Website Audit','dt-opti':'⚡ Optiscore','dt-forecast':'📊 Forecast','dt-ranking':'🔎 SEO Ranking','dt-brief':'🌐 Website Brief',
+    'dash-url-sub':'Full Digital Analysis Report',
+    'dash-chat-send-btn':'Send →',
+    'tools-detail-hint':'Click any tool below to expand it',
+    'step-1-text':' Fetching website data',
+    'step-2-text':' Running PageSpeed analysis',
+    'step-3-text':' Analysing SEO signals',
+    'step-4-text':' Building Google Ads strategy',
+    'step-5-text':' Creating social media plan',
+    'step-6-text':' Generating your full report',
+  },
+  es:{
+    'scan-tag':'🔍 Análisis Instantáneo Gratuito',
+    'scan-h1':'Añade tu web.<br><span>Obtén tu plan de crecimiento.</span>',
+    'scan-sub':'Una URL. 30 segundos. Analizamos tu web, puntuamos tu presencia digital y te damos una estrategia con IA para SEO, Google Ads y redes sociales.',
+    'scan-btn-text':'Analizar →',
+    'scan-examples':'Pruébalo: pega cualquier URL arriba',
+    'dash-tools-text':'<strong>Profundiza con herramientas individuales</strong> — pre-rellenadas con los datos de tu web',
+    'dash-report-title':'Informe Completo de Crecimiento Digital',
+    'dash-critical-title':'Problemas Críticos',
+    'dash-quickwin-title':'Victorias Rápidas Esta Semana',
+    'dash-social-title':'Estrategia de Redes Sociales',
+    'dash-chat-title':'Pregunta cualquier cosa sobre este análisis',
+    'dash-rescan-btn':'← Analizar Otro Sitio',
+    'dt-ads':'📈 Generador Anuncios','dt-audit':'🔍 Auditoría Web','dt-opti':'⚡ Optiscore','dt-forecast':'📊 Previsión','dt-ranking':'🔎 SEO Ranking','dt-brief':'🌐 Brief Web',
+    'dash-url-sub':'Informe Completo de Análisis Digital',
+    'dash-chat-send-btn':'Enviar →',
+    'tools-detail-hint':'Haz clic en cualquier herramienta para expandirla',
+    'step-1-text':' Obteniendo datos del sitio',
+    'step-2-text':' Ejecutando análisis PageSpeed',
+    'step-3-text':' Analizando señales SEO',
+    'step-4-text':' Construyendo estrategia Google Ads',
+    'step-5-text':' Creando plan de redes sociales',
+    'step-6-text':' Generando tu informe completo',
+  },
+  sq:{
+    'scan-tag':'🔍 Analizë e Menjëhershme Falas',
+    'scan-h1':'Shto faqen tënde.<br><span>Merr planin tënd të rritjes.</span>',
+    'scan-sub':'Një URL. 30 sekonda. Analizojmë faqen, vlerësojmë prezencën dixhitale dhe japim strategji me IA për SEO, Google Ads dhe rrjete sociale.',
+    'scan-btn-text':'Analizo →',
+    'scan-examples':'Provojeni: ngjisni çdo URL faqeje më sipër',
+    'dash-tools-text':'<strong>Shko më thellë me mjetet individuale</strong> — të parapërgatitura me të dhënat e faqes tuaj',
+    'dash-report-title':'Raport i Plotë i Rritjes Dixhitale',
+    'dash-critical-title':'Problemet Kritike',
+    'dash-quickwin-title':'Fitore të Shpejta Këtë Javë',
+    'dash-social-title':'Strategji e Rrjeteve Sociale',
+    'dash-chat-title':'Pyesni çdo gjë rreth kësaj analize',
+    'dash-rescan-btn':'← Analizoni një Faqe Tjetër',
+    'dt-ads':'📈 Gjenerator Reklamash','dt-audit':'🔍 Auditim Faqeje','dt-opti':'⚡ Optiscore','dt-forecast':'📊 Parashikim','dt-ranking':'🔎 SEO Ranking','dt-brief':'🌐 Brief Faqeje',
+    'dash-url-sub':'Raport i Plotë i Analizës Dixhitale',
+    'dash-chat-send-btn':'Dërgo →',
+    'tools-detail-hint':'Klikoni çdo mjet për ta zgjeruar',
+    'step-1-text':' Duke marrë të dhënat e faqes',
+    'step-2-text':' Duke ekzekutuar analizën PageSpeed',
+    'step-3-text':' Duke analizuar sinjalet SEO',
+    'step-4-text':' Duke ndërtuar strategjinë Google Ads',
+    'step-5-text':' Duke krijuar planin e rrjeteve sociale',
+    'step-6-text':' Duke gjeneruar raportin tuaj të plotë',
+  },
+  da:{
+    'scan-tag':'🔍 Gratis Øjeblikkelig Analyse',
+    'scan-h1':'Indsæt din hjemmeside.<br><span>Få din fulde vækstplan.</span>',
+    'scan-sub':'Én URL. 30 sekunder. Vi analyserer dit websted, scorer din digitale tilstedeværelse og giver dig en AI-drevet strategi for SEO, Google Ads og sociale medier.',
+    'scan-btn-text':'Analysér →',
+    'scan-examples':'Prøv det: indsæt en websteds-URL ovenfor',
+    'dash-tools-text':'<strong>Gå dybere med individuelle værktøjer</strong> — forudfyldt med dine webstedsoplysninger',
+    'dash-report-title':'Fuld Digital Vækstrapport',
+    'dash-critical-title':'Kritiske Problemer',
+    'dash-quickwin-title':'Hurtige Gevinster Denne Uge',
+    'dash-social-title':'Strategi for Sociale Medier',
+    'dash-chat-title':'Spørg om alt vedrørende denne analyse',
+    'dash-rescan-btn':'← Analysér Et Andet Websted',
+    'dt-ads':'📈 Annoncegenerator','dt-audit':'🔍 Webstedsrevision','dt-opti':'⚡ Optiscore','dt-forecast':'📊 Prognose','dt-ranking':'🔎 SEO Ranking','dt-brief':'🌐 Websteds Brief',
+    'dash-url-sub':'Fuld Digital Analyserapport',
+    'dash-chat-send-btn':'Send →',
+    'tools-detail-hint':'Klik på et hvilket som helst værktøj for at udvide det',
+    'step-1-text':' Henter webstedsdata',
+    'step-2-text':' Kører PageSpeed-analyse',
+    'step-3-text':' Analyserer SEO-signaler',
+    'step-4-text':' Bygger Google Ads-strategi',
+    'step-5-text':' Opretter sociale medier-plan',
+    'step-6-text':' Genererer din fulde rapport',
+  }
+};
+
+function applyScannerLang(lang) {
+  var d = SCAN_TL[lang]||SCAN_TL.en;
+  Object.keys(d).forEach(function(id){
+    var el=document.getElementById(id);
+    if(!el) return;
+    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA'){
+      // Update placeholder for inputs
+      if(id==='master-url'){
+        var placeholders={en:'https://yourwebsite.com',es:'https://tuweb.com',sq:'https://faqjagjuaj.com',da:'https://dinhjemmeside.dk'};
+        el.placeholder = placeholders[lang]||placeholders.en;
+      }
+      return;
+    }
+    el.innerHTML=d[id];
+  });
+  // Update step labels in progress animation
+  for(var i=1;i<=6;i++){
+    var stepEl=document.getElementById('step-'+i);
+    var labelKey='step-'+i+'-text';
+    if(stepEl && d[labelKey]){
+      // Keep the icon, update the text
+      var icon=stepEl.querySelector('.scan-step-icon');
+      var iconHtml=icon?icon.outerHTML:'';
+      stepEl.innerHTML=iconHtml+d[labelKey];
+    }
+  }
+  // Update chat input placeholder
+  var chatInp=document.getElementById('dash-chat-input');
+  if(chatInp){
+    var chatPh={en:'e.g. How do I fix the SEO score? What should I post on Instagram?',es:'ej. ¿Cómo arreglo el SEO? ¿Qué debo publicar en Instagram?',sq:'p.sh. Si të rregulloj SEO-n? Çfarë të postoj në Instagram?',da:'f.eks. Hvordan fikser jeg SEO-scoren? Hvad skal jeg poste på Instagram?'};
+    chatInp.placeholder=chatPh[lang]||chatPh.en;
+  }
+  // Update accordion titles
+  updateAccordionTitles(lang);
+}
 
 </script>
 </body>
