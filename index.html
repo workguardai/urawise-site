@@ -1736,31 +1736,41 @@ var CONVOS = {ads:[],audit:[],optiscore:[],forecast:[],ranking:[],gsc:[]};
 async function callClaude(toolId, systemPrompt, userPrompt, outputId, onDone) {
   var el = document.getElementById(outputId);
   el.innerHTML = '<span style="display:inline-flex;gap:4px;" class="typing-dots"><span></span><span></span><span></span></span>';
-  CONVOS[toolId] = [{role:'user', content: systemPrompt + '\n\n' + userPrompt}];
+
+  // Store a SHORT summary in CONVOS for follow-up chat — not the full system prompt
+  // This prevents token overflow on follow-up turns
+  CONVOS[toolId] = [{role:'user', content: userPrompt}];
+
+  var messages = [{role:'user', content: systemPrompt + '\n\n' + userPrompt}];
+
   try {
     var res = await fetch(CLAUDE_PROXY_URL, {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1200, messages: CONVOS[toolId]})
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:1200, messages: messages})
     });
     var data = await res.json();
+
     if(res.status===429 && data.error){
-      el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px;color:#dc2626;font-size:14px;line-height:1.6;">⏱️ <strong>'+(data.code==='DAILY_CAP'?'Daily limit reached':'Hourly limit reached')+'</strong><br>'+data.error+'</div>';
+      el.innerHTML='<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px;color:#dc2626;font-size:14px;line-height:1.65;">⏱️ <strong>'+(data.code==='DAILY_CAP'?'Daily limit reached':'Hourly limit reached')+'</strong><br>'+data.error+'</div>';
       if(onDone) onDone(''); return;
     }
-    // Extract text from response — may include web_search tool_use blocks
+
+    // Extract ONLY text blocks
     var text = '';
-    if(data.content){
-      data.content.forEach(function(block){
-        if(block.type==='text') text += block.text;
-      });
+    if(data.content && Array.isArray(data.content)){
+      data.content.forEach(function(b){ if(b && b.type==='text' && typeof b.text==='string') text+=b.text; });
     }
     if(!text) text = 'Something went wrong. Please try again.';
+
+    // Store ONLY plain string in CONVOS for follow-up
     CONVOS[toolId].push({role:'assistant', content: text});
+
     typeOut(el, text, function(){
       if(onDone) onDone(text);
     });
   } catch(e) {
-    el.innerHTML = '<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px;color:#dc2626;font-size:14px;">⚠️ Could not connect. Please try again or <a href="#contact" style="color:#5b47e0;">contact us directly</a>.</div>';
+    el.innerHTML='<div style="background:rgba(239,68,68,0.06);border:1.5px solid rgba(239,68,68,0.2);border-radius:10px;padding:16px;color:#dc2626;font-size:14px;">⚠️ Could not connect. Please check your connection and try again.</div>';
+    if(onDone) onDone('');
   }
 }
 
