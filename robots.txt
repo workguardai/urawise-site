@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://workguardai.github.io/urawise-site/sitemap.xml
