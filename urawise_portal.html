@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urawise — Choose your service</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink: #111010;
+    --cream: #F7F3EE;
+    --warm: #EDE7DD;
+    --digital-bg: #0E1117;
+    --digital-accent: #7C6FFF;
+    --digital-text: #F0EFF8;
+    --reno-bg: #F5EFE6;
+    --reno-accent: #8C6A3F;
+    --reno-text: #1C1610;
+    --mid: #C8C0B4;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: var(--sans);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    cursor: default;
+  }
+
+  /* DIVIDER LINE */
+  .divider {
+    position: fixed;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--mid);
+    z-index: 100;
+    pointer-events: none;
+    transform-origin: center;
+    transition: opacity 0.4s ease;
+  }
+
+  .divider::before {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--mid);
+  }
+
+  /* BRAND MARK - centered over divider */
+  .brand-mark {
+    position: fixed;
+    left: 50%;
+    top: 32px;
+    transform: translateX(-50%);
+    z-index: 200;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .brand-mark span {
+    font-family: var(--serif);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--mid);
+    white-space: nowrap;
+    mix-blend-mode: difference;
+    filter: invert(0);
+  }
+
+  /* PANELS */
+  .panel {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 48px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: flex-grow 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  .panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .panel:hover::after { opacity: 1; }
+  .panel:hover .panel-cta { opacity: 1; transform: translateY(0); }
+  .panel:hover .panel-eyebrow { letter-spacing: 6px; }
+
+  /* DIGITAL PANEL */
+  .panel-digital {
+    background: var(--digital-bg);
+    color: var(--digital-text);
+  }
+
+  .panel-digital::after {
+    background: radial-gradient(ellipse at 60% 50%, rgba(124,111,255,0.08) 0%, transparent 70%);
+  }
+
+  /* RENO PANEL */
+  .panel-reno {
+    background: var(--reno-bg);
+    color: var(--reno-text);
+  }
+
+  .panel-reno::after {
+    background: radial-gradient(ellipse at 40% 50%, rgba(140,106,63,0.08) 0%, transparent 70%);
+  }
+
+  /* PANEL CONTENT */
+  .panel-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 340px;
+  }
+
+  .panel-eyebrow {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    transition: letter-spacing 0.4s ease;
+  }
+
+  .panel-digital .panel-eyebrow { color: var(--digital-accent); }
+  .panel-reno .panel-eyebrow { color: var(--reno-accent); }
+
+  .panel-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+
+  .panel-digital .panel-title { color: var(--digital-text); }
+  .panel-reno .panel-title { color: var(--reno-text); }
+
+  .panel-title em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .panel-desc {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 36px;
+    opacity: 0.7;
+  }
+
+  .panel-services {
+    list-style: none;
+    margin-bottom: 40px;
+  }
+
+  .panel-services li {
+    font-size: 12px;
+    font-weight: 400;
+    padding: 7px 0;
+    border-bottom: 1px solid;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+  }
+
+  .panel-digital .panel-services li {
+    border-color: rgba(255,255,255,0.08);
+    color: rgba(240,239,248,0.75);
+  }
+
+  .panel-reno .panel-services li {
+    border-color: rgba(28,22,16,0.1);
+    color: rgba(28,22,16,0.7);
+  }
+
+  .panel-services li:last-child { border-bottom: none; }
+
+  .svc-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .panel-digital .svc-dot { background: var(--digital-accent); }
+  .panel-reno .svc-dot { background: var(--reno-accent); }
+
+  .panel-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border-radius: 2px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+    text-decoration: none;
+  }
+
+  .panel-digital .panel-cta {
+    background: var(--digital-accent);
+    color: white;
+  }
+
+  .panel-digital .panel-cta:hover { background: #6A5EE8; }
+
+  .panel-reno .panel-cta {
+    background: var(--reno-accent);
+    color: white;
+  }
+
+  .panel-reno .panel-cta:hover { background: #7A5A30; }
+
+  /* ARROW */
+  .cta-arrow {
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+
+  .panel-cta:hover .cta-arrow { transform: translateX(4px); }
+
+  /* LOCATION TAG */
+  .location-tag {
+    position: absolute;
+    bottom: 28px;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.3;
+  }
+
+  .panel-digital .location-tag { color: var(--digital-text); }
+  .panel-reno .location-tag { color: var(--reno-text); }
+
+  /* AMBIENT ELEMENTS */
+  .ambient {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .panel:hover .ambient { opacity: 1; }
+
+  .panel-digital .ambient {
+    width: 300px;
+    height: 300px;
+    background: rgba(124,111,255,0.06);
+    top: 20%;
+    right: -80px;
+  }
+
+  .panel-reno .ambient {
+    width: 300px;
+    height: 300px;
+    background: rgba(140,106,63,0.08);
+    bottom: 20%;
+    left: -80px;
+  }
+
+  /* HOVER EXPAND */
+  body:has(.panel-digital:hover) {
+    grid-template-columns: 1.18fr 0.82fr;
+  }
+
+  body:has(.panel-reno:hover) {
+    grid-template-columns: 0.82fr 1.18fr;
+  }
+
+  body { transition: grid-template-columns 0.5s cubic-bezier(0.77, 0, 0.175, 1); }
+
+  /* MOBILE */
+  @media (max-width: 680px) {
+    html, body { overflow: auto; }
+    body { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; height: auto; }
+    body:has(.panel-digital:hover), body:has(.panel-reno:hover) { grid-template-columns: 1fr; }
+    .panel { height: 100vh; min-height: 480px; }
+    .divider { display: none; }
+    .brand-mark { top: 16px; }
+    .panel-cta { opacity: 1; transform: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="divider"></div>
+
+<div class="brand-mark">
+  <span>Urawise</span>
+</div>
+
+<!-- DIGITAL PANEL -->
+<div class="panel panel-digital" onclick="window.location.href='#digital'">
+  <div class="ambient"></div>
+  <div class="panel-inner">
+    <div class="panel-eyebrow">Digital Services</div>
+    <h2 class="panel-title">Grow your<br>business <em>online.</em></h2>
+    <p class="panel-desc">Google Ads campaigns, AI-powered lead generation and digital marketing solutions for businesses ready to be found.</p>
+    <ul class="panel-services">
+      <li><span class="svc-dot"></span>Google Ads management</li>
+      <li><span class="svc-dot"></span>AI lead generation</li>
+      <li><span class="svc-dot"></span>Digital audits & strategy</li>
+      <li><span class="svc-dot"></span>Landing page creation</li>
+      <li><span class="svc-dot"></span>Performance reporting</li>
+    </ul>
+    <a href="#digital" class="panel-cta">
+      Explore digital <span class="cta-arrow">→</span>
+    </a>
+  </div>
+  <div class="location-tag">Albania · Spain · Europe</div>
+</div>
+
+<!-- RENOVATION PANEL -->
+<div class="panel panel-reno" onclick="window.location.href='#renovation'">
+  <div class="ambient"></div>
+  <div class="panel-inner">
+    <div class="panel-eyebrow">Renovation Services</div>
+    <h2 class="panel-title">Transform your<br><em>space.</em></h2>
+    <p class="panel-desc">Home improvements, renovations and construction works carried out with precision and care. Barcelona and surrounding areas.</p>
+    <ul class="panel-services">
+      <li><span class="svc-dot"></span>Bathroom renovations</li>
+      <li><span class="svc-dot"></span>Interior refurbishments</li>
+      <li><span class="svc-dot"></span>Flooring & pavements</li>
+      <li><span class="svc-dot"></span>Apartment improvements</li>
+      <li><span class="svc-dot"></span>General construction works</li>
+    </ul>
+    <a href="#renovation" class="panel-cta">
+      Explore renovation <span class="cta-arrow">→</span>
+    </a>
+  </div>
+  <div class="location-tag">Barcelona · Spain</div>
+</div>
+
+</body>
+</html>
