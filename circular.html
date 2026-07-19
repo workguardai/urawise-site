@@ -1031,7 +1031,7 @@ function sendViaWhatsApp() {
   var contact = document.getElementById('circ-contact').value.trim();
   var interest = document.getElementById('circ-interest').value;
   var message = document.getElementById('circ-message').value.trim();
-  var text = 'Hi, I am ' + (name || 'a visitor') + ' from Urawise Circular. I am interested in: ' + interest + '.' + (contact ? ' My contact: ' + contact + '.' : '') + (message ? ' Details: ' + message : '') + ' [Source: Circular Site]';
+  var text = 'Hi, I am ' + (name || 'a visitor') + ' from Urawise Circular. Interested in: ' + interest + '.' + (contact ? ' My contact: ' + contact + '.' : '') + (message ? ' Details: ' + message : '') + ' [Source: Circular Site]';
   window.open('https://wa.me/351924673825?text=' + encodeURIComponent(text), '_blank');
 }
 
@@ -1041,30 +1041,25 @@ function sendViaEmail() {
   var interest = document.getElementById('circ-interest').value;
   var message = document.getElementById('circ-message').value.trim();
   var subject = 'Urawise Circular — ' + interest;
-  var body = 'Name: ' + (name || 'Not provided') + '
-Contact: ' + (contact || 'Not provided') + '
-Interested in: ' + interest + '
-
-Message:
-' + (message || 'No message provided') + '
-
-[Source: Circular Site]';
+  var body = 'Name: ' + (name || 'Not provided') + '\nContact: ' + (contact || 'Not provided') + '\nInterested in: ' + interest + '\n\nMessage:\n' + (message || 'No message provided') + '\n\n[Source: Circular Site]';
   window.location.href = 'mailto:besasonos@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 }
 
 function setLang(lang) {
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
-  document.querySelectorAll('[data-en]').forEach(el => {
-    const text = el.getAttribute(`data-${lang}`);
-    if (text) {
-      if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = text;
-      } else if (el.tagName === 'OPTION') {
-        el.textContent = text;
-      } else {
-        el.innerHTML = text;
-      }
+  document.querySelectorAll('.lang-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+  var activeBtn = document.querySelector('.lang-btn[onclick="setLang(\'' + lang + '\')"]');
+  if (activeBtn) activeBtn.classList.add('active');
+  document.querySelectorAll('[data-en]').forEach(function(el) {
+    var text = el.getAttribute('data-' + lang) || el.getAttribute('data-en');
+    if (!text) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = text;
+    } else if (el.tagName === 'OPTION') {
+      el.textContent = text;
+    } else {
+      el.innerHTML = text;
     }
   });
   document.documentElement.lang = lang;
